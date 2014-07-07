@@ -9,8 +9,9 @@ install:
   - cd .. && git clone https://github.com/alliedmodders/ambuild.git && cd ambuild && python setup.py build && sudo python setup.py install && cd $CHECKOUT_DIR
   - cd .. && git clone https://github.com/alliedmodders/metamod-source.git && cd $CHECKOUT_DIR
   - cd .. && git clone https://github.com/alliedmodders/hl2sdk.git -b tf2 hl2sdk-tf2 && cd $CHECKOUT_DIR
-  - cd .. && git clone https://github.com/alliedmodders/sourcemod.git && cd sourcemod && mkdir build && cd build && python ../configure.py --sdks=tf2 --no-mysql --enable-optimize && ambuild && SOURCEMOD_RELEASE=$PWD\package\addons\sourcemod && cd $CHECKOUT_DIR
+  - cd .. && git clone https://github.com/alliedmodders/sourcemod.git && cd sourcemod && mkdir build && cd build && python ../configure.py --sdks=tf2 --no-mysql --enable-optimize && ambuild && cd $CHECKOUT_DIR
 script:
+  - SOURCEMOD_RELEASE=$(cd ../sourcemod/package/addons/sourcemod && pwd)
   - mkdir build && cd build
   - python ../configure.py --enable-optimize --sdks=tf2
   - ambuild
