@@ -9,7 +9,7 @@ folder_list = [
 #  'addons/sourcemod/scripting/include',
 #  'addons/sourcemod/configs',
 #  'addons/sourcemod/translations',
-#  'addons/sourcemod/plugins',
+  'addons/sourcemod/plugins',
 ]
 
 # Create the distribution folder hierarchy.
@@ -29,6 +29,10 @@ full_binary_list = SM.extensions
 with open(os.path.join(builder.buildPath, 'pdblog.txt'), 'w') as fp:
   for task in full_binary_list:
     fp.write(task.debug.path + '\n')
+
+for smx_file in SM.smx_files:
+  smx_entry = SM.smx_files[smx_file]
+  builder.AddCopy(smx_entry, folder_map['addons/sourcemod/plugins'])
 
 # Do all straight-up file copies from the source tree.
 def CopyFiles(src, dest, files):
