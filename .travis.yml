@@ -12,5 +12,5 @@ install:
 script:
   - SOURCEMOD_RELEASE=$(cd $TRAVIS_BUILD_DIR/../sourcemod/build/package/addons/sourcemod && pwd)
   - mkdir $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build
-  - python ../configure.py --enable-optimize --sdks=tf2
+  - python $TRAVIS_BUILD_DIR/configure.py --enable-optimize --sdks=tf2
   - ambuild
