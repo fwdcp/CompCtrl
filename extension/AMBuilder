@@ -1,28 +1,6 @@
 # vim: set sts=2 ts=8 sw=2 tw=99 et ft=python:
 import os
 
-def ResolveEnvPath(env, folder):
-  if env in os.environ:
-    path = os.environ[env]
-    if os.path.isdir(path):
-      return path
-  else:
-    head = os.getcwd()
-    oldhead = None
-    while head != None and head != oldhead:
-      path = os.path.join(head, folder)
-      if os.path.isdir(path):
-        return path
-      oldhead = head
-      head, tail = os.path.split(head)
-  return None
-
-sourcemod_root = ResolveEnvPath('SOURCEMOD16', 'sourcemod-1.6')
-if not sourcemod_root:
-  sourcemod_root = ResolveEnvPath('SOURCEMOD_DEV', 'sourcemod')
-  if not sourcemod_root:
-    raise Exception('Could not find a source copy of SourceMod')
-
 for sdk_name in SM.sdks:
   sdk = SM.sdks[sdk_name]
   
@@ -35,6 +13,6 @@ for sdk_name in SM.sdks:
 
   binary.sources += [
     'extension.cpp',
-    os.path.join(sourcemod_root, 'public', 'smsdk_ext.cpp'),
+    os.path.join(SM.sourcemod_root, 'public', 'smsdk_ext.cpp'),
   ]
   SM.extensions += [builder.Add(binary)]
