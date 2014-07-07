@@ -5,10 +5,10 @@ before_script:
   - sudo apt-get update -qq
   - sudo apt-get install -y g++-multilib libc6-dev-i386 lib32stdc++6 lib32z1-dev
   - CHECKOUT_DIR=$PWD
-  - cd .. && git clone https://github.com/alliedmodders/ambuild.git && cd ambuild && python setup.py build && sudo python setup.py install && cd CHECKOUT_DIR
-  - cd .. && git clone https://github.com/alliedmodders/metamod-source.git && cd CHECKOUT_DIR
-  - cd .. && git clone https://github.com/alliedmodders/hl2sdk.git -b hl2sdk-tf2 hl2sdk-tf2 && cd CHECKOUT_DIR
-  - cd .. && git clone https://github.com/alliedmodders/sourcemod.git && cd sourcemod && mkdir build && cd build && python ../configure.py && ambuild && SOURCEMOD_RELEASE=$PWD\package\addons\sourcemod && cd CHECKOUT_DIR
+  - cd .. && git clone https://github.com/alliedmodders/ambuild.git && cd ambuild && python setup.py build && sudo python setup.py install && cd $CHECKOUT_DIR
+  - cd .. && git clone https://github.com/alliedmodders/metamod-source.git && cd $CHECKOUT_DIR
+  - cd .. && git clone https://github.com/alliedmodders/hl2sdk.git -b hl2sdk-tf2 hl2sdk-tf2 && cd $CHECKOUT_DIR
+  - cd .. && git clone https://github.com/alliedmodders/sourcemod.git && cd sourcemod && mkdir build && cd build && python ../configure.py && ambuild && SOURCEMOD_RELEASE=$PWD\package\addons\sourcemod && cd $CHECKOUT_DIR
 script:
   - mkdir build && cd build
   - python ../configure.py --enable-optimize --sdks=tf2
