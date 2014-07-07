@@ -1,0 +1,65 @@
+# vim: set ts=8 sts=2 sw=2 tw=99 et ft=python: 
+import os
+
+builder.SetBuildFolder('package')
+
+folder_list = [
+  'addons/sourcemod/extensions',
+#  'addons/sourcemod/gamedata',
+#  'addons/sourcemod/scripting/include',
+#  'addons/sourcemod/configs',
+#  'addons/sourcemod/translations',
+#  'addons/sourcemod/plugins',
+]
+
+# Create the distribution folder hierarchy.
+folder_map = {}
+for folder in folder_list:
+  norm_folder = os.path.normpath(folder)
+  folder_map[folder] = builder.AddFolder(norm_folder)
+
+# Copy binaries.
+for cxx_task in SM.extensions:
+  builder.AddCopy(cxx_task.binary, folder_map['addons/sourcemod/extensions'])
+
+# Export PDB files. We write to a file in the build folder which is pretty
+# verboten, but it's okay if it's in the root since AMBuild will never try
+# to rmdir the root.
+full_binary_list = SM.extensions
+with open(os.path.join(builder.buildPath, 'pdblog.txt'), 'w') as fp:
+  for task in full_binary_list:
+    fp.write(task.debug.path + '\n')
+
+# Do all straight-up file copies from the source tree.
+def CopyFiles(src, dest, files):
+  if not dest:
+    dest = src
+  dest_entry = folder_map[dest]
+  for source_file in files:
+    source_path = os.path.join(builder.sourcePath, src, source_file)
+    builder.AddCopy(source_path, dest_entry)
+
+#CopyFiles('pawn', 'addons/sourcemod/scripting/include',
+#  [ 'tf2items.inc',
+#  ]
+#)
+
+#CopyFiles('pawn', 'addons/sourcemod/scripting',
+#  [ 'tf2items_manager.sp',
+#  ]
+#)
+
+#CopyFiles('', 'addons/sourcemod/gamedata',
+#  [ 'tf2.items.txt',
+#  ]
+#)
+
+#CopyFiles('', 'addons/sourcemod/gamedata',
+#  [ 'tf2.items.txt',
+#  ]
+#)
+
+#CopyFiles('', 'addons/sourcemod/extensions',
+#  [ 'tf2items.autoload',
+#  ]
+#)
