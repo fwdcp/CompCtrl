@@ -58,7 +58,6 @@ def build_plugin(script_path, smx_file):
     inputs = inputs,
     argv = argv,
     outputs = outputs,
-    dep_type = 'msvc',
     weak_inputs = SM.generated_headers or []
   )
   SM.smx_files[smx_file] = smx_entry
