@@ -1,5 +1,5 @@
-#ifndef _INCLUDE_SOURCEMOD_EXTENSION_PROPER_H_
-#define _INCLUDE_SOURCEMOD_EXTENSION_PROPER_H_
+#ifndef _INCLUDE_COMPCTRL_H_
+#define _INCLUDE_COMPCTRL_H_
 
 #include "smsdk_ext.h"
 
@@ -19,4 +19,4 @@ public:
 #endif
 };
 
-#endif // _INCLUDE_SOURCEMOD_EXTENSION_PROPER_H_
+#endif // _INCLUDE_COMPCTRL_H_
