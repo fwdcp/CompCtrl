@@ -6,7 +6,7 @@ builder.SetBuildFolder('package')
 folder_list = [
   'addons/sourcemod/extensions',
   'addons/sourcemod/gamedata',
-#  'addons/sourcemod/scripting/include',
+  'addons/sourcemod/scripting/include',
 #  'addons/sourcemod/configs',
 #  'addons/sourcemod/translations',
   'addons/sourcemod/plugins',
@@ -43,10 +43,10 @@ def CopyFiles(src, dest, files):
     source_path = os.path.join(builder.sourcePath, src, source_file)
     builder.AddCopy(source_path, dest_entry)
 
-#CopyFiles('pawn', 'addons/sourcemod/scripting/include',
-#  [ 'tf2items.inc',
-#  ]
-#)
+CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
+  [ 'compctrl.inc',
+  ]
+)
 
 #CopyFiles('pawn', 'addons/sourcemod/scripting',
 #  [ 'tf2items_manager.sp',
