@@ -59,8 +59,3 @@ CopyFiles('gamedata', 'addons/sourcemod/gamedata',
   [ 'compctrl.txt',
   ]
 )
-
-#CopyFiles('', 'addons/sourcemod/extensions',
-#  [ 'tf2items.autoload',
-#  ]
-#)
