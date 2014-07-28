@@ -16,6 +16,12 @@
 				"linux"		"157"
 				"mac"		"157"
 			}
+			"CTFGameRules::ShouldScorePerRound"
+			{
+				"windows"	"197"
+				"linux"		"198"
+				"mac"		"198"
+			}
 			"CTFGameRules::CheckWinLimit"
 			{
 				"windows"	"210"

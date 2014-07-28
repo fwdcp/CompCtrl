@@ -9,6 +9,7 @@ ISDKHooks *g_pSDKHooks = NULL;
 
 IForward *g_SetWinningTeamForward = NULL;
 IForward *g_SetStalemateForward = NULL;
+IForward *g_ShouldScoreByRoundForward = NULL;
 IForward *g_CheckWinLimitForward = NULL;
 
 bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
@@ -36,6 +37,7 @@ void CompCtrl::SDK_OnAllLoaded() {
 
 		g_SetWinningTeamForward = forwards->CreateForward("CompCtrl_OnSetWinningTeam", ET_Hook, 5, NULL, Param_CellByRef, Param_CellByRef, Param_CellByRef, Param_CellByRef, Param_CellByRef);
 		g_SetStalemateForward = forwards->CreateForward("CompCtrl_OnSetStalemate", ET_Hook, 3, NULL, Param_CellByRef, Param_CellByRef, Param_CellByRef);
+		g_ShouldScoreByRoundForward = forwards->CreateForward("CompCtrl_OnShouldScorePerRound", ET_Hook, 1, NULL, Param_CellByRef);
 		g_CheckWinLimitForward = forwards->CreateForward("CompCtrl_OnCheckWinLimit", ET_Hook, 1, NULL, Param_CellByRef);
 	}
 }
