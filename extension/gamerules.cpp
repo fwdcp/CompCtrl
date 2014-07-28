@@ -211,11 +211,7 @@ cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params) {
 	bool bSwitchTeams = (params[4] == 1);
 	bool bDontAddScore = (params[5] == 1);
 
-	if (!g_GameRulesManager.Call_CTFGameRules_SetWinningTeam(team, iWinReason, bForceMapReset, bSwitchTeams, bDontAddScore)) {
-		pContext->ThrowNativeError("Unable to call CTFGameRules::SetWinningTeam!");
-	}
-
-	return 0;
+	return g_GameRulesManager.Call_CTFGameRules_SetWinningTeam(team, iWinReason, bForceMapReset, bSwitchTeams, bDontAddScore);
 }
 
 cell_t CompCtrl_SetStalemate(IPluginContext *pContext, const cell_t *params) {
@@ -223,9 +219,5 @@ cell_t CompCtrl_SetStalemate(IPluginContext *pContext, const cell_t *params) {
 	bool bForceMapReset = (params[2] == 1);
 	bool bSwitchTeams = (params[3] == 1);
 
-	if (!g_GameRulesManager.Call_CTFGameRules_SetStalemate(iReason, bForceMapReset, bSwitchTeams)) {
-		pContext->ThrowNativeError("Unable to call CTFGameRules::SetStalemate!");
-	}
-
-	return 0;
+	return g_GameRulesManager.Call_CTFGameRules_SetStalemate(iReason, bForceMapReset, bSwitchTeams);
 }
