@@ -126,7 +126,7 @@ void GameRulesManager::Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason
 		RETURN_META(MRES_SUPERCEDE);
 	}
 	else if (result == Pl_Changed) {
-		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetWinningTeam, (team, iWinReason, forceMapReset == 1, switchTeams == 1, dontAddScore == 1));
+		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetWinningTeam, (team, iWinReason, forceMapReset != 0, switchTeams != 0, dontAddScore != 0));
 	}
 	else {
 		RETURN_META(MRES_IGNORED);
@@ -149,7 +149,7 @@ void GameRulesManager::Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMa
 		RETURN_META(MRES_SUPERCEDE);
 	}
 	else if (result == Pl_Changed) {
-		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetStalemate, (iReason, forceMapReset == 1, switchTeams == 1));
+		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetStalemate, (iReason, forceMapReset != 0, switchTeams != 0));
 	}
 	else {
 		RETURN_META(MRES_IGNORED);
@@ -157,7 +157,7 @@ void GameRulesManager::Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMa
 }
 
 bool GameRulesManager::Hook_CTFGameRules_ShouldScorePerRound() {
-	cell_t returnValue = 0;
+	cell_t returnValue = SH_MCALL(META_IFACEPTR(CBaseEntity), CTFGameRules_ShouldScorePerRound)() ? 1 : 0;
 
 	g_ShouldScoreByRoundForward->PushCellByRef(&returnValue);
 
@@ -166,7 +166,7 @@ bool GameRulesManager::Hook_CTFGameRules_ShouldScorePerRound() {
 	g_ShouldScoreByRoundForward->Execute(&result);
 
 	if (result > Pl_Continue) {
-		RETURN_META_VALUE(MRES_SUPERCEDE, returnValue == 1);
+		RETURN_META_VALUE(MRES_SUPERCEDE, returnValue != 0);
 	}
 	else {
 		RETURN_META_VALUE(MRES_IGNORED, false);
@@ -174,7 +174,7 @@ bool GameRulesManager::Hook_CTFGameRules_ShouldScorePerRound() {
 }
 
 bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit() {
-	cell_t returnValue = 0;
+	cell_t returnValue = SH_MCALL(META_IFACEPTR(CBaseEntity), CTFGameRules_CheckWinLimit)() ? 1 : 0;
 
 	g_CheckWinLimitForward->PushCellByRef(&returnValue);
 
@@ -183,7 +183,7 @@ bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit() {
 	g_CheckWinLimitForward->Execute(&result);
 
 	if (result > Pl_Continue) {
-		RETURN_META_VALUE(MRES_SUPERCEDE, returnValue == 1);
+		RETURN_META_VALUE(MRES_SUPERCEDE, returnValue != 0);
 	}
 	else {
 		RETURN_META_VALUE(MRES_IGNORED, false);
@@ -207,17 +207,17 @@ void GameRulesManager::RemoveHooks(CBaseEntity *pEntity) {
 cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params) {
 	int team = params[1];
 	int iWinReason = params[2];
-	bool bForceMapReset = (params[3] == 1);
-	bool bSwitchTeams = (params[4] == 1);
-	bool bDontAddScore = (params[5] == 1);
+	bool bForceMapReset = (params[3] != 0);
+	bool bSwitchTeams = (params[4] != 0);
+	bool bDontAddScore = (params[5] != 0);
 
 	return g_GameRulesManager.Call_CTFGameRules_SetWinningTeam(team, iWinReason, bForceMapReset, bSwitchTeams, bDontAddScore);
 }
 
 cell_t CompCtrl_SetStalemate(IPluginContext *pContext, const cell_t *params) {
 	int iReason = params[1];
-	bool bForceMapReset = (params[2] == 1);
-	bool bSwitchTeams = (params[3] == 1);
+	bool bForceMapReset = (params[2] != 0);
+	bool bSwitchTeams = (params[3] != 0);
 
 	return g_GameRulesManager.Call_CTFGameRules_SetStalemate(iReason, bForceMapReset, bSwitchTeams);
 }
