@@ -2,15 +2,18 @@
 #define _INCLUDE_COMPCTRL_H_
 
 #include "smsdk_ext.h"
+#include "ISDKHooks.h"
+
+#include "gamerules.h"
 
 class CompCtrl : public SDKExtension
 {
 public:
-	//virtual bool SDK_OnLoad(char *error, size_t maxlength, bool late);
+	virtual bool SDK_OnLoad(char *error, size_t maxlength, bool late);
 	//virtual void SDK_OnUnload();
-	//virtual void SDK_OnAllLoaded();
+	virtual void SDK_OnAllLoaded();
 	//virtual void SDK_OnPauseChange(bool paused);
-	//virtual bool QueryRunning(char *error, size_t maxlength);
+	virtual bool QueryRunning(char *error, size_t maxlength);
 public:
 #if defined SMEXT_CONF_METAMOD
 	//virtual bool SDK_OnMetamodLoad(ISmmAPI *ismm, char *error, size_t maxlength, bool late);
@@ -18,5 +21,19 @@ public:
 	//virtual bool SDK_OnMetamodPauseChange(bool paused, char *error, size_t maxlength);
 #endif
 };
+
+extern IGameConfig *g_pGameConfig;
+extern ISDKHooks *g_pSDKHooks;
+
+const sp_nativeinfo_t g_Natives[] =
+{
+	{ "CompCtrl_SetWinningTeam", CompCtrl_SetWinningTeam },
+	{ "CompCtrl_SetStalemate", CompCtrl_SetStalemate },
+	{ NULL, NULL }
+};
+
+extern IForward *g_SetWinningTeamForward;
+extern IForward *g_SetStalemateForward;
+extern IForward *g_CheckWinLimitForward;
 
 #endif // _INCLUDE_COMPCTRL_H_

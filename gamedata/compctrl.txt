@@ -1,0 +1,27 @@
+"Games"
+{
+	"tf"
+	{
+		"Offsets"
+		{
+			"CTFGameRules::SetWinningTeam"
+			{
+				"windows"	"155"
+				"linux"		"156"
+				"mac"		"156"
+			}
+			"CTFGameRules::SetStalemate"
+			{
+				"windows"	"156"
+				"linux"		"157"
+				"mac"		"157"
+			}
+			"CTFGameRules::CheckWinLimit"
+			{
+				"windows"	"210"
+				"linux"		"211"
+				"mac"		"211"
+			}
+		}
+	}
+}

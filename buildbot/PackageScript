@@ -5,7 +5,7 @@ builder.SetBuildFolder('package')
 
 folder_list = [
   'addons/sourcemod/extensions',
-#  'addons/sourcemod/gamedata',
+  'addons/sourcemod/gamedata',
 #  'addons/sourcemod/scripting/include',
 #  'addons/sourcemod/configs',
 #  'addons/sourcemod/translations',
@@ -53,15 +53,10 @@ def CopyFiles(src, dest, files):
 #  ]
 #)
 
-#CopyFiles('', 'addons/sourcemod/gamedata',
-#  [ 'tf2.items.txt',
-#  ]
-#)
-
-#CopyFiles('', 'addons/sourcemod/gamedata',
-#  [ 'tf2.items.txt',
-#  ]
-#)
+CopyFiles('gamedata', 'addons/sourcemod/gamedata',
+  [ 'compctrl.txt',
+  ]
+)
 
 #CopyFiles('', 'addons/sourcemod/extensions',
 #  [ 'tf2items.autoload',
