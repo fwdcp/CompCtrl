@@ -6,6 +6,9 @@
 
 class GameRulesManager : public ISMEntityListener
 {
+public:
+	GameRulesManager() : m_TFGameRules(0xFFFFFFFF) {}
+
 	// management
 public:
 	bool TryEnable();
@@ -34,7 +37,7 @@ private:
 
 private:
 	bool m_hooksSetup;
-	cell_t m_TFGameRules = 0xFFFFFFFF;
+	cell_t m_TFGameRules;
 };
 
 cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params);
