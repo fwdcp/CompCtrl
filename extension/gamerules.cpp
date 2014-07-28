@@ -122,7 +122,10 @@ void GameRulesManager::Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason
 
 	g_SetWinningTeamForward->Execute(&result);
 
-	if (result > Pl_Continue) {
+	if (result > Pl_Changed) {
+		RETURN_META(MRES_SUPERCEDE);
+	}
+	else if (result == Pl_Changed) {
 		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetWinningTeam, (team, iWinReason, forceMapReset == 1, switchTeams == 1, dontAddScore == 1));
 	}
 	else {
@@ -142,7 +145,10 @@ void GameRulesManager::Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMa
 
 	g_SetStalemateForward->Execute(&result);
 
-	if (result > Pl_Continue) {
+	if (result > Pl_Changed) {
+		RETURN_META(MRES_SUPERCEDE);
+	}
+	else if (result == Pl_Changed) {
 		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetStalemate, (iReason, forceMapReset == 1, switchTeams == 1));
 	}
 	else {
