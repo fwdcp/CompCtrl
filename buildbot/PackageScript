@@ -45,6 +45,7 @@ def CopyFiles(src, dest, files):
 
 CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
   [ 'compctrl.inc',
+    'morecolors.inc'
   ]
 )
 
