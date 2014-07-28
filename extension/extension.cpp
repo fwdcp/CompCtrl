@@ -4,12 +4,12 @@ CompCtrl g_CompCtrl;		/**< Global singleton for extension's main interface */
 
 SMEXT_LINK(&g_CompCtrl);
 
-IGameConfig *g_pGameConfig = nullptr;
-ISDKHooks *g_pSDKHooks = nullptr;
+IGameConfig *g_pGameConfig = NULL;
+ISDKHooks *g_pSDKHooks = NULL;
 
-IForward *g_SetWinningTeamForward = nullptr;
-IForward *g_SetStalemateForward = nullptr;
-IForward *g_CheckWinLimitForward = nullptr;
+IForward *g_SetWinningTeamForward = NULL;
+IForward *g_SetStalemateForward = NULL;
+IForward *g_CheckWinLimitForward = NULL;
 
 bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
 	sharesys->AddDependency(myself, "sdkhooks.ext", true, true);
