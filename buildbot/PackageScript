@@ -7,6 +7,7 @@ folder_list = [
   'addons/sourcemod/extensions',
   'addons/sourcemod/gamedata',
   'addons/sourcemod/scripting/include',
+  'addons/sourcemod/scripting',
 #  'addons/sourcemod/configs',
 #  'addons/sourcemod/translations',
   'addons/sourcemod/plugins',
@@ -49,10 +50,10 @@ CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
   ]
 )
 
-#CopyFiles('pawn', 'addons/sourcemod/scripting',
-#  [ 'tf2items_manager.sp',
-#  ]
-#)
+CopyFiles('plugins', 'addons/sourcemod/scripting',
+  [ 'compctrl-teams.sp',
+  ]
+)
 
 CopyFiles('gamedata', 'addons/sourcemod/gamedata',
   [ 'compctrl.txt',
