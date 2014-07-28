@@ -4,6 +4,8 @@
 #include "smsdk_ext.h"
 #include "ISDKHooks.h"
 
+#include "gamerules.h"
+
 class CompCtrl : public SDKExtension
 {
 public:
@@ -20,6 +22,18 @@ public:
 #endif
 };
 
+extern IGameConfig *g_pGameConfig;
 extern ISDKHooks *g_pSDKHooks;
+
+const sp_nativeinfo_t g_Natives[] =
+{
+	{ "CompCtrl_SetWinningTeam", CompCtrl_SetWinningTeam },
+	{ "CompCtrl_SetStalemate", CompCtrl_SetStalemate },
+	{ NULL, NULL }
+};
+
+extern IForward *g_SetWinningTeamForward;
+extern IForward *g_SetStalemateForward;
+extern IForward *g_CheckWinLimitForward;
 
 #endif // _INCLUDE_COMPCTRL_H_

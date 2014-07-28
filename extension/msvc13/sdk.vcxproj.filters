@@ -24,6 +24,9 @@
     <ClCompile Include="$(SOURCEMOD_DEV)\public\smsdk_ext.cpp">
       <Filter>SourceMod SDK</Filter>
     </ClCompile>
+    <ClCompile Include="..\gamerules.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\extension.h">
@@ -36,6 +39,9 @@
       <Filter>SourceMod SDK</Filter>
     </ClInclude>
     <ClInclude Include="..\version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gamerules.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

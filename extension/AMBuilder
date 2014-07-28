@@ -13,6 +13,7 @@ for sdk_name in SM.sdks:
 
   binary.sources += [
     'extension.cpp',
+    'gamerules.cpp',
     os.path.join(SM.sourcemod_root, 'public', 'smsdk_ext.cpp'),
   ]
   SM.extensions += [builder.Add(binary)]
