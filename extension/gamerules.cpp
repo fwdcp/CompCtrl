@@ -73,9 +73,9 @@ void GameRulesManager::Call_CTFGameRules_SetStalemate(int iReason, bool bForceMa
 }
 
 void GameRulesManager::Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset, bool bSwitchTeams, bool bDontAddScore) {
-	cell_t forceMapReset = bForceMapReset ? 1 : 0;
-	cell_t switchTeams = bSwitchTeams ? 1 : 0;
-	cell_t dontAddScore = bDontAddScore ? 1 : 0;
+	cell_t forceMapReset = bForceMapReset;
+	cell_t switchTeams = bSwitchTeams;
+	cell_t dontAddScore = bDontAddScore;
 
 	g_SetWinningTeamForward->PushCellByRef(&team);
 	g_SetWinningTeamForward->PushCellByRef(&iWinReason);
@@ -91,7 +91,7 @@ void GameRulesManager::Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason
 		RETURN_META(MRES_SUPERCEDE);
 	}
 	else if (result == Pl_Changed) {
-		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetWinningTeam, (team, iWinReason, forceMapReset != 0, switchTeams != 0, dontAddScore != 0));
+		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetWinningTeam, (team, iWinReason, (bool)forceMapReset, (bool)switchTeams, (bool)dontAddScore));
 	}
 	else {
 		RETURN_META(MRES_IGNORED);
@@ -99,8 +99,8 @@ void GameRulesManager::Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason
 }
 
 void GameRulesManager::Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset, bool bSwitchTeams) {
-	cell_t forceMapReset = bForceMapReset ? 1 : 0;
-	cell_t switchTeams = bSwitchTeams ? 1 : 0;
+	cell_t forceMapReset = bForceMapReset;
+	cell_t switchTeams = bSwitchTeams;
 
 	g_SetWinningTeamForward->PushCellByRef(&iReason);
 	g_SetWinningTeamForward->PushCellByRef(&forceMapReset);
@@ -114,7 +114,7 @@ void GameRulesManager::Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMa
 		RETURN_META(MRES_SUPERCEDE);
 	}
 	else if (result == Pl_Changed) {
-		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetStalemate, (iReason, forceMapReset != 0, switchTeams != 0));
+		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetStalemate, (iReason, (bool)forceMapReset, (bool)switchTeams));
 	}
 	else {
 		RETURN_META(MRES_IGNORED);
@@ -122,7 +122,7 @@ void GameRulesManager::Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMa
 }
 
 bool GameRulesManager::Hook_CTFGameRules_ShouldScorePerRound() {
-	cell_t returnValue = SH_MCALL(META_IFACEPTR(CBaseEntity), CTFGameRules_ShouldScorePerRound)() ? 1 : 0;
+	cell_t returnValue = SH_MCALL(META_IFACEPTR(CBaseEntity), CTFGameRules_ShouldScorePerRound)();
 
 	g_ShouldScoreByRoundForward->PushCellByRef(&returnValue);
 
@@ -131,7 +131,7 @@ bool GameRulesManager::Hook_CTFGameRules_ShouldScorePerRound() {
 	g_ShouldScoreByRoundForward->Execute(&result);
 
 	if (result > Pl_Continue) {
-		RETURN_META_VALUE(MRES_SUPERCEDE, returnValue != 0);
+		RETURN_META_VALUE(MRES_SUPERCEDE, (bool)returnValue);
 	}
 	else {
 		RETURN_META_VALUE(MRES_IGNORED, false);
@@ -139,7 +139,7 @@ bool GameRulesManager::Hook_CTFGameRules_ShouldScorePerRound() {
 }
 
 bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit() {
-	cell_t returnValue = SH_MCALL(META_IFACEPTR(CBaseEntity), CTFGameRules_CheckWinLimit)() ? 1 : 0;
+	cell_t returnValue = SH_MCALL(META_IFACEPTR(CBaseEntity), CTFGameRules_CheckWinLimit)();
 
 	g_CheckWinLimitForward->PushCellByRef(&returnValue);
 
@@ -148,7 +148,7 @@ bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit() {
 	g_CheckWinLimitForward->Execute(&result);
 
 	if (result > Pl_Continue) {
-		RETURN_META_VALUE(MRES_SUPERCEDE, returnValue != 0);
+		RETURN_META_VALUE(MRES_SUPERCEDE, (bool)returnValue);
 	}
 	else {
 		RETURN_META_VALUE(MRES_IGNORED, false);
@@ -172,9 +172,9 @@ void GameRulesManager::RemoveHooks(CBaseEntity *pEntity) {
 cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params) {
 	int team = params[1];
 	int iWinReason = params[2];
-	bool bForceMapReset = (params[3] != 0);
-	bool bSwitchTeams = (params[4] != 0);
-	bool bDontAddScore = (params[5] != 0);
+	bool bForceMapReset = (bool)params[3];
+	bool bSwitchTeams = (bool)params[4];
+	bool bDontAddScore = (bool)params[5];
 
 	if (!g_pSDKTools->GetGameRules()) {
 		pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
@@ -187,8 +187,8 @@ cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params) {
 
 cell_t CompCtrl_SetStalemate(IPluginContext *pContext, const cell_t *params) {
 	int iReason = params[1];
-	bool bForceMapReset = (params[2] != 0);
-	bool bSwitchTeams = (params[3] != 0);
+	bool bForceMapReset = (bool)params[2];
+	bool bSwitchTeams = (bool)params[3];
 
 	if (!g_pSDKTools->GetGameRules()) {
 		pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
