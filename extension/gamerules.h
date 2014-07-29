@@ -9,7 +9,7 @@ class GameRulesManager
 public:
 	void Enable();
 	void Disable();
-	bool IsRunning() { return m_hooksSetup; }
+	bool IsRunning() { return m_hooksSetup && m_hooksEnabled; }
 
 	// natives
 public:
@@ -24,6 +24,7 @@ public:
 
 private:
 	bool m_hooksSetup;
+	bool m_hooksEnabled;
 	int m_setWinningTeamHook;
 	int m_setStalemateHook;
 	int m_checkWinLimit;
