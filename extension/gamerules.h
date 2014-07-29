@@ -11,7 +11,7 @@ public:
 	void Disable();
 	bool IsRunning() { return m_hooksSetup && m_hooksEnabled; }
 
-	// natives
+	// calls
 public:
 	void Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false);
 	void Call_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset = true, bool bSwitchTeams = false);
