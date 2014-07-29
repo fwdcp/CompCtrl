@@ -79,3 +79,11 @@ forward Action:CompCtrl_OnSetStalemate(&WinReason:reason, &bool:forceMapReset, &
  * @return				Plugin_Continue to return the original value, Plugin_Changed or above to use the new value.
  */
 forward Action:CompCtrl_OnCheckWinLimit(&bool:returnValue);
+
+/**
+ * @brief 				When ResetScores in CTFTeam is called by the game.
+ *
+ * @param team			The team that is having its scores reset.
+ * @return				Plugin_Continue to allow the reset, Plugin_Changed or above to prevent the reset.
+ */
+forward Action:CompCtrl_OnResetTeamScores(TFTeam:team);
