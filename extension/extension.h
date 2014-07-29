@@ -38,7 +38,6 @@ const sp_nativeinfo_t g_Natives[] =
 
 extern IForward *g_SetWinningTeamForward;
 extern IForward *g_SetStalemateForward;
-extern IForward *g_ShouldScoreByRoundForward;
 extern IForward *g_CheckWinLimitForward;
 
 #endif // _INCLUDE_COMPCTRL_H_
