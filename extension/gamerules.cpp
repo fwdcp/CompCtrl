@@ -8,102 +8,67 @@ SH_DECL_MANUALHOOK3_void(CTFGameRules_SetStalemate, 0, 0, 0, int, bool, bool);
 SH_DECL_MANUALHOOK0(CTFGameRules_ShouldScorePerRound, 0, 0, 0, bool);
 SH_DECL_MANUALHOOK0(CTFGameRules_CheckWinLimit, 0, 0, 0, bool);
 
-bool GameRulesManager::TryEnable() {
+void GameRulesManager::Enable() {
 	if (!m_hooksSetup) {
 		int offset;
 
 		if (!g_pGameConfig->GetOffset("CTFGameRules::SetWinningTeam", &offset)) {
 			g_pSM->LogError(myself, "Failed to find CTFGameRules::SetWinningTeam offset");
-			return false;
+			return;
 		}
 
 		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_SetWinningTeam, offset, 0, 0);
 
 		if (!g_pGameConfig->GetOffset("CTFGameRules::SetStalemate", &offset)) {
 			g_pSM->LogError(myself, "Failed to find CTFGameRules::SetStalemate offset");
-			return false;
+			return;
 		}
 
 		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_SetStalemate, offset, 0, 0);
 
 		if (!g_pGameConfig->GetOffset("CTFGameRules::ShouldScorePerRound", &offset)) {
 			g_pSM->LogError(myself, "Failed to find CTFGameRules::ShouldScorePerRound offset");
-			return false;
+			return;
 		}
 
 		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_ShouldScorePerRound, offset, 0, 0);
 
 		if (!g_pGameConfig->GetOffset("CTFGameRules::CheckWinLimit", &offset)) {
 			g_pSM->LogError(myself, "Failed to find CTFGameRules::CheckWinLimit offset");
-			return false;
+			return;
 		}
 
 		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_CheckWinLimit, offset, 0, 0);
 
-		m_hooksSetup = true;
-	}
-
-	for (int i = 0; i < MAX_EDICTS; ++i) {
-		CBaseEntity *pEntity = gamehelpers->ReferenceToEntity(i);
-		if (!pEntity) {
-			continue;
+		if (!g_pSDKTools->GetGameRules()) {
+			return;
 		}
 
-		const char *classname = gamehelpers->GetEntityClassname(pEntity);
+		m_setWinningTeamHook = SH_ADD_MANUALDVPHOOK(CTFGameRules_SetWinningTeam, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_SetWinningTeam), false);
+		m_setStalemateHook = SH_ADD_MANUALDVPHOOK(CTFGameRules_SetStalemate, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_SetStalemate), false);
 
-		OnEntityCreated(pEntity, classname);
+		m_hooksSetup = true;
 	}
-
-	return true;
 }
 
 void GameRulesManager::Disable() {
+	if (m_hooksSetup) {
+		SH_REMOVE_HOOK_ID(m_setWinningTeamHook);
+		SH_REMOVE_HOOK_ID(m_setStalemateHook);
 
-}
-
-void GameRulesManager::OnEntityCreated(CBaseEntity *pEntity, const char *classname) {
-	if (V_strcmp(classname, "CTFGameRules") == 0) {
-		CBaseEntity *oldTFGameRules = gamehelpers->ReferenceToEntity(m_TFGameRules);
-
-		if (oldTFGameRules) {
-			RemoveHooks(oldTFGameRules);
-		}
-
-		m_TFGameRules = gamehelpers->EntityToReference(pEntity);
-
-		AddHooks(pEntity);
+		m_hooksSetup = false;
 	}
 }
 
-void GameRulesManager::OnEntityDestroyed(CBaseEntity *pEntity) {
-	if (gamehelpers->EntityToReference(pEntity) == m_TFGameRules) {
-		RemoveHooks(pEntity);
-	}
-
-	m_TFGameRules = 0xFFFFFFFF;
-}
-
-bool GameRulesManager::Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset, bool bSwitchTeams, bool bDontAddScore) {
-	CBaseEntity *tfGameRules = gamehelpers->ReferenceToEntity(m_TFGameRules);
-
-	if (tfGameRules) {
-		SH_MCALL(tfGameRules, CTFGameRules_SetWinningTeam)(team, iWinReason, bForceMapReset, bSwitchTeams, bDontAddScore);
-		return true;
-	}
-	else {
-		return false;
+void GameRulesManager::Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset, bool bSwitchTeams, bool bDontAddScore) {
+	if (g_pSDKTools->GetGameRules()) {
+		SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_SetWinningTeam)(team, iWinReason, bForceMapReset, bSwitchTeams, bDontAddScore);
 	}
 }
 
-bool GameRulesManager::Call_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset, bool bSwitchTeams) {
-	CBaseEntity *tfGameRules = gamehelpers->ReferenceToEntity(m_TFGameRules);
-
-	if (tfGameRules) {
-		SH_MCALL(tfGameRules, CTFGameRules_SetStalemate)(iReason, bForceMapReset, bSwitchTeams);
-		return true;
-	}
-	else {
-		return false;
+void GameRulesManager::Call_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset, bool bSwitchTeams) {
+	if (g_pSDKTools->GetGameRules()) {
+		SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_SetStalemate)(iReason, bForceMapReset, bSwitchTeams);
 	}
 }
 
@@ -211,7 +176,13 @@ cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params) {
 	bool bSwitchTeams = (params[4] != 0);
 	bool bDontAddScore = (params[5] != 0);
 
-	return g_GameRulesManager.Call_CTFGameRules_SetWinningTeam(team, iWinReason, bForceMapReset, bSwitchTeams, bDontAddScore);
+	if (!g_pSDKTools->GetGameRules()) {
+		pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
+	}
+
+	g_GameRulesManager.Call_CTFGameRules_SetWinningTeam(team, iWinReason, bForceMapReset, bSwitchTeams, bDontAddScore);
+
+	return 0;
 }
 
 cell_t CompCtrl_SetStalemate(IPluginContext *pContext, const cell_t *params) {
@@ -219,5 +190,11 @@ cell_t CompCtrl_SetStalemate(IPluginContext *pContext, const cell_t *params) {
 	bool bForceMapReset = (params[2] != 0);
 	bool bSwitchTeams = (params[3] != 0);
 
-	return g_GameRulesManager.Call_CTFGameRules_SetStalemate(iReason, bForceMapReset, bSwitchTeams);
+	if (!g_pSDKTools->GetGameRules()) {
+		pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
+	}
+
+	g_GameRulesManager.Call_CTFGameRules_SetStalemate(iReason, bForceMapReset, bSwitchTeams);
+
+	return 0;
 }

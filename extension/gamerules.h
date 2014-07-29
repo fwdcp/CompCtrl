@@ -6,23 +6,15 @@
 
 class GameRulesManager : public ISMEntityListener
 {
-public:
-	GameRulesManager() : m_TFGameRules(0xFFFFFFFF) {}
-
 	// management
 public:
-	bool TryEnable();
+	void Enable();
 	void Disable();
-
-	// ISMEntityListener
-public:
-	virtual void OnEntityCreated(CBaseEntity *pEntity, const char *classname);
-	virtual void OnEntityDestroyed(CBaseEntity *pEntity);
 
 	// natives
 public:
-	bool Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false);
-	bool Call_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset = true, bool bSwitchTeams = false);
+	void Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false);
+	void Call_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset = true, bool bSwitchTeams = false);
 
 	// hooks
 public:
@@ -38,7 +30,8 @@ private:
 
 private:
 	bool m_hooksSetup;
-	cell_t m_TFGameRules;
+	int m_setWinningTeamHook;
+	int m_setStalemateHook;
 };
 
 cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params);
