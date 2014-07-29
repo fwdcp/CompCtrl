@@ -32,6 +32,10 @@ bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
 	return true;
 }
 
+void CompCtrl::SDK_OnUnload() {
+	g_GameRulesManager.Disable();
+}
+
 void CompCtrl::SDK_OnAllLoaded() {
 	SM_GET_LATE_IFACE(SDKHOOKS, g_pSDKHooks);
 	SM_GET_LATE_IFACE(SDKTOOLS, g_pSDKTools);
