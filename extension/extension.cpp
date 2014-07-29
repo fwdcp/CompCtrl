@@ -12,7 +12,6 @@ ISDKTools *g_pSDKTools = NULL;
 
 IForward *g_SetWinningTeamForward = NULL;
 IForward *g_SetStalemateForward = NULL;
-IForward *g_ShouldScoreByRoundForward = NULL;
 IForward *g_CheckWinLimitForward = NULL;
 
 bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
