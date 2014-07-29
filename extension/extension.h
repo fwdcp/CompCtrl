@@ -3,6 +3,7 @@
 
 #include "smsdk_ext.h"
 #include "ISDKHooks.h"
+#include "ISDKTools.h"
 
 #include "gamerules.h"
 
@@ -24,6 +25,7 @@ public:
 
 extern IGameConfig *g_pGameConfig;
 extern ISDKHooks *g_pSDKHooks;
+extern ISDKTools *g_pSDKTools;
 
 const sp_nativeinfo_t g_Natives[] =
 {

@@ -6,6 +6,7 @@ SMEXT_LINK(&g_CompCtrl);
 
 IGameConfig *g_pGameConfig = NULL;
 ISDKHooks *g_pSDKHooks = NULL;
+ISDKTools *g_pSDKTools = NULL;
 
 IForward *g_SetWinningTeamForward = NULL;
 IForward *g_SetStalemateForward = NULL;
@@ -14,6 +15,7 @@ IForward *g_CheckWinLimitForward = NULL;
 
 bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
 	sharesys->AddDependency(myself, "sdkhooks.ext", true, true);
+	sharesys->AddDependency(myself, "sdktools.ext", true, true);
 
 	char *gameConfigError = new char[255];
 	if (!gameconfs->LoadGameConfigFile("compctrl", &g_pGameConfig, gameConfigError, sizeof(gameConfigError)))
@@ -30,6 +32,7 @@ bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
 
 void CompCtrl::SDK_OnAllLoaded() {
 	SM_GET_LATE_IFACE(SDKHOOKS, g_pSDKHooks);
+	SM_GET_LATE_IFACE(SDKTOOLS, g_pSDKTools);
 
 	if (QueryRunning(NULL, 0))
 	{
@@ -44,5 +47,6 @@ void CompCtrl::SDK_OnAllLoaded() {
 
 bool CompCtrl::QueryRunning(char *error, size_t maxlength) {
 	SM_CHECK_IFACE(SDKHOOKS, g_pSDKHooks);
+	SM_CHECK_IFACE(SDKTOOLS, g_pSDKTools);
 	return true;
 }
