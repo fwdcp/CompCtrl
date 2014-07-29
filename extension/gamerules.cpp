@@ -5,7 +5,6 @@ GameRulesManager g_GameRulesManager;
 
 SH_DECL_MANUALHOOK5_void(CTFGameRules_SetWinningTeam, 0, 0, 0, int, int, bool, bool, bool);
 SH_DECL_MANUALHOOK3_void(CTFGameRules_SetStalemate, 0, 0, 0, int, bool, bool);
-SH_DECL_MANUALHOOK0(CTFGameRules_ShouldScorePerRound, 0, 0, 0, bool);
 SH_DECL_MANUALHOOK0(CTFGameRules_CheckWinLimit, 0, 0, 0, bool);
 
 void GameRulesManager::Enable() {
@@ -25,13 +24,6 @@ void GameRulesManager::Enable() {
 		}
 
 		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_SetStalemate, offset, 0, 0);
-
-		if (!g_pGameConfig->GetOffset("CTFGameRules::ShouldScorePerRound", &offset)) {
-			g_pSM->LogError(myself, "Failed to find CTFGameRules::ShouldScorePerRound offset");
-			return;
-		}
-
-		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_ShouldScorePerRound, offset, 0, 0);
 
 		if (!g_pGameConfig->GetOffset("CTFGameRules::CheckWinLimit", &offset)) {
 			g_pSM->LogError(myself, "Failed to find CTFGameRules::CheckWinLimit offset");
@@ -121,23 +113,6 @@ void GameRulesManager::Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMa
 	}
 }
 
-bool GameRulesManager::Hook_CTFGameRules_ShouldScorePerRound() {
-	cell_t returnValue = SH_MCALL(META_IFACEPTR(CBaseEntity), CTFGameRules_ShouldScorePerRound)();
-
-	g_ShouldScoreByRoundForward->PushCellByRef(&returnValue);
-
-	cell_t result = 0;
-
-	g_ShouldScoreByRoundForward->Execute(&result);
-
-	if (result > Pl_Continue) {
-		RETURN_META_VALUE(MRES_SUPERCEDE, (bool)returnValue);
-	}
-	else {
-		RETURN_META_VALUE(MRES_IGNORED, false);
-	}
-}
-
 bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit() {
 	cell_t returnValue = SH_MCALL(META_IFACEPTR(CBaseEntity), CTFGameRules_CheckWinLimit)();
 
@@ -158,14 +133,12 @@ bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit() {
 void GameRulesManager::AddHooks(CBaseEntity *pEntity) {
 	SH_ADD_MANUALHOOK(CTFGameRules_SetWinningTeam, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_SetWinningTeam), false);
 	SH_ADD_MANUALHOOK(CTFGameRules_SetStalemate, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_SetStalemate), false);
-	SH_ADD_MANUALHOOK(CTFGameRules_ShouldScorePerRound, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_ShouldScorePerRound), false);
 	SH_ADD_MANUALHOOK(CTFGameRules_CheckWinLimit, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_CheckWinLimit), false);
 }
 
 void GameRulesManager::RemoveHooks(CBaseEntity *pEntity) {
 	SH_REMOVE_MANUALHOOK(CTFGameRules_SetWinningTeam, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_SetWinningTeam), false);
 	SH_REMOVE_MANUALHOOK(CTFGameRules_SetStalemate, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_SetStalemate), false);
-	SH_REMOVE_MANUALHOOK(CTFGameRules_ShouldScorePerRound, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_ShouldScorePerRound), false);
 	SH_REMOVE_MANUALHOOK(CTFGameRules_CheckWinLimit, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_CheckWinLimit), false);
 }
 

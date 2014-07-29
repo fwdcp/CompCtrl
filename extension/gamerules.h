@@ -21,7 +21,6 @@ public:
 public:
 	void Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false);
 	void Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset = true, bool bSwitchTeams = false);
-	bool Hook_CTFGameRules_ShouldScorePerRound();
 	bool Hook_CTFGameRules_CheckWinLimit();
 
 	// hook management

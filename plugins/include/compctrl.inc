@@ -73,14 +73,6 @@ forward Action:CompCtrl_OnSetWinningTeam(&TFTeam:team, &WinReason:reason, &bool:
 forward Action:CompCtrl_OnSetStalemate(&WinReason:reason, &bool:forceMapReset, &bool:switchTeams);
 
 /**
- * @brief 				When ShouldScorePerRound in CTFGameRules is called by the game.
- *
- * @param returnValue	The return value for the function (true for should score per round, false for shouldn't).
- * @return				Plugin_Continue to return the original value, Plugin_Changed or above to use the new value.
- */
-forward Action:CompCtrl_OnShouldScorePerRound(&bool:returnValue);
-
-/**
  * @brief 				When CheckWinLimit in CTFGameRules is called by the game.
  *
  * @param returnValue	The return value for the function (true for win limit reached, false for not).
