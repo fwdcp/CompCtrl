@@ -38,6 +38,7 @@ void GameRulesManager::Enable() {
 
 		m_setWinningTeamHook = SH_ADD_MANUALVPHOOK(CTFGameRules_SetWinningTeam, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_SetWinningTeam), false);
 		m_setStalemateHook = SH_ADD_MANUALVPHOOK(CTFGameRules_SetStalemate, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_SetStalemate), false);
+		m_checkWinLimit = SH_ADD_MANUALVPHOOK(CTFGameRules_CheckWinLimit, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_CheckWinLimit), false);
 
 		m_hooksSetup = true;
 	}
@@ -47,6 +48,7 @@ void GameRulesManager::Disable() {
 	if (m_hooksSetup) {
 		SH_REMOVE_HOOK_ID(m_setWinningTeamHook);
 		SH_REMOVE_HOOK_ID(m_setStalemateHook);
+		SH_REMOVE_HOOK_ID(m_checkWinLimit);
 
 		m_hooksSetup = false;
 	}
@@ -128,18 +130,6 @@ bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit() {
 	else {
 		RETURN_META_VALUE(MRES_IGNORED, false);
 	}
-}
-
-void GameRulesManager::AddHooks(CBaseEntity *pEntity) {
-	SH_ADD_MANUALHOOK(CTFGameRules_SetWinningTeam, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_SetWinningTeam), false);
-	SH_ADD_MANUALHOOK(CTFGameRules_SetStalemate, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_SetStalemate), false);
-	SH_ADD_MANUALHOOK(CTFGameRules_CheckWinLimit, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_CheckWinLimit), false);
-}
-
-void GameRulesManager::RemoveHooks(CBaseEntity *pEntity) {
-	SH_REMOVE_MANUALHOOK(CTFGameRules_SetWinningTeam, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_SetWinningTeam), false);
-	SH_REMOVE_MANUALHOOK(CTFGameRules_SetStalemate, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_SetStalemate), false);
-	SH_REMOVE_MANUALHOOK(CTFGameRules_CheckWinLimit, pEntity, SH_MEMBER(&g_GameRulesManager, &GameRulesManager::Hook_CTFGameRules_CheckWinLimit), false);
 }
 
 cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params) {
