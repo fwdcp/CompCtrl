@@ -10,6 +10,7 @@ class GameRulesManager : public ISMEntityListener
 public:
 	void Enable();
 	void Disable();
+	bool IsRunning() { return m_hooksSetup; }
 
 	// natives
 public:

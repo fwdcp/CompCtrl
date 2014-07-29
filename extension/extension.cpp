@@ -4,6 +4,8 @@ CompCtrl g_CompCtrl;		/**< Global singleton for extension's main interface */
 
 SMEXT_LINK(&g_CompCtrl);
 
+SH_DECL_HOOK6(IServerGameDLL, LevelInit, SH_NOATTRIB, false, bool, const char *, const char *, const char *, const char *, bool, bool);
+
 IGameConfig *g_pGameConfig = NULL;
 ISDKHooks *g_pSDKHooks = NULL;
 ISDKTools *g_pSDKTools = NULL;
@@ -49,4 +51,24 @@ bool CompCtrl::QueryRunning(char *error, size_t maxlength) {
 	SM_CHECK_IFACE(SDKHOOKS, g_pSDKHooks);
 	SM_CHECK_IFACE(SDKTOOLS, g_pSDKTools);
 	return true;
+}
+
+bool CompCtrl::SDK_OnMetamodLoad(ISmmAPI *ismm, char *error, size_t maxlength, bool late) {
+	SH_ADD_HOOK(IServerGameDLL, LevelInit, gamedll, SH_MEMBER(this, &CompCtrl::OnLevelInit), true);
+
+	return true;
+}
+
+bool CompCtrl::SDK_OnMetamodUnload(char *error, size_t maxlength) {
+	SH_REMOVE_HOOK(IServerGameDLL, LevelInit, gamedll, SH_MEMBER(this, &CompCtrl::OnLevelInit), true);
+
+	return true;
+}
+
+bool CompCtrl::OnLevelInit(const char *pMapName, char const *pMapEntities, char const *pOldLevel, char const *pLandmarkName, bool loadGame, bool background) {
+	if (!g_GameRulesManager.IsRunning()) {
+		g_GameRulesManager.Enable();
+	}
+
+	RETURN_META_VALUE(MRES_IGNORED, true);
 }
