@@ -4,7 +4,7 @@
 TeamManager g_TeamManager;
 
 SH_DECL_MANUALHOOK0(CTFTeam_GetTeamNumber, 0, 0, 0, int);
-SH_DECL_MANUALHOOK0_void(CTFTeam_ResetScores, 0, 0, 0, int)
+SH_DECL_MANUALHOOK0_void(CTFTeam_ResetScores, 0, 0, 0);
 
 void TeamManager::Enable() {
 	if (!m_hooksSetup) {
