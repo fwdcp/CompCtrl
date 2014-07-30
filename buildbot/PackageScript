@@ -8,7 +8,7 @@ folder_list = [
   'addons/sourcemod/gamedata',
   'addons/sourcemod/scripting/include',
   'addons/sourcemod/scripting',
-#  'addons/sourcemod/configs',
+  'addons/sourcemod/configs',
 #  'addons/sourcemod/translations',
   'addons/sourcemod/plugins',
 ]
@@ -52,10 +52,16 @@ CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
 
 CopyFiles('plugins', 'addons/sourcemod/scripting',
   [ 'compctrl-teams.sp',
+    'compctrl-matches.sp',
   ]
 )
 
 CopyFiles('gamedata', 'addons/sourcemod/gamedata',
   [ 'compctrl.txt',
+  ]
+)
+
+CopyFiles('configs', 'addons/sourcemod/configs',
+  [ 'compctrl-matches.cfg',
   ]
 )

@@ -28,6 +28,14 @@ enum WinReason {
 	WinReason_WinDiffLimit,
 };
 
+enum EndCondition {
+	EndCondition_None = 0,
+	EndCondition_TimeLimit,
+	EndCondition_WinLimit,
+	EndCondition_WinDifference,
+	EndCondition_MaxRounds
+}
+
 /**
  * @brief 				Calls SetWinningTeam in CTFGameRules.
  *
