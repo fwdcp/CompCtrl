@@ -121,6 +121,8 @@ public Action:Command_UnreadyPlayer(client, args) {
 	
 	CPrintToChatAllEx(client, "{teamcolor}%s{default} changed player state to {olive}Not Ready{default}", name);
 	
+	FakeClientCommand(client, "tournament_readystate 0");
+	
 	return Plugin_Handled;
 }
 public Action:Command_ReadyTeam(client, args) {
