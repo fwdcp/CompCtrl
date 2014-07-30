@@ -42,7 +42,7 @@ void GameRulesManager::Enable() {
 
 		m_setWinningTeamHook = SH_ADD_MANUALVPHOOK(CTFGameRules_SetWinningTeam, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_SetWinningTeam), false);
 		m_setStalemateHook = SH_ADD_MANUALVPHOOK(CTFGameRules_SetStalemate, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_SetStalemate), false);
-		m_checkWinLimit = SH_ADD_MANUALVPHOOK(CTFGameRules_CheckWinLimit, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_CheckWinLimit), false);
+		m_checkWinLimitHook = SH_ADD_MANUALVPHOOK(CTFGameRules_CheckWinLimit, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_CheckWinLimit), false);
 
 		m_hooksEnabled = true;
 	}
@@ -52,7 +52,7 @@ void GameRulesManager::Disable() {
 	if (m_hooksEnabled) {
 		SH_REMOVE_HOOK_ID(m_setWinningTeamHook);
 		SH_REMOVE_HOOK_ID(m_setStalemateHook);
-		SH_REMOVE_HOOK_ID(m_checkWinLimit);
+		SH_REMOVE_HOOK_ID(m_checkWinLimitHook);
 
 		m_hooksEnabled = false;
 	}

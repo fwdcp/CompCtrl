@@ -27,7 +27,7 @@ private:
 	bool m_hooksEnabled;
 	int m_setWinningTeamHook;
 	int m_setStalemateHook;
-	int m_checkWinLimit;
+	int m_checkWinLimitHook;
 };
 
 cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params);
