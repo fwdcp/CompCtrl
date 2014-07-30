@@ -1,8 +1,9 @@
 #include <sourcemod>
-#include <sdktools_gamerules>
+
+#include <morecolors>
+#include <sdktools>
 #include <tf2>
 #include <tf2_stocks>
-#include <morecolors>
 
 new Handle:g_MinTeamPlayers = INVALID_HANDLE;
 new Handle:g_MaxTeamPlayers = INVALID_HANDLE;
