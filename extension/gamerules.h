@@ -21,6 +21,7 @@ public:
 	void Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false);
 	void Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset = true, bool bSwitchTeams = false);
 	bool Hook_CTFGameRules_CheckWinLimit();
+	void Hook_CTFGameRules_RestartTournament();
 
 private:
 	bool m_hooksSetup;
@@ -28,6 +29,7 @@ private:
 	int m_setWinningTeamHook;
 	int m_setStalemateHook;
 	int m_checkWinLimitHook;
+	int m_restartTournamentHook;
 };
 
 cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params);

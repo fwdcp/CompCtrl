@@ -81,6 +81,13 @@ forward Action:CompCtrl_OnSetStalemate(&WinReason:reason, &bool:forceMapReset, &
 forward Action:CompCtrl_OnCheckWinLimit(&bool:returnValue);
 
 /**
+ * @brief 				When RestartTournament in CTFGameRules is called by the game.
+ *
+ * @return				Plugin_Continue to allow the restart, Plugin_Changed or above to prevent the restart.
+ */
+forward Action:CompCtrl_OnRestartTournament();
+
+/**
  * @brief 				When ResetScores in CTFTeam is called by the game.
  *
  * @param team			The team that is having its scores reset.

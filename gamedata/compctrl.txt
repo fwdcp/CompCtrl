@@ -16,6 +16,12 @@
 				"linux"		"157"
 				"mac"		"157"
 			}
+			"CTFGameRules::RestartTournament"
+			{
+				"windows"	"199"
+				"linux"		"200"
+				"mac"		"200"
+			}
 			"CTFGameRules::CheckWinLimit"
 			{
 				"windows"	"210"

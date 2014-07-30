@@ -6,6 +6,7 @@ GameRulesManager g_GameRulesManager;
 SH_DECL_MANUALHOOK5_void(CTFGameRules_SetWinningTeam, 0, 0, 0, int, int, bool, bool, bool);
 SH_DECL_MANUALHOOK3_void(CTFGameRules_SetStalemate, 0, 0, 0, int, bool, bool);
 SH_DECL_MANUALHOOK0(CTFGameRules_CheckWinLimit, 0, 0, 0, bool);
+SH_DECL_MANUALHOOK0_void(CTFGameRules_RestartTournament, 0, 0, 0);
 
 void GameRulesManager::Enable() {
 	if (!m_hooksSetup) {
@@ -32,6 +33,13 @@ void GameRulesManager::Enable() {
 
 		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_CheckWinLimit, offset, 0, 0);
 
+		if (!g_pGameConfig->GetOffset("CTFGameRules::RestartTournament", &offset)) {
+			g_pSM->LogError(myself, "Failed to find CTFGameRules::RestartTournament offset");
+			return;
+		}
+
+		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_RestartTournament, offset, 0, 0);
+
 		m_hooksSetup = true;
 	}
 
@@ -43,6 +51,7 @@ void GameRulesManager::Enable() {
 		m_setWinningTeamHook = SH_ADD_MANUALVPHOOK(CTFGameRules_SetWinningTeam, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_SetWinningTeam), false);
 		m_setStalemateHook = SH_ADD_MANUALVPHOOK(CTFGameRules_SetStalemate, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_SetStalemate), false);
 		m_checkWinLimitHook = SH_ADD_MANUALVPHOOK(CTFGameRules_CheckWinLimit, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_CheckWinLimit), false);
+		m_restartTournamentHook = SH_ADD_MANUALVPHOOK(CTFGameRules_RestartTournament, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_RestartTournament), false);
 
 		m_hooksEnabled = true;
 	}
@@ -53,6 +62,7 @@ void GameRulesManager::Disable() {
 		SH_REMOVE_HOOK_ID(m_setWinningTeamHook);
 		SH_REMOVE_HOOK_ID(m_setStalemateHook);
 		SH_REMOVE_HOOK_ID(m_checkWinLimitHook);
+		SH_REMOVE_HOOK_ID(m_restartTournamentHook);
 
 		m_hooksEnabled = false;
 	}
@@ -133,6 +143,19 @@ bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit() {
 	}
 	else {
 		RETURN_META_VALUE(MRES_IGNORED, false);
+	}
+}
+
+void GameRulesManager::Hook_CTFGameRules_RestartTournament() {
+	cell_t result = 0;
+
+	g_RestartTournamentForward->Execute(&result);
+
+	if (result > Pl_Continue) {
+		RETURN_META(MRES_SUPERCEDE);
+	}
+	else {
+		RETURN_META(MRES_IGNORED);
 	}
 }
 
