@@ -35,6 +35,9 @@ bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
 
 void CompCtrl::SDK_OnUnload() {
 	g_GameRulesManager.Disable();
+	g_TeamManager.Disable();
+
+	g_pSDKHooks->RemoveEntityListener(&g_TeamManager);
 }
 
 void CompCtrl::SDK_OnAllLoaded() {
@@ -50,6 +53,11 @@ void CompCtrl::SDK_OnAllLoaded() {
 		g_CheckWinLimitForward = forwards->CreateForward("CompCtrl_OnCheckWinLimit", ET_Hook, 1, NULL, Param_CellByRef);
 		g_RestartTournamentForward = forwards->CreateForward("CompCtrl_OnRestartTournament", ET_Hook, 0, NULL);
 		g_ResetTeamScoresForward = forwards->CreateForward("CompCtrl_OnResetTeamScores", ET_Hook, 1, NULL, Param_Cell);
+
+		g_GameRulesManager.Enable();
+		g_TeamManager.Enable();
+
+		g_pSDKHooks->AddEntityListener(&g_TeamManager);
 	}
 }
 

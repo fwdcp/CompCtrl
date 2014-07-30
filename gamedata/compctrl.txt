@@ -28,6 +28,18 @@
 				"linux"		"211"
 				"mac"		"211"
 			}
+			"CTFTeam::GetTeamNumber"
+			{
+				"windows"	"188"
+				"linux"		"189"
+				"mac"		"189"
+			}
+			"CTFTeam::ResetScores"
+			{
+				"windows"	"204"
+				"linux"		"205"
+				"mac"		"205"
+			}
 		}
 	}
 }

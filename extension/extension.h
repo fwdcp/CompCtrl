@@ -6,6 +6,7 @@
 #include "ISDKTools.h"
 
 #include "gamerules.h"
+#include "team.h"
 
 class CompCtrl : public SDKExtension
 {
