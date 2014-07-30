@@ -4,7 +4,6 @@
 #include "smsdk_ext.h"
 #include "ISDKHooks.h"
 #include "ISDKTools.h"
-#include <sourcehook/sourcehook.h>
 
 #include "gamerules.h"
 #include "team.h"
