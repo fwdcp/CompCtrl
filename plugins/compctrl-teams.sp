@@ -178,15 +178,15 @@ public Action:Command_ChangeTeamReady(client, const String:command[], argc) {
 		new maxPlayers = GetConVarInt(g_MaxTeamPlayers);
 		
 		if (minPlayers != 0 && teamPlayers < minPlayers) {
-			PrintToChat(client, "You cannot ready your team because it has %i players, which is less than the %i minimum players required to play.", teamPlayers, minPlayers);
+			PrintToChat(client, "You cannot ready your team because it has %i player(s), which is less than the %i minimum player(s) required to play.", teamPlayers, minPlayers);
 			return Plugin_Stop;
 		}
 		else if (maxPlayers != 0 && teamPlayers > maxPlayers) {
-			PrintToChat(client, "You cannot ready your team because it has %i players, which is more than the %i maximum players allowed to play.", teamPlayers, maxPlayers);
+			PrintToChat(client, "You cannot ready your team because it has %i player(s), which is more than the %i maximum player(s) allowed to play.", teamPlayers, maxPlayers);
 			return Plugin_Stop;
 		}
 		else if (teamPlayersReady < teamPlayers) {
-			PrintToChat(client, "You cannot ready your team because %i players on it are not ready.", teamPlayers - teamPlayersReady);
+			PrintToChat(client, "You cannot ready your team because %i player(s) on it are not ready.", teamPlayers - teamPlayersReady);
 			return Plugin_Stop;
 		}
 		else {
