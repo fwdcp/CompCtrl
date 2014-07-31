@@ -16,6 +16,12 @@
 				"linux"		"157"
 				"mac"		"157"
 			}
+			"CTFGameRules::HandleSwitchTeams"
+			{
+				"windows"	"159"
+				"linux"		"160"
+				"mac"		"160"
+			}
 			"CTFGameRules::RestartTournament"
 			{
 				"windows"	"199"

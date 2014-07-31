@@ -34,13 +34,15 @@ const sp_nativeinfo_t g_Natives[] =
 {
 	{ "CompCtrl_SetWinningTeam", CompCtrl_SetWinningTeam },
 	{ "CompCtrl_SetStalemate", CompCtrl_SetStalemate },
+	{ "CompCtrl_SwitchTeams", CompCtrl_SwitchTeams },
 	{ NULL, NULL }
 };
 
 extern IForward *g_SetWinningTeamForward;
 extern IForward *g_SetStalemateForward;
-extern IForward *g_CheckWinLimitForward;
+extern IForward *g_SwitchTeamsForward;
 extern IForward *g_RestartTournamentForward;
+extern IForward *g_CheckWinLimitForward;
 extern IForward *g_ResetTeamScoresForward;
 
 #endif // _INCLUDE_COMPCTRL_H_

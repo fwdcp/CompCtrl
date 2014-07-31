@@ -5,8 +5,9 @@ GameRulesManager g_GameRulesManager;
 
 SH_DECL_MANUALHOOK5_void(CTFGameRules_SetWinningTeam, 0, 0, 0, int, int, bool, bool, bool);
 SH_DECL_MANUALHOOK3_void(CTFGameRules_SetStalemate, 0, 0, 0, int, bool, bool);
-SH_DECL_MANUALHOOK0(CTFGameRules_CheckWinLimit, 0, 0, 0, bool);
+SH_DECL_MANUALHOOK0_void(CTFGameRules_HandleSwitchTeams, 0, 0, 0);
 SH_DECL_MANUALHOOK0_void(CTFGameRules_RestartTournament, 0, 0, 0);
+SH_DECL_MANUALHOOK0(CTFGameRules_CheckWinLimit, 0, 0, 0, bool);
 
 void GameRulesManager::Enable() {
 	if (!m_hooksSetup) {
@@ -26,12 +27,12 @@ void GameRulesManager::Enable() {
 
 		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_SetStalemate, offset, 0, 0);
 
-		if (!g_pGameConfig->GetOffset("CTFGameRules::CheckWinLimit", &offset)) {
-			g_pSM->LogError(myself, "Failed to find CTFGameRules::CheckWinLimit offset");
+		if (!g_pGameConfig->GetOffset("CTFGameRules::HandleSwitchTeams", &offset)) {
+			g_pSM->LogError(myself, "Failed to find CTFGameRules::HandleSwitchTeams offset");
 			return;
 		}
 
-		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_CheckWinLimit, offset, 0, 0);
+		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_HandleSwitchTeams, offset, 0, 0);
 
 		if (!g_pGameConfig->GetOffset("CTFGameRules::RestartTournament", &offset)) {
 			g_pSM->LogError(myself, "Failed to find CTFGameRules::RestartTournament offset");
@@ -39,6 +40,13 @@ void GameRulesManager::Enable() {
 		}
 
 		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_RestartTournament, offset, 0, 0);
+
+		if (!g_pGameConfig->GetOffset("CTFGameRules::CheckWinLimit", &offset)) {
+			g_pSM->LogError(myself, "Failed to find CTFGameRules::CheckWinLimit offset");
+			return;
+		}
+
+		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_CheckWinLimit, offset, 0, 0);
 
 		m_hooksSetup = true;
 	}
@@ -50,8 +58,9 @@ void GameRulesManager::Enable() {
 
 		m_setWinningTeamHook = SH_ADD_MANUALVPHOOK(CTFGameRules_SetWinningTeam, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_SetWinningTeam), false);
 		m_setStalemateHook = SH_ADD_MANUALVPHOOK(CTFGameRules_SetStalemate, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_SetStalemate), false);
-		m_checkWinLimitHook = SH_ADD_MANUALVPHOOK(CTFGameRules_CheckWinLimit, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_CheckWinLimit), false);
+		m_handleSwitchTeamsHook = SH_ADD_MANUALVPHOOK(CTFGameRules_HandleSwitchTeams, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_HandleSwitchTeams), false);
 		m_restartTournamentHook = SH_ADD_MANUALVPHOOK(CTFGameRules_RestartTournament, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_RestartTournament), false);
+		m_checkWinLimitHook = SH_ADD_MANUALVPHOOK(CTFGameRules_CheckWinLimit, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_CheckWinLimit), false);
 
 		m_hooksEnabled = true;
 	}
@@ -61,8 +70,9 @@ void GameRulesManager::Disable() {
 	if (m_hooksEnabled) {
 		SH_REMOVE_HOOK_ID(m_setWinningTeamHook);
 		SH_REMOVE_HOOK_ID(m_setStalemateHook);
-		SH_REMOVE_HOOK_ID(m_checkWinLimitHook);
+		SH_REMOVE_HOOK_ID(m_handleSwitchTeamsHook);
 		SH_REMOVE_HOOK_ID(m_restartTournamentHook);
+		SH_REMOVE_HOOK_ID(m_checkWinLimitHook);
 
 		m_hooksEnabled = false;
 	}
@@ -77,6 +87,12 @@ void GameRulesManager::Call_CTFGameRules_SetWinningTeam(int team, int iWinReason
 void GameRulesManager::Call_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset, bool bSwitchTeams) {
 	if (g_pSDKTools->GetGameRules()) {
 		SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_SetStalemate)(iReason, bForceMapReset, bSwitchTeams);
+	}
+}
+
+void GameRulesManager::Call_CTFGameRules_HandleSwitchTeams() {
+	if (g_pSDKTools->GetGameRules()) {
+		SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_HandleSwitchTeams)();
 	}
 }
 
@@ -129,6 +145,32 @@ void GameRulesManager::Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMa
 	}
 }
 
+void GameRulesManager::Hook_CTFGameRules_HandleSwitchTeams() {
+	cell_t result = 0;
+
+	g_SwitchTeamsForward->Execute(&result);
+
+	if (result > Pl_Continue) {
+		RETURN_META(MRES_SUPERCEDE);
+	}
+	else {
+		RETURN_META(MRES_IGNORED);
+	}
+}
+
+void GameRulesManager::Hook_CTFGameRules_RestartTournament() {
+	cell_t result = 0;
+
+	g_RestartTournamentForward->Execute(&result);
+
+	if (result > Pl_Continue) {
+		RETURN_META(MRES_SUPERCEDE);
+	}
+	else {
+		RETURN_META(MRES_IGNORED);
+	}
+}
+
 bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit() {
 	cell_t returnValue = SH_MCALL(META_IFACEPTR(CBaseEntity), CTFGameRules_CheckWinLimit)();
 
@@ -143,19 +185,6 @@ bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit() {
 	}
 	else {
 		RETURN_META_VALUE(MRES_IGNORED, false);
-	}
-}
-
-void GameRulesManager::Hook_CTFGameRules_RestartTournament() {
-	cell_t result = 0;
-
-	g_RestartTournamentForward->Execute(&result);
-
-	if (result > Pl_Continue) {
-		RETURN_META(MRES_SUPERCEDE);
-	}
-	else {
-		RETURN_META(MRES_IGNORED);
 	}
 }
 
@@ -185,6 +214,16 @@ cell_t CompCtrl_SetStalemate(IPluginContext *pContext, const cell_t *params) {
 	}
 
 	g_GameRulesManager.Call_CTFGameRules_SetStalemate(iReason, bForceMapReset, bSwitchTeams);
+
+	return 0;
+}
+
+cell_t CompCtrl_SwitchTeams(IPluginContext *pContext, const cell_t *params) {
+	if (!g_pSDKTools->GetGameRules()) {
+		pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
+	}
+
+	g_GameRulesManager.Call_CTFGameRules_HandleSwitchTeams();
 
 	return 0;
 }

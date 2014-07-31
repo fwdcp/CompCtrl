@@ -34,7 +34,13 @@ enum EndCondition {
 	EndCondition_WinLimit,
 	EndCondition_WinDifference,
 	EndCondition_MaxRounds
-}
+};
+
+enum StopwatchStatus {
+	StopwatchStatus_Unknown = 0,
+	StopwatchStatus_SetTarget,
+	StopwatchStatus_ChaseTarget
+};
 
 /**
  * @brief 				Calls SetWinningTeam in CTFGameRules.
@@ -59,6 +65,13 @@ native CompCtrl_SetWinningTeam(TFTeam:team, WinReason:reason, bool:forceMapReset
 native CompCtrl_SetStalemate(WinReason:reason, bool:forceMapReset, bool:switchTeams);
 
 /**
+ * @brief 				Calls HandleSwitchTeams in CTFGameRules.
+ *
+ * @noreturn
+ */
+native CompCtrl_SwitchTeams();
+
+/**
  * @brief 				When SetWinningTeam in CTFGameRules is called by the game.
  *
  * @param team			The team that has won.
@@ -81,12 +94,11 @@ forward Action:CompCtrl_OnSetWinningTeam(&TFTeam:team, &WinReason:reason, &bool:
 forward Action:CompCtrl_OnSetStalemate(&WinReason:reason, &bool:forceMapReset, &bool:switchTeams);
 
 /**
- * @brief 				When CheckWinLimit in CTFGameRules is called by the game.
+ * @brief 				When HandleSwitchTeams in CTFGameRules is called by the game.
  *
- * @param returnValue	The return value for the function (true for win limit reached, false for not).
- * @return				Plugin_Continue to return the original value, Plugin_Changed or above to use the new value.
+ * @return				Plugin_Continue to allow the team switch, Plugin_Changed or above to prevent the team switch.
  */
-forward Action:CompCtrl_OnCheckWinLimit(&bool:returnValue);
+forward Action:CompCtrl_OnSwitchTeams();
 
 /**
  * @brief 				When RestartTournament in CTFGameRules is called by the game.
@@ -94,6 +106,14 @@ forward Action:CompCtrl_OnCheckWinLimit(&bool:returnValue);
  * @return				Plugin_Continue to allow the restart, Plugin_Changed or above to prevent the restart.
  */
 forward Action:CompCtrl_OnRestartTournament();
+
+/**
+ * @brief 				When CheckWinLimit in CTFGameRules is called by the game.
+ *
+ * @param returnValue	The return value for the function (true for win limit reached, false for not).
+ * @return				Plugin_Continue to return the original value, Plugin_Changed or above to use the new value.
+ */
+forward Action:CompCtrl_OnCheckWinLimit(&bool:returnValue);
 
 /**
  * @brief 				When ResetScores in CTFTeam is called by the game.
