@@ -44,9 +44,9 @@ enum EndCondition {
  * @param forceMapReset	Whether to reset the map (usually after a full round is completed).
  * @param switchTeams	Whether to switch teams.
  * @param dontAddScore	Whether to not score this round.
- * @return				Whether the function was successfully called.
+ * @noreturn
  */
-native bool:CompCtrl_SetWinningTeam(TFTeam:team, WinReason:reason, bool:forceMapReset, bool:switchTeams, bool:dontAddScore);
+native CompCtrl_SetWinningTeam(TFTeam:team, WinReason:reason, bool:forceMapReset, bool:switchTeams, bool:dontAddScore);
 
 /**
  * @brief 				Calls SetStalemate in CTFGameRules.
@@ -54,9 +54,9 @@ native bool:CompCtrl_SetWinningTeam(TFTeam:team, WinReason:reason, bool:forceMap
  * @param reason		The reason why the team is winning.
  * @param forceMapReset	Whether to reset the map (usually after a full round is completed).
  * @param switchTeams	Whether to switch teams.
- * @return				Whether the function was successfully called.
+ * @noreturn
  */
-native bool:CompCtrl_SetStalemate(WinReason:reason, bool:forceMapReset, bool:switchTeams);
+native CompCtrl_SetStalemate(WinReason:reason, bool:forceMapReset, bool:switchTeams);
 
 /**
  * @brief 				When SetWinningTeam in CTFGameRules is called by the game.
