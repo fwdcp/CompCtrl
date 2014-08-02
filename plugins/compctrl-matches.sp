@@ -239,59 +239,6 @@ public Action:CompCtrl_OnSetWinningTeam(&TFTeam:team, &WinReason:reason, &bool:f
 	return Plugin_Continue;
 }
 
-public Action:CompCtrl_OnSetStalemate(&StalemateReason:reason, &bool:forceMapReset, &bool:switchTeams) {
-	if (g_InMatch) {
-		GetCurrentRoundConfig();
-		
-		if (KvGetNum(g_MatchConfigs, "sudden-death", 0)) {
-			return Plugin_Continue;
-		}
-		
-		new redScore = GetScore(TFTeam_Red);
-		new bluScore = GetScore(TFTeam_Blue);
-		
-		if (GameRules_GetProp("m_bStopWatch", 1)) {
-			if (GetStopwatchStatus() == StopwatchStatus_ChaseTarget) {
-				g_RoundsPlayed++;
-			}
-		}
-		else {
-			g_RoundsPlayed++;
-		}
-		
-		if (KvGetNum(g_MatchConfigs, "manual-scoring", 0)) {
-			g_RedTeamScore = redScore;
-			g_BluTeamScore = bluScore;
-		}
-		
-		new EndCondition:endCondition;
-		new TFTeam:cause;
-		
-		if (!CheckEndConditions(redScore, bluScore, endCondition, cause)) {
-			if (KvGetNum(g_MatchConfigs, "switch-teams-each-round")) {
-				g_SwitchTeams = true;
-			}
-		}
-		else {
-			EndPeriod(redScore, bluScore, endCondition, cause);
-		}
-		
-		if (g_SwitchTeams) {
-			if (GameRules_GetProp("m_bStopWatch", 1) && GetStopwatchStatus() == StopwatchStatus_ChaseTarget) {
-				switchTeams = false;
-			}
-			else {
-				switchTeams = true;
-			}
-			
-			g_SwitchTeams = false;
-			return Plugin_Changed;
-		}
-	}
-	
-	return Plugin_Continue;
-}
-
 public Action:CompCtrl_OnSwitchTeams() {
 	if (g_InMatch) {
 		GetCurrentRoundConfig();
