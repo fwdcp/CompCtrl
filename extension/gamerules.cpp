@@ -192,8 +192,8 @@ bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit() {
 }
 
 cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params) {
-	int team = params[1];
-	int iWinReason = params[2];
+	int team = (int)params[1];
+	int iWinReason = (int)params[2];
 	bool bForceMapReset = (bool)params[3];
 	bool bSwitchTeams = (bool)params[4];
 	bool bDontAddScore = (bool)params[5];
@@ -208,7 +208,7 @@ cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params) {
 }
 
 cell_t CompCtrl_SetStalemate(IPluginContext *pContext, const cell_t *params) {
-	int iReason = params[1];
+	int iReason = (int)params[1];
 	bool bForceMapReset = (bool)params[2];
 	bool bSwitchTeams = (bool)params[3];
 
