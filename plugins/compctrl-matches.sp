@@ -28,6 +28,7 @@ new Handle:g_WinLimit = INVALID_HANDLE;
 new Handle:g_WinDifference = INVALID_HANDLE;
 new Handle:g_WinDifferenceMin = INVALID_HANDLE;
 new Handle:g_MaxRounds = INVALID_HANDLE;
+new Handle:g_FlagCapsPerRound = INVALID_HANDLE;
 
 public Plugin:myinfo =
 {
@@ -57,6 +58,7 @@ public OnPluginStart() {
 	g_WinDifference = FindConVar("mp_windifference");
 	g_WinDifferenceMin = FindConVar("mp_windifference_min");
 	g_MaxRounds = FindConVar("mp_maxrounds");
+	g_FlagCapsPerRound = FindConVar("tf_flag_caps_per_round");
 	
 	HookEvent("teamplay_round_start", Event_RoundStart);
 }
@@ -304,6 +306,7 @@ BeginPeriod() {
 	SetConVarInt(g_WinDifference, KvGetNum(g_MatchConfigs, "windifference", 0), true, true);
 	SetConVarInt(g_WinDifferenceMin, KvGetNum(g_MatchConfigs, "windifference-min", 0), true, true);
 	SetConVarInt(g_MaxRounds, KvGetNum(g_MatchConfigs, "maxrounds", 0), true, true);
+	SetConVarInt(g_FlagCapsPerRound, KvGetNum(g_MatchConfigs, "flag-caps-per-round", 0), true, true);
 	
 	g_RoundsPlayed = 0;
 	
