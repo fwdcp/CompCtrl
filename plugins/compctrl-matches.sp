@@ -1,6 +1,7 @@
 #include <sourcemod>
 
 #include <compctrl>
+#include <compctrl_version>
 #include <morecolors>
 #include <sdktools>
 
@@ -35,7 +36,7 @@ public Plugin:myinfo =
 	name = "CompCtrl Match Management",
 	author = "Forward Command Post",
 	description = "a plugin to manage matches in tournament mode",
-	version = "0.0.0",
+	version = COMPCTRL_VERSION,
 	url = "http://github.com/fwdcp/CompCtrl/"
 };
 

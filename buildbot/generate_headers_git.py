@@ -68,4 +68,21 @@ def output_version_headers():
 #endif /* _EXT_AUTO_VERSION_INFORMATION_H_ */
     """.format(tag, cset, major, minor, release, rev, fullstring))
 
+  with open(os.path.join(OutputFolder, 'compctrl_version_auto.inc'), 'w') as fp:
+    fp.write("""
+#if defined _compctrl_auto_version_included
+ #endinput
+#endif
+#define _compctrl_auto_version_included
+
+#define COMPCTRL_V_TAG      \"{0}\"
+#define COMPCTRL_V_CSET	    \"{1}\"
+#define COMPCTRL_V_MAJOR	{2}
+#define COMPCTRL_V_MINOR	{3}
+#define COMPCTRL_V_RELEASE	{4}
+#define COMPCTRL_V_REV		\"{5}\"
+
+#define COMPCTRL_VERSION	\"{6}\"
+    """.format(tag, cset, major, minor, release, rev, fullstring))
+
 output_version_headers()

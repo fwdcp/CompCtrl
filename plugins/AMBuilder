@@ -48,6 +48,8 @@ spcomp_argv = [
                          os.path.join(builder.buildPath, builder.buildFolder)),
   '-i' + os.path.relpath(os.path.join(builder.sourcePath, 'plugins', 'include'),
                          os.path.join(builder.buildPath, builder.buildFolder)),
+  '-i' + os.path.relpath(os.path.join(builder.buildPath, 'includes'),
+                         os.path.join(builder.buildPath, builder.buildFolder)),
   '-h',
 ]
 
