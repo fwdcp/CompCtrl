@@ -14,9 +14,13 @@ new bool:g_ReadiedUp = false;
 new bool:g_PeriodNeedsSetup = false;
 new bool:g_AllowScoreReset = false;
 new g_RoundsPlayed;
+new g_RedTeamScore;
+new g_BluTeamScore;
 
 new Handle:g_Tournament = INVALID_HANDLE;
 new Handle:g_TournamentNonAdminRestart = INVALID_HANDLE;
+new Handle:g_Stopwatch = INVALID_HANDLE;
+new Handle:g_SuddenDeath = INVALID_HANDLE;
 new Handle:g_RedTeamName = INVALID_HANDLE;
 new Handle:g_BlueTeamName = INVALID_HANDLE;
 new Handle:g_TimeLimit = INVALID_HANDLE;
@@ -29,7 +33,7 @@ public Plugin:myinfo =
 {
 	name = "CompCtrl Match Management",
 	author = "Forward Command Post",
-	description = "a plugin to manage scoring in tournament mode",
+	description = "a plugin to manage matches in tournament mode",
 	version = "0.0.0",
 	url = "http://github.com/fwdcp/CompCtrl/"
 };
@@ -44,6 +48,8 @@ public OnPluginStart() {
 	
 	g_Tournament = FindConVar("mp_tournament");
 	g_TournamentNonAdminRestart = FindConVar("mp_tournament_allow_non_admin_restart");
+	g_Stopwatch = FindConVar("mp_tournament_stopwatch");
+	g_SuddenDeath = FindConVar("mp_stalemate_enable");
 	g_RedTeamName = FindConVar("mp_tournament_redteamname");
 	g_BlueTeamName = FindConVar("mp_tournament_blueteamname");
 	g_TimeLimit = FindConVar("mp_timelimit");
@@ -95,66 +101,120 @@ public Event_RoundStart(Handle:event, const String:name[], bool:dontBroadcast) {
 		
 		GetCurrentRoundConfig();
 		
-		if (g_RoundsPlayed == 0) {
-			decl String:periodName[256];
-			KvGetString(g_MatchConfigs, "name", periodName, sizeof(periodName), "period");
-			
-			CPrintToChatAll("{green}[CompCtrl]{default} Starting {olive}%s{default}.", periodName);
-			
-			g_InPeriod = true;
+		if (KvGetNum(g_MatchConfigs, "manual-scoring", 0)) {
+			SetConVarInt(g_TimeLimit, 0, true, true);
+			SetConVarInt(g_WinLimit, 0, true, true);
+			SetConVarInt(g_WinDifference, 0, true, true);
+			SetConVarInt(g_WinDifferenceMin, 0, true, true);
+			SetConVarInt(g_MaxRounds, 0, true, true);
+		}
+		
+		if (!GameRules_GetProp("m_bStopWatch", 1) || GetStopwatchStatus() == StopwatchStatus_SetTarget) {
+			if (g_RoundsPlayed == 0) {
+				decl String:periodName[256];
+				KvGetString(g_MatchConfigs, "name", periodName, sizeof(periodName), "period");
+				
+				CPrintToChatAll("{green}[CompCtrl]{default} Starting {olive}%s{default}.", periodName);
+				
+				g_InPeriod = true;
+			}
 		}
 		
 		new currentRound = g_RoundsPlayed + 1;
 		
-		if (KvGetNum(g_MatchConfigs, "timelimit", 0) > 0) {
-			new timeLeft;
-			GetMapTimeLeft(timeLeft);
-			
-			CPrintToChatAll("{green}[CompCtrl]{default} Period status: round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+		if (GameRules_GetProp("m_bStopWatch", 1)) {
+			if (KvGetNum(g_MatchConfigs, "timelimit", 0) > 0) {
+				new timeLeft;
+				GetMapTimeLeft(timeLeft);
+				
+				switch (GetStopwatchStatus()) {
+					case StopwatchStatus_SetTarget: {
+						CPrintToChatAll("{green}[CompCtrl]{default} Period status: set part of round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+					}
+					case StopwatchStatus_ChaseTarget: {
+						CPrintToChatAll("{green}[CompCtrl]{default} Period status: chase part of round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+					}
+					default: {
+						CPrintToChatAll("{green}[CompCtrl]{default} Period status: round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+					}
+				}
+			}
+			else {
+				switch (GetStopwatchStatus()) {
+					case StopwatchStatus_SetTarget: {
+						CPrintToChatAll("{green}[CompCtrl]{default} Period status: set part of round {olive}%i{default}.", currentRound);
+					}
+					case StopwatchStatus_ChaseTarget: {
+						CPrintToChatAll("{green}[CompCtrl]{default} Period status: chase part of round {olive}%i{default}.", currentRound);
+					}
+					default: {
+						CPrintToChatAll("{green}[CompCtrl]{default} Period status: round {olive}%i{default}.", currentRound);
+					}
+				}
+			}
 		}
 		else {
-			CPrintToChatAll("{green}[CompCtrl]{default} Period status: round {olive}%i{default}.", currentRound);
+			if (KvGetNum(g_MatchConfigs, "timelimit", 0) > 0) {
+				new timeLeft;
+				GetMapTimeLeft(timeLeft);
+				
+				CPrintToChatAll("{green}[CompCtrl]{default} Period status: round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+			}
+			else {
+				CPrintToChatAll("{green}[CompCtrl]{default} Period status: round {olive}%i{default}.", currentRound);
+			}
 		}
-		
-		new redScore = GetTeamScore(_:TFTeam_Red);
-		new bluScore = GetTeamScore(_:TFTeam_Blue);
 		
 		decl String:redName[256];
 		GetConVarString(g_RedTeamName, redName, sizeof(redName));
 		decl String:bluName[256];
 		GetConVarString(g_BlueTeamName, bluName, sizeof(bluName));
 		
-		CPrintToChatAll("{green}[CompCtrl]{default} Current score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, bluScore, redName, redScore);
+		CPrintToChatAll("{green}[CompCtrl]{default} Current score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
 	}
 }
 
 public Action:CompCtrl_OnSetWinningTeam(&TFTeam:team, &WinReason:reason, &bool:forceMapReset, &bool:switchTeams, &bool:dontAddScore) {
 	if (g_InMatch) {
-		new redScore = GetTeamScore(_:TFTeam_Red);
-		new bluScore = GetTeamScore(_:TFTeam_Blue);
+		GetCurrentRoundConfig();
 		
-		decl String:redName[256];
-		GetConVarString(g_RedTeamName, redName, sizeof(redName));
-		decl String:bluName[256];
-		GetConVarString(g_BlueTeamName, bluName, sizeof(bluName));
+		new redScore = GetScore(TFTeam_Red);
+		new bluScore = GetScore(TFTeam_Blue);
 		
-		if (!dontAddScore) {
-			if (team == TFTeam_Red) {
-				redScore++;
-			}
-			else if (team == TFTeam_Blue) {
-				bluScore++;
+		if (GameRules_GetProp("m_bStopWatch", 1)) {
+			if (GetStopwatchStatus() == StopwatchStatus_ChaseTarget) {
+				if (team == TFTeam_Red) {
+					redScore++;
+				}
+				else if (team == TFTeam_Blue) {
+					bluScore++;
+				}
+			
+				g_RoundsPlayed++;
 			}
 		}
+		else {
+			if (!dontAddScore) {
+				if (team == TFTeam_Red) {
+					redScore++;
+				}
+				else if (team == TFTeam_Blue) {
+					bluScore++;
+				}
+			}
 		
-		g_RoundsPlayed++;
+			g_RoundsPlayed++;
+		}
+		
+		if (KvGetNum(g_MatchConfigs, "manual-scoring", 0)) {
+			g_RedTeamScore = redScore;
+			g_BluTeamScore = bluScore;
+		}
 		
 		new EndCondition:endCondition;
 		new TFTeam:cause;
 		
 		if (!CheckEndConditions(redScore, bluScore, endCondition, cause)) {
-			GetCurrentRoundConfig();
-			
 			if (KvGetNum(g_MatchConfigs, "switch-teams-each-round")) {
 				g_SwitchTeams = true;
 			}
@@ -164,9 +224,84 @@ public Action:CompCtrl_OnSetWinningTeam(&TFTeam:team, &WinReason:reason, &bool:f
 		}
 		
 		if (g_SwitchTeams) {
-			switchTeams = true;
+			if (GameRules_GetProp("m_bStopWatch", 1) && GetStopwatchStatus() == StopwatchStatus_ChaseTarget) {
+				switchTeams = false;
+			}
+			else {
+				switchTeams = true;
+			}
+			
 			g_SwitchTeams = false;
 			return Plugin_Changed;
+		}
+	}
+	
+	return Plugin_Continue;
+}
+
+public Action:CompCtrl_OnSetStalemate(&WinReason:reason, &bool:forceMapReset, &bool:switchTeams) {
+	if (g_InMatch) {
+		GetCurrentRoundConfig();
+		
+		if (KvGetNum(g_MatchConfigs, "sudden-death", 0)) {
+			return Plugin_Continue;
+		}
+		
+		new redScore = GetScore(TFTeam_Red);
+		new bluScore = GetScore(TFTeam_Blue);
+		
+		if (GameRules_GetProp("m_bStopWatch", 1)) {
+			if (GetStopwatchStatus() == StopwatchStatus_ChaseTarget) {
+				g_RoundsPlayed++;
+			}
+		}
+		else {
+			g_RoundsPlayed++;
+		}
+		
+		if (KvGetNum(g_MatchConfigs, "manual-scoring", 0)) {
+			g_RedTeamScore = redScore;
+			g_BluTeamScore = bluScore;
+		}
+		
+		new EndCondition:endCondition;
+		new TFTeam:cause;
+		
+		if (!CheckEndConditions(redScore, bluScore, endCondition, cause)) {
+			if (KvGetNum(g_MatchConfigs, "switch-teams-each-round")) {
+				g_SwitchTeams = true;
+			}
+		}
+		else {
+			EndPeriod(redScore, bluScore, endCondition, cause);
+		}
+		
+		if (g_SwitchTeams) {
+			if (GameRules_GetProp("m_bStopWatch", 1) && GetStopwatchStatus() == StopwatchStatus_ChaseTarget) {
+				switchTeams = false;
+			}
+			else {
+				switchTeams = true;
+			}
+			
+			g_SwitchTeams = false;
+			return Plugin_Changed;
+		}
+	}
+	
+	return Plugin_Continue;
+}
+
+public Action:CompCtrl_OnSwitchTeams() {
+	if (g_InMatch) {
+		GetCurrentRoundConfig();
+		
+		if (KvGetNum(g_MatchConfigs, "manual-scoring", 0)) {
+			new newBluScore = g_RedTeamScore;
+			new newRedScore = g_BluTeamScore;
+			
+			g_RedTeamScore = newRedScore;
+			g_BluTeamScore = newBluScore;
 		}
 	}
 	
@@ -182,27 +317,41 @@ public Action:CompCtrl_OnRestartTournament() {
 	return Plugin_Continue;
 }
 
-public Action:CompCtrl_OnResetTeamScores(TFTeam:team) {
-	if (g_InMatch && !g_AllowScoreReset) {
-		if (team == TFTeam_Red || team == TFTeam_Blue) {
-			return Plugin_Stop;
+public Action:CompCtrl_OnCheckWinLimit(&bool:returnValue) {
+	if (g_InMatch) {
+		GetCurrentRoundConfig();
+		
+		if (KvGetNum(g_MatchConfigs, "manual-scoring", 0)) {
+			new EndCondition:endCondition;
+			new TFTeam:cause;
+			
+			returnValue = CheckEndConditions(GetScore(TFTeam_Red), GetScore(TFTeam_Blue), endCondition, cause);
+			return Plugin_Changed;
 		}
 	}
 	
 	return Plugin_Continue;
 }
 
-GetCurrentRoundConfig() {
-	KvRewind(g_MatchConfigs);
+public Action:CompCtrl_OnResetTeamScores(TFTeam:team) {
+	if (g_InMatch) {
+		GetCurrentRoundConfig();
 	
-	if (!KvJumpToKey(g_MatchConfigs, g_MatchConfigName) || !KvJumpToKey(g_MatchConfigs, "periods") || !KvJumpToKey(g_MatchConfigs, g_CurrentPeriod)) {
-		ThrowError("Failed to find period!");
+		if (g_InMatch && !g_AllowScoreReset && !KvGetNum(g_MatchConfigs, "manual-scoring", 0)) {
+			if (team == TFTeam_Red || team == TFTeam_Blue) {
+				return Plugin_Stop;
+			}
+		}
 	}
+	
+	return Plugin_Continue;
 }
 
 BeginPeriod() {
 	GetCurrentRoundConfig();
 	
+	SetConVarBool(g_Stopwatch, bool:KvGetNum(g_MatchConfigs, "stopwatch", 1), true, true);
+	SetConVarBool(g_SuddenDeath, bool:KvGetNum(g_MatchConfigs, "sudden-death", 0), true, true);
 	SetConVarInt(g_TimeLimit, KvGetNum(g_MatchConfigs, "timelimit", 0), true, true);
 	SetConVarInt(g_WinLimit, KvGetNum(g_MatchConfigs, "winlimit", 0), true, true);
 	SetConVarInt(g_WinDifference, KvGetNum(g_MatchConfigs, "windifference", 0), true, true);
@@ -239,6 +388,9 @@ BeginPeriod() {
 		Format(winConditionInformation, sizeof(winConditionInformation), "%s {olive}win difference %i{default} (with {olive}minimum score %i{default})", winConditionInformation, KvGetNum(g_MatchConfigs, "windifference", 0), KvGetNum(g_MatchConfigs, "windifference-min", 0));
 	}
 	if (KvGetNum(g_MatchConfigs, "maxrounds", 0) > 0) {
+		if (!StrEqual(winConditionInformation, "{green}[CompCtrl]{default} This period will end upon the fulfillment of one of the following:")) {
+			StrCat(winConditionInformation, sizeof(winConditionInformation), ";");
+		}
 		
 		Format(winConditionInformation, sizeof(winConditionInformation), "%s {olive}max rounds %i{default}", winConditionInformation, KvGetNum(g_MatchConfigs, "maxrounds", 0));
 	}
@@ -274,69 +426,6 @@ BeginPeriod() {
 	else {
 		CPrintToChatAll("{green}[CompCtrl]{default} Upon completion of this period, the match will proceed to the {olive}%s{default} period.", nextPeriodName);
 	}
-}
-
-bool:CheckEndConditions(redScore, bluScore, &EndCondition:endCondition, &TFTeam:cause) {
-	GetCurrentRoundConfig();
-	
-	new timeLimit = KvGetNum(g_MatchConfigs, "timelimit", 0);
-	
-	if (timeLimit > 0) {
-		new timeLeft;
-		GetMapTimeLeft(timeLeft);
-		
-		if (timeLeft <= 0) {
-			endCondition = EndCondition_TimeLimit;
-			cause = TFTeam_Unassigned;
-			return true;
-		}
-	}
-	
-	new winLimit = KvGetNum(g_MatchConfigs, "winlimit", 0);
-	
-	if (winLimit > 0) {
-		if (redScore >= winLimit) {
-			endCondition = EndCondition_WinLimit;
-			cause = TFTeam_Red;
-			return true;
-		}
-		else if (bluScore >= winLimit) {
-			endCondition = EndCondition_WinLimit;
-			cause = TFTeam_Blue;
-			return true;
-		}
-	}
-	
-	new winDifference = KvGetNum(g_MatchConfigs, "windifference", 0);
-	
-	if (winDifference > 0) {
-		new winDifferenceMin = KvGetNum(g_MatchConfigs, "windifference-min", 0);
-		
-		if (redScore >= winDifferenceMin && redScore - bluScore >= winDifference) {
-			endCondition = EndCondition_WinDifference;
-			cause = TFTeam_Red;
-			return true;
-		}
-		else if (bluScore >= winDifferenceMin && bluScore - redScore >= winDifference) {
-			endCondition = EndCondition_WinDifference;
-			cause = TFTeam_Blue;
-			return true;
-		}
-	}
-	
-	new maxRounds = KvGetNum(g_MatchConfigs, "maxrounds", 0);
-	
-	if (maxRounds > 0) {
-		if (g_RoundsPlayed >= maxRounds) {
-			endCondition = EndCondition_MaxRounds;
-			cause = TFTeam_Unassigned;
-			return true;
-		}
-	}
-	
-	endCondition = EndCondition_None;
-	cause = TFTeam_Unassigned;
-	return false;
 }
 
 EndPeriod(redScore, bluScore, EndCondition:endCondition, TFTeam:cause) {
@@ -412,5 +501,136 @@ EndPeriod(redScore, bluScore, EndCondition:endCondition, TFTeam:cause) {
 		}
 			
 		g_PeriodNeedsSetup = true;
+	}
+}
+
+bool:CheckEndConditions(redScore, bluScore, &EndCondition:endCondition, &TFTeam:cause) {
+	GetCurrentRoundConfig();
+	
+	new timeLimit = KvGetNum(g_MatchConfigs, "timelimit", 0);
+	
+	if (timeLimit > 0) {
+		new timeLeft;
+		GetMapTimeLeft(timeLeft);
+		
+		if (timeLeft <= 0) {
+			endCondition = EndCondition_TimeLimit;
+			cause = TFTeam_Unassigned;
+			return true;
+		}
+	}
+	
+	new winLimit = KvGetNum(g_MatchConfigs, "winlimit", 0);
+	
+	if (winLimit > 0) {
+		if (redScore >= winLimit) {
+			endCondition = EndCondition_WinLimit;
+			cause = TFTeam_Red;
+			return true;
+		}
+		else if (bluScore >= winLimit) {
+			endCondition = EndCondition_WinLimit;
+			cause = TFTeam_Blue;
+			return true;
+		}
+	}
+	
+	new winDifference = KvGetNum(g_MatchConfigs, "windifference", 0);
+	
+	if (winDifference > 0) {
+		new winDifferenceMin = KvGetNum(g_MatchConfigs, "windifference-min", 0);
+		
+		if (redScore >= winDifferenceMin && redScore - bluScore >= winDifference) {
+			endCondition = EndCondition_WinDifference;
+			cause = TFTeam_Red;
+			return true;
+		}
+		else if (bluScore >= winDifferenceMin && bluScore - redScore >= winDifference) {
+			endCondition = EndCondition_WinDifference;
+			cause = TFTeam_Blue;
+			return true;
+		}
+	}
+	
+	new maxRounds = KvGetNum(g_MatchConfigs, "maxrounds", 0);
+	
+	if (maxRounds > 0) {
+		if (g_RoundsPlayed >= maxRounds) {
+			endCondition = EndCondition_MaxRounds;
+			cause = TFTeam_Unassigned;
+			return true;
+		}
+	}
+	
+	endCondition = EndCondition_None;
+	cause = TFTeam_Unassigned;
+	return false;
+}
+
+StopwatchStatus:GetStopwatchStatus() {
+	if (!GameRules_GetProp("m_bStopWatch", 1)) {
+		return StopwatchStatus_Unknown;
+	}
+	
+	new tfObjectiveResource = FindEntityByClassname(-1, "tf_objective_resource");
+	
+	if (tfObjectiveResource != -1){
+		new timer = GetEntProp(tfObjectiveResource, Prop_Send, "m_iStopWatchTimer");
+		
+		if (timer != -1) {
+			decl String:timerClassname[256];
+			GetEdictClassname(timer, timerClassname, sizeof(timerClassname));
+			
+			if (StrEqual(timerClassname, "team_round_timer")) {
+				if (GetEntProp(timer, Prop_Send, "m_bStopWatchTimer")) {
+					if (GetEntProp(timer, Prop_Send, "m_bInCaptureWatchState")) {
+						return StopwatchStatus_SetTarget;
+					}
+					else {
+						return StopwatchStatus_ChaseTarget;
+					}
+				}
+			}
+		}
+	}
+	
+	switch (GameRules_GetProp("m_nStopWatchState", 1)) {
+		case 0: {
+			return StopwatchStatus_SetTarget;
+		}
+		case 2: {
+			return StopwatchStatus_ChaseTarget;
+		}
+		default: {
+			return StopwatchStatus_Unknown;
+		}
+	}
+	
+	return StopwatchStatus_Unknown;
+}
+
+GetScore(TFTeam:team) {
+	GetCurrentRoundConfig();
+	
+	if (KvGetNum(g_MatchConfigs, "manual-scoring", 0)) {
+		if (team == TFTeam_Red) {
+			return g_RedTeamScore;
+		}
+		else if (team == TFTeam_Blue) {
+			return g_BluTeamScore;
+		}
+	}
+	else {
+		return GetTeamScore(_:team);
+	}
+	
+	return 0;
+}
+
+GetCurrentRoundConfig() {
+	KvRewind(g_MatchConfigs);
+	
+	if (!KvJumpToKey(g_MatchConfigs, g_MatchConfigName) || !KvJumpToKey(g_MatchConfigs, "periods") || !KvJumpToKey(g_MatchConfigs, g_CurrentPeriod)) {
+		ThrowError("Failed to find period!");
 	}
 }
