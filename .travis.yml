@@ -1,16 +1,34 @@
 language: cpp
 compiler:
-  - clang
+- clang
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y g++-multilib libc6-dev-i386 lib32stdc++6 lib32z1-dev
+- sudo apt-get update -qq
+- sudo apt-get install -y g++-multilib libc6-dev-i386 lib32stdc++6 lib32z1-dev
 install:
-  - git clone https://github.com/alliedmodders/ambuild.git $TRAVIS_BUILD_DIR/../ambuild && cd $TRAVIS_BUILD_DIR/../ambuild && python setup.py build && sudo python setup.py install
-  - git clone https://github.com/alliedmodders/metamod-source.git -b 1.10-dev $TRAVIS_BUILD_DIR/../metamod-source
-  - git clone https://github.com/alliedmodders/hl2sdk.git -b tf2 $TRAVIS_BUILD_DIR/../hl2sdk-tf2
-  - git clone https://github.com/alliedmodders/sourcemod.git -b 1.6-dev $TRAVIS_BUILD_DIR/../sourcemod && cd $TRAVIS_BUILD_DIR/../sourcemod && mkdir build && cd build && python ../configure.py --sdks=tf2 --no-mysql --enable-optimize && ambuild
+- git clone https://github.com/alliedmodders/ambuild.git $TRAVIS_BUILD_DIR/../ambuild
+  && cd $TRAVIS_BUILD_DIR/../ambuild && python setup.py build && sudo python setup.py
+  install
+- git clone https://github.com/alliedmodders/metamod-source.git -b 1.10-dev $TRAVIS_BUILD_DIR/../metamod-source
+- git clone https://github.com/alliedmodders/hl2sdk.git -b tf2 $TRAVIS_BUILD_DIR/../hl2sdk-tf2
+- git clone https://github.com/alliedmodders/sourcemod.git -b 1.6-dev $TRAVIS_BUILD_DIR/../sourcemod
+  && cd $TRAVIS_BUILD_DIR/../sourcemod && mkdir build && cd build && python ../configure.py
+  --sdks=tf2 --no-mysql --enable-optimize && ambuild
 script:
-  - export SOURCEMOD_RELEASE=$(cd $TRAVIS_BUILD_DIR/../sourcemod/build/package/addons/sourcemod && pwd)
-  - mkdir $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build
-  - python ../configure.py --enable-optimize --sdks=tf2
-  - ambuild
+- export SOURCEMOD_RELEASE=$(cd $TRAVIS_BUILD_DIR/../sourcemod/build/package/addons/sourcemod
+  && pwd)
+- mkdir $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build
+- python ../configure.py --enable-optimize --sdks=tf2
+- ambuild
+before_deploy:
+- cd $TRAVIS_BUILD_DIR/build/package
+- zip -r compctrl-$TRAVIS_TAG-linux.zip *
+deploy:
+  provider: releases
+  api_key:
+    secure: RPmvO2+XNZDGJikkFYCVttKdlwp5Q2is+6uEuCU7SNhEtnfJVNEFb8zozbwQdnXZM4lcXNaHXXVahrZVpbX79wnMjyHNWl9EqduAFbaxB4rASYWQvwajPdBolWlh/OnCLrdiIMjHlrq18oeVhJemKIKalF1nIqCY9z4ihFSNF10=
+  file: $TRAVIS_BUILD_DIR/build/package/compctrl-$TRAVIS_TAG-linux.zip
+  skip_cleanup: true
+  on:
+    repo: fwdcp/CompCtrl
+    tags: true
+    all_branches: true
