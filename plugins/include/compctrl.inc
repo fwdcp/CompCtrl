@@ -30,8 +30,8 @@ enum WinReason {
 
 enum StalemateReason {
 	StalemateReason_Join_Mid,
-	Stalemate_Timer,
-	Stalemate_Server_Timelimit
+	StalemateReason_Timer,
+	StalemateReason_Server_Timelimit
 };
 
 enum EndCondition {
