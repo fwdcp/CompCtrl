@@ -97,15 +97,17 @@ void GameRulesManager::Call_CTFGameRules_HandleSwitchTeams() {
 }
 
 void GameRulesManager::Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset, bool bSwitchTeams, bool bDontAddScore) {
-	cell_t forceMapReset = bForceMapReset;
-	cell_t switchTeams = bSwitchTeams;
-	cell_t dontAddScore = bDontAddScore;
+	cell_t teamCell = team;
+	cell_t winReasonCell = iWinReason;
+	cell_t forceMapResetCell = bForceMapReset;
+	cell_t switchTeamsCell = bSwitchTeams;
+	cell_t dontAddScoreCell = bDontAddScore;
 
-	g_SetWinningTeamForward->PushCellByRef(&team);
-	g_SetWinningTeamForward->PushCellByRef(&iWinReason);
-	g_SetWinningTeamForward->PushCellByRef(&forceMapReset);
-	g_SetWinningTeamForward->PushCellByRef(&switchTeams);
-	g_SetWinningTeamForward->PushCellByRef(&dontAddScore);
+	g_SetWinningTeamForward->PushCellByRef(&teamCell);
+	g_SetWinningTeamForward->PushCellByRef(&winReasonCell);
+	g_SetWinningTeamForward->PushCellByRef(&forceMapResetCell);
+	g_SetWinningTeamForward->PushCellByRef(&switchTeamsCell);
+	g_SetWinningTeamForward->PushCellByRef(&dontAddScoreCell);
 
 	cell_t result = 0;
 
@@ -115,7 +117,7 @@ void GameRulesManager::Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason
 		RETURN_META(MRES_SUPERCEDE);
 	}
 	else if (result == Pl_Changed) {
-		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetWinningTeam, (team, iWinReason, (bool)forceMapReset, (bool)switchTeams, (bool)dontAddScore));
+		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetWinningTeam, ((int)teamCell, (int)winReasonCell, (bool)forceMapResetCell, (bool)switchTeamsCell, (bool)dontAddScoreCell));
 	}
 	else {
 		RETURN_META(MRES_IGNORED);
@@ -123,12 +125,13 @@ void GameRulesManager::Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason
 }
 
 void GameRulesManager::Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset, bool bSwitchTeams) {
-	cell_t forceMapReset = bForceMapReset;
-	cell_t switchTeams = bSwitchTeams;
+	cell_t reasonCell = iReason;
+	cell_t forceMapResetCell = bForceMapReset;
+	cell_t switchTeamsCell = bSwitchTeams;
 
-	g_SetWinningTeamForward->PushCellByRef(&iReason);
-	g_SetWinningTeamForward->PushCellByRef(&forceMapReset);
-	g_SetWinningTeamForward->PushCellByRef(&switchTeams);
+	g_SetWinningTeamForward->PushCellByRef(&reasonCell);
+	g_SetWinningTeamForward->PushCellByRef(&forceMapResetCell);
+	g_SetWinningTeamForward->PushCellByRef(&switchTeamsCell);
 
 	cell_t result = 0;
 
@@ -138,7 +141,7 @@ void GameRulesManager::Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMa
 		RETURN_META(MRES_SUPERCEDE);
 	}
 	else if (result == Pl_Changed) {
-		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetStalemate, (iReason, (bool)forceMapReset, (bool)switchTeams));
+		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetStalemate, ((int)reasonCell, (bool)forceMapResetCell, (bool)switchTeamsCell));
 	}
 	else {
 		RETURN_META(MRES_IGNORED);
