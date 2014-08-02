@@ -38,7 +38,12 @@ void CompCtrl::SDK_OnUnload() {
 	g_GameRulesManager.Disable();
 	g_TeamManager.Disable();
 
-	g_pSDKHooks->RemoveEntityListener(&g_TeamManager);
+	forwards->ReleaseForward(g_SetWinningTeamForward);
+	forwards->ReleaseForward(g_SetStalemateForward);
+	forwards->ReleaseForward(g_SwitchTeamsForward);
+	forwards->ReleaseForward(g_RestartTournamentForward);
+	forwards->ReleaseForward(g_CheckWinLimitForward);
+	forwards->ReleaseForward(g_ResetTeamScoresForward);
 }
 
 void CompCtrl::SDK_OnAllLoaded() {
