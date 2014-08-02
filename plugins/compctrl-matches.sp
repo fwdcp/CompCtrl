@@ -239,7 +239,7 @@ public Action:CompCtrl_OnSetWinningTeam(&TFTeam:team, &WinReason:reason, &bool:f
 	return Plugin_Continue;
 }
 
-public Action:CompCtrl_OnSetStalemate(&WinReason:reason, &bool:forceMapReset, &bool:switchTeams) {
+public Action:CompCtrl_OnSetStalemate(&StalemateReason:reason, &bool:forceMapReset, &bool:switchTeams) {
 	if (g_InMatch) {
 		GetCurrentRoundConfig();
 		

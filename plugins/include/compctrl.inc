@@ -25,7 +25,13 @@ enum WinReason {
 	WinReason_Stalemate,
 	WinReason_TimeLimit,
 	WinReason_WinLimit,
-	WinReason_WinDiffLimit,
+	WinReason_WinDiffLimit
+};
+
+enum StalemateReason {
+	StalemateReason_Join_Mid,
+	Stalemate_Timer,
+	Stalemate_Server_Timelimit
 };
 
 enum EndCondition {
@@ -62,7 +68,7 @@ native CompCtrl_SetWinningTeam(TFTeam:team, WinReason:reason, bool:forceMapReset
  * @param switchTeams	Whether to switch teams.
  * @noreturn
  */
-native CompCtrl_SetStalemate(WinReason:reason, bool:forceMapReset, bool:switchTeams);
+native CompCtrl_SetStalemate(StalemateReason:reason, bool:forceMapReset, bool:switchTeams);
 
 /**
  * @brief 				Calls HandleSwitchTeams in CTFGameRules.
@@ -91,7 +97,7 @@ forward Action:CompCtrl_OnSetWinningTeam(&TFTeam:team, &WinReason:reason, &bool:
  * @param switchTeams	Whether to switch teams.
  * @return				Plugin_Continue to continue with original values, Plugin_Changed to use new values, Plugin_Handled or Plugin_Stop to stop the game call.
  */
-forward Action:CompCtrl_OnSetStalemate(&WinReason:reason, &bool:forceMapReset, &bool:switchTeams);
+forward Action:CompCtrl_OnSetStalemate(&StalemateReason:reason, &bool:forceMapReset, &bool:switchTeams);
 
 /**
  * @brief 				When HandleSwitchTeams in CTFGameRules is called by the game.
