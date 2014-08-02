@@ -1,0 +1,20 @@
+# vim: set sts=2 ts=8 sw=2 tw=99 et ft=python:
+import os
+
+for sdk_name in SM.sdks:
+  sdk = SM.sdks[sdk_name]
+  
+  binary = SM.HL2Library(builder, 'compctrl.ext.' + sdk.ext, sdk)
+  binary.compiler.cxxincludes += [
+    os.path.join(sdk.path, 'game', 'shared')
+  ]
+  if binary.compiler.cxx.behavior == 'gcc':
+    binary.compiler.cxxflags += ['-Wno-invalid-offsetof']
+
+  binary.sources += [
+    'extension.cpp',
+    'gamerules.cpp',
+    'team.cpp',
+    os.path.join(SM.sourcemod_root, 'public', 'smsdk_ext.cpp'),
+  ]
+  SM.extensions += [builder.Add(binary)]

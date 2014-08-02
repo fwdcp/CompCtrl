@@ -1,0 +1,51 @@
+"Games"
+{
+	"tf"
+	{
+		"Offsets"
+		{
+			"CTFGameRules::SetWinningTeam"
+			{
+				"windows"	"155"
+				"linux"		"156"
+				"mac"		"156"
+			}
+			"CTFGameRules::SetStalemate"
+			{
+				"windows"	"156"
+				"linux"		"157"
+				"mac"		"157"
+			}
+			"CTFGameRules::HandleSwitchTeams"
+			{
+				"windows"	"159"
+				"linux"		"160"
+				"mac"		"160"
+			}
+			"CTFGameRules::RestartTournament"
+			{
+				"windows"	"199"
+				"linux"		"200"
+				"mac"		"200"
+			}
+			"CTFGameRules::CheckWinLimit"
+			{
+				"windows"	"210"
+				"linux"		"211"
+				"mac"		"211"
+			}
+			"CTFTeam::GetTeamNumber"
+			{
+				"windows"	"188"
+				"linux"		"189"
+				"mac"		"189"
+			}
+			"CTFTeam::ResetScores"
+			{
+				"windows"	"204"
+				"linux"		"205"
+				"mac"		"205"
+			}
+		}
+	}
+}

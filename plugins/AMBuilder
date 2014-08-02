@@ -1,0 +1,74 @@
+# vim: set ts=8 sts=2 sw=2 tw=99 et ft=python: 
+import os
+
+scripts = []
+includes = []
+
+for file in os.listdir(os.path.join(builder.currentSourcePath)):
+  if file.endswith(".sp"):
+    scripts.append(file)
+
+for file in os.listdir(os.path.join(builder.currentSourcePath, 'include')):
+  if file.endswith(".inc"):
+    includes.append(os.path.join(builder.currentSourcePath, 'include', file))
+
+def ResolveEnvPath(env, folder):
+  if env in os.environ:
+    path = os.environ[env]
+    if os.path.isdir(path):
+      return path
+  else:
+    head = os.getcwd()
+    oldhead = None
+    while head != None and head != oldhead:
+      path = os.path.join(head, folder)
+      if os.path.isdir(path):
+        return path
+      oldhead = head
+      head, tail = os.path.split(head)
+  return None
+
+sourcemod_path = ResolveEnvPath('SOURCEMOD_RELEASE', 'sourcemod')
+if not sourcemod_path:
+  raise Exception('Could not find a copy of SourceMod')
+
+scripting_path = os.path.join(sourcemod_path, 'scripting')
+
+if builder.target_platform == 'windows':
+  spcomp_path = os.path.join(scripting_path, 'spcomp.exe')
+else:
+  spcomp_path = os.path.join(scripting_path, 'spcomp')
+
+if not os.path.isfile(spcomp_path):
+  raise Exception('Could not find the spcomp binary - set SOURCEMOD_RELEASE to the sourcemod directory of a compiled release of SourceMod')
+
+spcomp_argv = [
+  spcomp_path,
+  '-i' + os.path.relpath(os.path.join(scripting_path, 'includes'),
+                         os.path.join(builder.buildPath, builder.buildFolder)),
+  '-i' + os.path.relpath(os.path.join(builder.sourcePath, 'plugins', 'include'),
+                         os.path.join(builder.buildPath, builder.buildFolder)),
+  '-h',
+]
+
+def build_plugin(script_path, smx_file):
+  inputs = [
+    script_path,
+  ]
+  inputs += includes
+  outputs = [
+    smx_file
+  ]
+  argv = spcomp_argv + [script_path]
+  cmd_entry, (smx_entry,) = builder.AddCommand(
+    inputs = inputs,
+    argv = argv,
+    outputs = outputs,
+    weak_inputs = SM.generated_headers or []
+  )
+  SM.smx_files[smx_file] = smx_entry
+
+for script_file in scripts:
+  script_path = os.path.join(builder.currentSourcePath, script_file)
+  smx_file = os.path.splitext(script_file)[0] + '.smx'
+  build_plugin(script_path, smx_file)
