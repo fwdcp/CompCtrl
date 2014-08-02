@@ -1,5 +1,6 @@
 #include <sourcemod>
 
+#include <compctrl_version>
 #include <morecolors>
 #include <sdktools>
 #include <tf2>
@@ -13,7 +14,7 @@ public Plugin:myinfo =
 	name = "CompCtrl Team Management",
 	author = "Forward Command Post",
 	description = "a plugin to manage teams in tournament mode",
-	version = "0.0.0",
+	version = COMPCTRL_VERSION,
 	url = "http://github.com/fwdcp/CompCtrl/"
 };
 

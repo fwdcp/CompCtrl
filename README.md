@@ -10,6 +10,10 @@ Installation
 Changelog
 ---------
 
+**0.1.1**
+* general
+  * fix automatic versioning
+
 **0.1.0**
 * matches
   * release initial version of matches module
