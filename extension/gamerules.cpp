@@ -129,9 +129,9 @@ void GameRulesManager::Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMa
 	cell_t forceMapResetCell = bForceMapReset;
 	cell_t switchTeamsCell = bSwitchTeams;
 
-	g_SetWinningTeamForward->PushCellByRef(&reasonCell);
-	g_SetWinningTeamForward->PushCellByRef(&forceMapResetCell);
-	g_SetWinningTeamForward->PushCellByRef(&switchTeamsCell);
+	g_SetStalemateForward->PushCellByRef(&reasonCell);
+	g_SetStalemateForward->PushCellByRef(&forceMapResetCell);
+	g_SetStalemateForward->PushCellByRef(&switchTeamsCell);
 
 	cell_t result = 0;
 
