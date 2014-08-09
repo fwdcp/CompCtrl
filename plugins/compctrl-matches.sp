@@ -316,44 +316,51 @@ BeginPeriod() {
 	
 	CPrintToChatAll("{green}[CompCtrl]{default} The next period will be: {olive}%s{default}.", periodName);
 	
-	new String:winConditionInformation[512] = "{green}[CompCtrl]{default} This period will end upon the fulfillment of one of the following:";
+	new winConditions = 0;
+	new String:winConditionInformation[512];
 	if (KvGetNum(g_MatchConfigs, "timelimit", 0) > 0) {
-		if (!StrEqual(winConditionInformation, "{green}[CompCtrl]{default} This period will end upon the fulfillment of one of the following:")) {
-			StrCat(winConditionInformation, sizeof(winConditionInformation), ";");
+		if (winConditions > 0) {
+			StrCat(winConditionInformation, sizeof(winConditionInformation), "; ");
 		}
 		
-		Format(winConditionInformation, sizeof(winConditionInformation), "%s {olive}time limit %i{default}", winConditionInformation, KvGetNum(g_MatchConfigs, "timelimit", 0));
+		Format(winConditionInformation, sizeof(winConditionInformation), "%s{olive}time limit %i{default}", winConditionInformation, KvGetNum(g_MatchConfigs, "timelimit", 0));
+		
+		winConditions++;
 	}
 	if (KvGetNum(g_MatchConfigs, "winlimit", 0) > 0) {
-		if (!StrEqual(winConditionInformation, "{green}[CompCtrl]{default} This period will end upon the fulfillment of one of the following:")) {
-			StrCat(winConditionInformation, sizeof(winConditionInformation), ";");
+		if (winConditions > 0) {
+			StrCat(winConditionInformation, sizeof(winConditionInformation), "; ");
 		}
 		
-		Format(winConditionInformation, sizeof(winConditionInformation), "%s {olive}win limit %i{default}", winConditionInformation, KvGetNum(g_MatchConfigs, "winlimit", 0));
+		Format(winConditionInformation, sizeof(winConditionInformation), "%s{olive}win limit %i{default}", winConditionInformation, KvGetNum(g_MatchConfigs, "winlimit", 0));
+		
+		winConditions++;
 	}
 	if (KvGetNum(g_MatchConfigs, "windifference", 0) > 0) {
-		if (!StrEqual(winConditionInformation, "{green}[CompCtrl]{default} This period will end upon the fulfillment of one of the following:")) {
-			StrCat(winConditionInformation, sizeof(winConditionInformation), ";");
+		if (winConditions > 0) {
+			StrCat(winConditionInformation, sizeof(winConditionInformation), "; ");
 		}
 		
-		Format(winConditionInformation, sizeof(winConditionInformation), "%s {olive}win difference %i{default} (with {olive}minimum score %i{default})", winConditionInformation, KvGetNum(g_MatchConfigs, "windifference", 0), KvGetNum(g_MatchConfigs, "windifference-min", 0));
+		Format(winConditionInformation, sizeof(winConditionInformation), "%s{olive}win difference %i{default} (with {olive}minimum score %i{default})", winConditionInformation, KvGetNum(g_MatchConfigs, "windifference", 0), KvGetNum(g_MatchConfigs, "windifference-min", 0));
+		
+		winConditions++;
 	}
 	if (KvGetNum(g_MatchConfigs, "maxrounds", 0) > 0) {
-		if (!StrEqual(winConditionInformation, "{green}[CompCtrl]{default} This period will end upon the fulfillment of one of the following:")) {
-			StrCat(winConditionInformation, sizeof(winConditionInformation), ";");
+		if (winConditions > 0) {
+			StrCat(winConditionInformation, sizeof(winConditionInformation), "; ");
 		}
 		
-		Format(winConditionInformation, sizeof(winConditionInformation), "%s {olive}max rounds %i{default}", winConditionInformation, KvGetNum(g_MatchConfigs, "maxrounds", 0));
+		Format(winConditionInformation, sizeof(winConditionInformation), "%s{olive}max rounds %i{default}", winConditionInformation, KvGetNum(g_MatchConfigs, "maxrounds", 0));
+		
+		winConditions++;
 	}
 	
-	if (!StrEqual(winConditionInformation, "{green}[CompCtrl]{default} This period will end upon the fulfillment of one of the following:")) {
-		StrCat(winConditionInformation, sizeof(winConditionInformation), ".");
+	if (winConditions > 0) {
+		CPrintToChatAll("{green}[CompCtrl]{default} This period will end upon the fulfillment of one of the following: %s.", winConditionInformation);
 	}
 	else {
-		winConditionInformation = "{green}[CompCtrl]{default} This period does not have any end conditions.";
+		CPrintToChatAll("{green}[CompCtrl]{default} This period does not have any end conditions.");
 	}
-	
-	CPrintToChatAll(winConditionInformation);
 	
 	decl String:nextPeriod[256];
 	KvGetString(g_MatchConfigs, "next-period", nextPeriod, sizeof(nextPeriod), g_CurrentPeriod);
