@@ -313,6 +313,11 @@ public Action:Command_CheckReadyStatus(client, args) {
 		}
 	}
 	
-	CReplyToCommand(client, "{green}Ready{default}: %s", readyPlayers);
-	CReplyToCommand(client, "{yellow}Not ready{default}: %s", unreadyPlayers);
+	if (readyCount > 0) {
+		CReplyToCommand(client, "{green}Ready{default}: %s", readyPlayers);
+	}
+	
+	if (unreadyCount > 0) {
+		CReplyToCommand(client, "{yellow}Not ready{default}: %s", unreadyPlayers);
+	}
 }
