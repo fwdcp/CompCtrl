@@ -22,20 +22,20 @@ public OnPluginStart() {
 	g_MinTeamPlayers = CreateConVar("compctrl_team_players_min", "0", "the minimum number of players a team is required to play with (0 for no limit)", FCVAR_NOTIFY|FCVAR_REPLICATED|FCVAR_PLUGIN, true, 0.0);
 	g_MaxTeamPlayers = CreateConVar("compctrl_team_players_max", "0", "the maximum number of players a team is required to play with (0 for no limit)", FCVAR_NOTIFY|FCVAR_REPLICATED|FCVAR_PLUGIN, true, 0.0);
 	
-	RegConsoleCmd("sm_ready", Command_ReadyPlayer);
-	RegConsoleCmd("sm_unready", Command_UnreadyPlayer);
+	RegConsoleCmd("sm_ready", Command_ReadyPlayer, "set yourself as ready");
+	RegConsoleCmd("sm_unready", Command_UnreadyPlayer, "set yourself as not ready");
 	
-	RegConsoleCmd("sm_teamready", Command_ReadyTeam);
-	RegConsoleCmd("sm_teamunready", Command_UnreadyTeam);
+	RegConsoleCmd("sm_teamready", Command_ReadyTeam, "set the team as ready");
+	RegConsoleCmd("sm_teamunready", Command_UnreadyTeam, "set the team as not ready");
 	AddCommandListener(Command_ChangeTeamReady, "tournament_readystate");
 	
 	AddCommandListener(Command_ChangeTeam, "jointeam");
 	HookEvent("player_team", Event_PlayerTeam);
 	
-	RegConsoleCmd("sm_teamname", Command_SetTeamName);
+	RegConsoleCmd("sm_teamname", Command_SetTeamName, "set the name of the team");
 	AddCommandListener(Command_ChangeTeamName, "tournament_teamname");
 	
-	RegConsoleCmd("sm_readystatus", Command_CheckReadyStatus);
+	RegConsoleCmd("sm_readystatus", Command_CheckReadyStatus, "check the ready status of players");
 }
 
 public OnClientDisconnect(client) {
