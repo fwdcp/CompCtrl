@@ -29,10 +29,115 @@ public OnPluginStart() {
 	RegConsoleCmd("sm_teamunready", Command_UnreadyTeam);
 	AddCommandListener(Command_ChangeTeamReady, "tournament_readystate");
 	
+	AddCommandListener(Command_ChangeTeam, "jointeam");
+	HookEvent("player_team", Event_PlayerTeam);
+	
 	RegConsoleCmd("sm_teamname", Command_SetTeamName);
 	AddCommandListener(Command_ChangeTeamName, "tournament_teamname");
 	
 	RegConsoleCmd("sm_readystatus", Command_CheckReadyStatus);
+}
+
+public OnClientDisconnect(client) {
+	new team = GetClientTeam(client);
+		
+	new teamPlayers;
+	new teamPlayersReady;
+	
+	for (new i = 1; i < MaxClients; i++) {
+		if (!IsClientConnected(i) || !IsClientInGame(i) || GetClientTeam(i) != team) {
+			continue;
+		}
+		
+		teamPlayers++;
+		
+		if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+			teamPlayersReady++;
+		}
+	}
+	
+	new minPlayers = GetConVarInt(g_MinTeamPlayers);
+	new maxPlayers = GetConVarInt(g_MaxTeamPlayers);
+	
+	if (minPlayers != 0 && teamPlayers < minPlayers) {
+		FakeClientCommand(client, "tournament_readystate 0");
+	}
+	else if (maxPlayers != 0 && teamPlayers > maxPlayers) {
+		FakeClientCommand(client, "tournament_readystate 0");
+	}
+	else if (teamPlayersReady < teamPlayers) {
+		FakeClientCommand(client, "tournament_readystate 0");
+	}
+}
+
+public Action:Command_ChangeTeam(client, const String:command[], argc) {
+	new team = GetClientTeam(client);
+	
+	new teamPlayers;
+	new teamPlayersReady;
+	
+	for (new i = 1; i < MaxClients; i++) {
+		if (!IsClientConnected(i) || !IsClientInGame(i) || i == client || GetClientTeam(i) != team) {
+			continue;
+		}
+		
+		teamPlayers++;
+		
+		if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+			teamPlayersReady++;
+		}
+	}
+	
+	new minPlayers = GetConVarInt(g_MinTeamPlayers);
+	new maxPlayers = GetConVarInt(g_MaxTeamPlayers);
+	
+	if (minPlayers != 0 && teamPlayers < minPlayers) {
+		FakeClientCommand(client, "tournament_readystate 0");
+	}
+	else if (maxPlayers != 0 && teamPlayers > maxPlayers) {
+		FakeClientCommand(client, "tournament_readystate 0");
+	}
+	else if (teamPlayersReady < teamPlayers) {
+		FakeClientCommand(client, "tournament_readystate 0");
+	}
+	
+	return Plugin_Continue;
+}
+
+public Event_PlayerTeam(Handle:event, const String:name[], bool:dontBroadcast) {
+	if (GetEventInt(event, "disconnect")) {
+		new client = GetClientOfUserId(GetEventInt(event, "userid"));
+		
+		new team = GetEventInt(event, "team");
+		
+		new teamPlayers;
+		new teamPlayersReady;
+		
+		for (new i = 1; i < MaxClients; i++) {
+			if (!IsClientConnected(i) || !IsClientInGame(i) || GetClientTeam(i) != team) {
+				continue;
+			}
+			
+			teamPlayers++;
+			
+			if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+				teamPlayersReady++;
+			}
+		}
+		
+		new minPlayers = GetConVarInt(g_MinTeamPlayers);
+		new maxPlayers = GetConVarInt(g_MaxTeamPlayers);
+		
+		if (minPlayers != 0 && teamPlayers < minPlayers) {
+			FakeClientCommand(client, "tournament_readystate 0");
+		}
+		else if (maxPlayers != 0 && teamPlayers > maxPlayers) {
+			FakeClientCommand(client, "tournament_readystate 0");
+		}
+		else if (teamPlayersReady < teamPlayers) {
+			FakeClientCommand(client, "tournament_readystate 0");
+		}
+	}
 }
 
 public Action:Command_ReadyPlayer(client, args) {
