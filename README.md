@@ -10,6 +10,15 @@ Installation
 Changelog
 ---------
 
+**0.1.2**
+* matches
+  * add ozfortress configs
+  * improve win condition reporting
+* teams
+  * add command to check ready status
+  * add ability to automatically set teams as ready
+  * check more cases for a team not being eligible for ready
+
 **0.1.1**
 * general
   * fix automatic versioning
@@ -43,13 +52,19 @@ Modules
 
 #### Console Variables
 
-##### Player Limit Commands
+##### Auto Ready Variable
+`compctrl_team_auto_ready` sets the number of players at which, if all the players on the team are ready, a team will be automatically set to ready. A setting of 0 disables this feature.
+
+##### Player Limit Variables
 `compctrl_team_players_min` and `compctrl_team_players_max` set limits on the number of players a team is allowed to play with. A setting of 0 indicates no limit.
 	
 #### Console Commands
 
 ##### Player Ready Commands
 `sm_ready` and `sm_unready` are used by a player to set their ready status.
+
+##### Ready Status Command
+`sm_readystatus` will display a list of players that are ready and not ready.
 
 ##### Team Ready Commands
 `sm_teamready` and `sm_teamunready` may be used as an alternative to the tournament interface. Note that teams will not be allowed to set themselves as ready if they have an incorrect number of players or if all of the players on the team are not ready.
