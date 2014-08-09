@@ -105,7 +105,7 @@ public Action:Command_ChangeTeam(client, const String:command[], argc) {
 }
 
 public Event_PlayerTeam(Handle:event, const String:name[], bool:dontBroadcast) {
-	if (GetEventInt(event, "disconnect")) {
+	if (!GetEventInt(event, "disconnect")) {
 		new client = GetClientOfUserId(GetEventInt(event, "userid"));
 		
 		new team = GetEventInt(event, "team");
