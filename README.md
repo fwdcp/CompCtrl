@@ -10,6 +10,10 @@ Installation
 Changelog
 ---------
 
+**0.1.3**
+* general
+  * fix automatic versioning for plugins (again)
+
 **0.1.2**
 * matches
   * add ozfortress configs

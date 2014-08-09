@@ -58,6 +58,7 @@ def build_plugin(script_path, smx_file):
     script_path,
   ]
   inputs += includes
+  inputs += SM.generated_headers
   outputs = [
     smx_file
   ]
@@ -65,8 +66,7 @@ def build_plugin(script_path, smx_file):
   cmd_entry, (smx_entry,) = builder.AddCommand(
     inputs = inputs,
     argv = argv,
-    outputs = outputs,
-    weak_inputs = SM.generated_headers or []
+    outputs = outputs
   )
   SM.smx_files[smx_file] = smx_entry
 
