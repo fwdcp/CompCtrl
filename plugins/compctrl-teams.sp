@@ -8,6 +8,7 @@
 
 new Handle:g_MinTeamPlayers = INVALID_HANDLE;
 new Handle:g_MaxTeamPlayers = INVALID_HANDLE;
+new Handle:g_AutoReadyTeam = INVALID_HANDLE;
 
 public Plugin:myinfo =
 {
@@ -21,16 +22,124 @@ public Plugin:myinfo =
 public OnPluginStart() {
 	g_MinTeamPlayers = CreateConVar("compctrl_team_players_min", "0", "the minimum number of players a team is required to play with (0 for no limit)", FCVAR_NOTIFY|FCVAR_REPLICATED|FCVAR_PLUGIN, true, 0.0);
 	g_MaxTeamPlayers = CreateConVar("compctrl_team_players_max", "0", "the maximum number of players a team is required to play with (0 for no limit)", FCVAR_NOTIFY|FCVAR_REPLICATED|FCVAR_PLUGIN, true, 0.0);
+	g_AutoReadyTeam = CreateConVar("compctrl_team_auto_ready", "0", "if non-zero, a team will be automatically readied when it has this number of players and all players are ready", FCVAR_NOTIFY|FCVAR_REPLICATED|FCVAR_PLUGIN, true, 0.0);
 	
-	RegConsoleCmd("sm_ready", Command_ReadyPlayer);
-	RegConsoleCmd("sm_unready", Command_UnreadyPlayer);
+	RegConsoleCmd("sm_ready", Command_ReadyPlayer, "set yourself as ready");
+	RegConsoleCmd("sm_unready", Command_UnreadyPlayer, "set yourself as not ready");
 	
-	RegConsoleCmd("sm_teamready", Command_ReadyTeam);
-	RegConsoleCmd("sm_teamunready", Command_UnreadyTeam);
+	RegConsoleCmd("sm_teamready", Command_ReadyTeam, "set the team as ready");
+	RegConsoleCmd("sm_teamunready", Command_UnreadyTeam, "set the team as not ready");
 	AddCommandListener(Command_ChangeTeamReady, "tournament_readystate");
 	
-	RegConsoleCmd("sm_teamname", Command_SetTeamName);
+	AddCommandListener(Command_ChangeTeam, "jointeam");
+	HookEvent("player_team", Event_PlayerTeam);
+	
+	RegConsoleCmd("sm_teamname", Command_SetTeamName, "set the name of the team");
 	AddCommandListener(Command_ChangeTeamName, "tournament_teamname");
+	
+	RegConsoleCmd("sm_readystatus", Command_CheckReadyStatus, "check the ready status of players");
+}
+
+public OnClientDisconnect(client) {
+	new team = GetClientTeam(client);
+		
+	new teamPlayers;
+	new teamPlayersReady;
+	
+	for (new i = 1; i < MaxClients; i++) {
+		if (!IsClientConnected(i) || !IsClientInGame(i) || GetClientTeam(i) != team) {
+			continue;
+		}
+		
+		teamPlayers++;
+		
+		if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+			teamPlayersReady++;
+		}
+	}
+	
+	new minPlayers = GetConVarInt(g_MinTeamPlayers);
+	new maxPlayers = GetConVarInt(g_MaxTeamPlayers);
+	
+	if (minPlayers != 0 && teamPlayers < minPlayers) {
+		FakeClientCommand(client, "tournament_readystate 0");
+	}
+	else if (maxPlayers != 0 && teamPlayers > maxPlayers) {
+		FakeClientCommand(client, "tournament_readystate 0");
+	}
+	else if (teamPlayersReady < teamPlayers) {
+		FakeClientCommand(client, "tournament_readystate 0");
+	}
+}
+
+public Action:Command_ChangeTeam(client, const String:command[], argc) {
+	new team = GetClientTeam(client);
+	
+	new teamPlayers;
+	new teamPlayersReady;
+	
+	for (new i = 1; i < MaxClients; i++) {
+		if (!IsClientConnected(i) || !IsClientInGame(i) || i == client || GetClientTeam(i) != team) {
+			continue;
+		}
+		
+		teamPlayers++;
+		
+		if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+			teamPlayersReady++;
+		}
+	}
+	
+	new minPlayers = GetConVarInt(g_MinTeamPlayers);
+	new maxPlayers = GetConVarInt(g_MaxTeamPlayers);
+	
+	if (minPlayers != 0 && teamPlayers < minPlayers) {
+		FakeClientCommand(client, "tournament_readystate 0");
+	}
+	else if (maxPlayers != 0 && teamPlayers > maxPlayers) {
+		FakeClientCommand(client, "tournament_readystate 0");
+	}
+	else if (teamPlayersReady < teamPlayers) {
+		FakeClientCommand(client, "tournament_readystate 0");
+	}
+	
+	return Plugin_Continue;
+}
+
+public Event_PlayerTeam(Handle:event, const String:name[], bool:dontBroadcast) {
+	if (!GetEventInt(event, "disconnect")) {
+		new client = GetClientOfUserId(GetEventInt(event, "userid"));
+		
+		new team = GetEventInt(event, "team");
+		
+		new teamPlayers;
+		new teamPlayersReady;
+		
+		for (new i = 1; i < MaxClients; i++) {
+			if (!IsClientConnected(i) || !IsClientInGame(i) || GetClientTeam(i) != team) {
+				continue;
+			}
+			
+			teamPlayers++;
+			
+			if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+				teamPlayersReady++;
+			}
+		}
+		
+		new minPlayers = GetConVarInt(g_MinTeamPlayers);
+		new maxPlayers = GetConVarInt(g_MaxTeamPlayers);
+		
+		if (minPlayers != 0 && teamPlayers < minPlayers) {
+			FakeClientCommand(client, "tournament_readystate 0");
+		}
+		else if (maxPlayers != 0 && teamPlayers > maxPlayers) {
+			FakeClientCommand(client, "tournament_readystate 0");
+		}
+		else if (teamPlayersReady < teamPlayers) {
+			FakeClientCommand(client, "tournament_readystate 0");
+		}
+	}
 }
 
 public Action:Command_ReadyPlayer(client, args) {
@@ -99,6 +208,34 @@ public Action:Command_ReadyPlayer(client, args) {
 			SetEventString(soundBroadcast, "sound", classSound);
 			SetEventInt(soundBroadcast, "additional_flags", 0);
 			FireEvent(soundBroadcast);
+		}
+	}
+	
+	new autoReady = GetConVarInt(g_AutoReadyTeam);
+	
+	if (autoReady > 0) {
+		new team = GetClientTeam(client);
+			
+		new teamPlayers;
+		new teamPlayersReady;
+		
+		for (new i = 1; i < MaxClients; i++) {
+			if (!IsClientConnected(i) || !IsClientInGame(i) || GetClientTeam(i) != team) {
+				continue;
+			}
+			
+			teamPlayers++;
+			
+			if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+				teamPlayersReady++;
+			}
+		}
+		
+		new minPlayers = GetConVarInt(g_MinTeamPlayers);
+		new maxPlayers = GetConVarInt(g_MaxTeamPlayers);
+		
+		if (teamPlayersReady == teamPlayers && teamPlayers >= autoReady && (minPlayers == 0 || teamPlayers >= minPlayers) && (maxPlayers == 0 || teamPlayers <= maxPlayers)) {
+			FakeClientCommand(client, "tournament_readystate 1");
 		}
 	}
 	
@@ -246,4 +383,76 @@ public Action:Command_ChangeTeamName(client, const String:command[], argc) {
 	}
 	
 	return Plugin_Handled;
+}
+
+public Action:Command_CheckReadyStatus(client, args) {
+	new String:readyPlayers[512];
+	new String:unreadyPlayers[512];
+	
+	new readyCount = 0;
+	new unreadyCount = 0;
+	
+	for (new i = 1; i <= MaxClients; i++) {
+		if (!IsClientConnected(client) || !IsClientInGame(client) || TFTeam:GetClientTeam(client) != TFTeam_Blue) {
+			continue;
+		}
+		
+		decl String:name[64];
+		GetClientName(i, name, sizeof(name));
+		
+		if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+			if (readyCount > 0) {
+				StrCat(readyPlayers, sizeof(readyPlayers), "; ");
+			}
+			
+			Format(readyPlayers, sizeof(readyPlayers), "%s{blue}%s{default}", readyPlayers, name);
+			
+			readyCount++;
+		}
+		else {
+			if (unreadyCount > 0) {
+				StrCat(unreadyPlayers, sizeof(unreadyPlayers), "; ");
+			}
+			
+			Format(unreadyPlayers, sizeof(unreadyPlayers), "%s{blue}%s{default}", unreadyPlayers, name);
+			
+			unreadyCount++;
+		}
+	}
+	
+	for (new i = 1; i <= MaxClients; i++) {
+		if (!IsClientConnected(client) || !IsClientInGame(client) || TFTeam:GetClientTeam(client) != TFTeam_Red) {
+			continue;
+		}
+		
+		decl String:name[64];
+		GetClientName(i, name, sizeof(name));
+		
+		if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+			if (readyCount > 0) {
+				StrCat(readyPlayers, sizeof(readyPlayers), "; ");
+			}
+			
+			Format(readyPlayers, sizeof(readyPlayers), "%s{red}%s{default}", readyPlayers, name);
+			
+			readyCount++;
+		}
+		else {
+			if (unreadyCount > 0) {
+				StrCat(unreadyPlayers, sizeof(unreadyPlayers), "; ");
+			}
+			
+			Format(unreadyPlayers, sizeof(unreadyPlayers), "%s{red}%s{default}", unreadyPlayers, name);
+			
+			unreadyCount++;
+		}
+	}
+	
+	if (readyCount > 0) {
+		CReplyToCommand(client, "{green}Ready{default}: %s", readyPlayers);
+	}
+	
+	if (unreadyCount > 0) {
+		CReplyToCommand(client, "{yellow}Not ready{default}: %s", unreadyPlayers);
+	}
 }
