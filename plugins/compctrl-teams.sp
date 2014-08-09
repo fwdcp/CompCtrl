@@ -8,6 +8,7 @@
 
 new Handle:g_MinTeamPlayers = INVALID_HANDLE;
 new Handle:g_MaxTeamPlayers = INVALID_HANDLE;
+new Handle:g_AutoReadyTeam = INVALID_HANDLE;
 
 public Plugin:myinfo =
 {
@@ -21,6 +22,7 @@ public Plugin:myinfo =
 public OnPluginStart() {
 	g_MinTeamPlayers = CreateConVar("compctrl_team_players_min", "0", "the minimum number of players a team is required to play with (0 for no limit)", FCVAR_NOTIFY|FCVAR_REPLICATED|FCVAR_PLUGIN, true, 0.0);
 	g_MaxTeamPlayers = CreateConVar("compctrl_team_players_max", "0", "the maximum number of players a team is required to play with (0 for no limit)", FCVAR_NOTIFY|FCVAR_REPLICATED|FCVAR_PLUGIN, true, 0.0);
+	g_AutoReadyTeam = CreateConVar("compctrl_team_auto_ready", "0", "if non-zero, a team will be automatically readied when it has this number of players and all players are ready", FCVAR_NOTIFY|FCVAR_REPLICATED|FCVAR_PLUGIN, true, 0.0);
 	
 	RegConsoleCmd("sm_ready", Command_ReadyPlayer, "set yourself as ready");
 	RegConsoleCmd("sm_unready", Command_UnreadyPlayer, "set yourself as not ready");
@@ -206,6 +208,34 @@ public Action:Command_ReadyPlayer(client, args) {
 			SetEventString(soundBroadcast, "sound", classSound);
 			SetEventInt(soundBroadcast, "additional_flags", 0);
 			FireEvent(soundBroadcast);
+		}
+	}
+	
+	new autoReady = GetConVarInt(g_AutoReadyTeam);
+	
+	if (autoReady > 0) {
+		new team = GetClientTeam(client);
+			
+		new teamPlayers;
+		new teamPlayersReady;
+		
+		for (new i = 1; i < MaxClients; i++) {
+			if (!IsClientConnected(i) || !IsClientInGame(i) || GetClientTeam(i) != team) {
+				continue;
+			}
+			
+			teamPlayers++;
+			
+			if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+				teamPlayersReady++;
+			}
+		}
+		
+		new minPlayers = GetConVarInt(g_MinTeamPlayers);
+		new maxPlayers = GetConVarInt(g_MaxTeamPlayers);
+		
+		if (teamPlayersReady == teamPlayers && teamPlayers >= autoReady && (minPlayers == 0 || teamPlayers >= minPlayers) && (maxPlayers == 0 || teamPlayers <= maxPlayers)) {
+			FakeClientCommand(client, "tournament_readystate 1");
 		}
 	}
 	
