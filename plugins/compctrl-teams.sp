@@ -31,6 +31,8 @@ public OnPluginStart() {
 	
 	RegConsoleCmd("sm_teamname", Command_SetTeamName);
 	AddCommandListener(Command_ChangeTeamName, "tournament_teamname");
+	
+	RegConsoleCmd("sm_readystatus", Command_CheckReadyStatus);
 }
 
 public Action:Command_ReadyPlayer(client, args) {
@@ -246,4 +248,71 @@ public Action:Command_ChangeTeamName(client, const String:command[], argc) {
 	}
 	
 	return Plugin_Handled;
+}
+
+public Action:Command_CheckReadyStatus(client, args) {
+	new String:readyPlayers[512];
+	new String:unreadyPlayers[512];
+	
+	new readyCount = 0;
+	new unreadyCount = 0;
+	
+	for (new i = 1; i <= MaxClients; i++) {
+		if (!IsClientConnected(client) || !IsClientInGame(client) || TFTeam:GetClientTeam(client) != TFTeam_Blue) {
+			continue;
+		}
+		
+		decl String:name[64];
+		GetClientName(i, name, sizeof(name));
+		
+		if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+			if (readyCount > 0) {
+				StrCat(readyPlayers, sizeof(readyPlayers), "; ");
+			}
+			
+			Format(readyPlayers, sizeof(readyPlayers), "%s{blue}%s{default}", readyPlayers, name);
+			
+			readyCount++;
+		}
+		else {
+			if (unreadyCount > 0) {
+				StrCat(unreadyPlayers, sizeof(unreadyPlayers), "; ");
+			}
+			
+			Format(unreadyPlayers, sizeof(unreadyPlayers), "%s{blue}%s{default}", unreadyPlayers, name);
+			
+			unreadyCount++;
+		}
+	}
+	
+	for (new i = 1; i <= MaxClients; i++) {
+		if (!IsClientConnected(client) || !IsClientInGame(client) || TFTeam:GetClientTeam(client) != TFTeam_Red) {
+			continue;
+		}
+		
+		decl String:name[64];
+		GetClientName(i, name, sizeof(name));
+		
+		if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+			if (readyCount > 0) {
+				StrCat(readyPlayers, sizeof(readyPlayers), "; ");
+			}
+			
+			Format(readyPlayers, sizeof(readyPlayers), "%s{red}%s{default}", readyPlayers, name);
+			
+			readyCount++;
+		}
+		else {
+			if (unreadyCount > 0) {
+				StrCat(unreadyPlayers, sizeof(unreadyPlayers), "; ");
+			}
+			
+			Format(unreadyPlayers, sizeof(unreadyPlayers), "%s{red}%s{default}", unreadyPlayers, name);
+			
+			unreadyCount++;
+		}
+	}
+	
+	CReplyToCommand(client, "{green}Ready:{default} %s", readyPlayers);
+	CReplyToCommand(client, "{yellow}Not ready:{default} %s", unreadyPlayers);
 }
