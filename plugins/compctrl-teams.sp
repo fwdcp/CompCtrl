@@ -455,4 +455,6 @@ public Action:Command_CheckReadyStatus(client, args) {
 	if (unreadyCount > 0) {
 		CReplyToCommand(client, "{yellow}Not ready{default}: %s", unreadyPlayers);
 	}
+	
+	return Plugin_Handled;
 }
