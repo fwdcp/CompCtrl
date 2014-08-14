@@ -10,6 +10,10 @@ Installation
 Changelog
 ---------
 
+**0.1.4**
+* teams
+  * fix ready status not working
+
 **0.1.3**
 * general
   * fix automatic versioning for plugins (again)
