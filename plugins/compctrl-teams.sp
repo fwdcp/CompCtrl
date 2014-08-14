@@ -393,7 +393,7 @@ public Action:Command_CheckReadyStatus(client, args) {
 	new unreadyCount = 0;
 	
 	for (new i = 1; i <= MaxClients; i++) {
-		if (!IsClientConnected(client) || !IsClientInGame(client) || TFTeam:GetClientTeam(client) != TFTeam_Blue) {
+		if (!IsClientConnected(i) || !IsClientInGame(i) || TFTeam:GetClientTeam(i) != TFTeam_Blue) {
 			continue;
 		}
 		
@@ -421,7 +421,7 @@ public Action:Command_CheckReadyStatus(client, args) {
 	}
 	
 	for (new i = 1; i <= MaxClients; i++) {
-		if (!IsClientConnected(client) || !IsClientInGame(client) || TFTeam:GetClientTeam(client) != TFTeam_Red) {
+		if (!IsClientConnected(i) || !IsClientInGame(i) || TFTeam:GetClientTeam(i) != TFTeam_Red) {
 			continue;
 		}
 		
@@ -455,4 +455,6 @@ public Action:Command_CheckReadyStatus(client, args) {
 	if (unreadyCount > 0) {
 		CReplyToCommand(client, "{yellow}Not ready{default}: %s", unreadyPlayers);
 	}
+	
+	return Plugin_Handled; 
 }
