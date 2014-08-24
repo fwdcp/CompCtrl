@@ -40,11 +40,6 @@ public Plugin:myinfo =
 };
 
 public OnPluginStart() {
-	g_MatchConfigs = CreateKeyValues("compctrl-matches");
-	decl String:configPath[PLATFORM_MAX_PATH];
-	BuildPath(Path_SM, configPath, sizeof(configPath), "configs/compctrl-matches.cfg");
-	FileToKeyValues(g_MatchConfigs, configPath);
-	
 	RegAdminCmd("sm_match", Command_SetupMatch, ADMFLAG_CONFIG, "sets up a match regulated by CompCtrl with the specified config", "compctrl");
 	
 	g_Tournament = FindConVar("mp_tournament");
@@ -64,20 +59,25 @@ public OnPluginStart() {
 }
 
 public Action:Command_SetupMatch(client, args) {
-	KvRewind(g_MatchConfigs);
-	
 	decl String:arg[256];
 	GetCmdArg(1, arg, sizeof(arg));
 	
-	if (!KvJumpToKey(g_MatchConfigs, arg)) {
+	g_MatchConfigs = CreateKeyValues(arg);
+	
+	decl String:configPath[PLATFORM_MAX_PATH];
+	BuildPath(Path_SM, configPath, sizeof(configPath), "configs/compctrl/matches/%s.cfg", arg);
+	
+	if (!FileExists(configPath) || !FileToKeyValues(g_MatchConfigs, configPath)) {
 		ReplyToCommand(client, "No such match config exists!");
-		KvRewind(g_MatchConfigs);
+		CloseHandle(g_MatchConfigs);
+		g_MatchConfigs = INVALID_HANDLE;
 		return Plugin_Handled;
 	}
 	
 	if (!KvJumpToKey(g_MatchConfigs, "periods") || !KvGotoFirstSubKey(g_MatchConfigs)) {
 		ReplyToCommand(client, "Match config is invalid!");
-		KvRewind(g_MatchConfigs);
+		CloseHandle(g_MatchConfigs);
+		g_MatchConfigs = INVALID_HANDLE;
 		return Plugin_Handled;
 	}
 	
@@ -365,7 +365,7 @@ BeginPeriod() {
 	KvGetString(g_MatchConfigs, "next-period", nextPeriod, sizeof(nextPeriod), g_CurrentPeriod);
 	decl String:nextPeriodName[256];
 	KvRewind(g_MatchConfigs);
-	if (!KvJumpToKey(g_MatchConfigs, g_MatchConfigName) || !KvJumpToKey(g_MatchConfigs, "periods") || !KvJumpToKey(g_MatchConfigs, nextPeriod)) {
+	if (!KvJumpToKey(g_MatchConfigs, "periods") || !KvJumpToKey(g_MatchConfigs, nextPeriod)) {
 		ThrowError("Failed to find period!");
 	}
 	KvGetString(g_MatchConfigs, "name", nextPeriodName, sizeof(nextPeriodName));
@@ -442,6 +442,8 @@ EndPeriod(redScore, bluScore, EndCondition:endCondition, TFTeam:cause) {
 			CPrintToChatAll("{green}[CompCtrl]{default} The match is now over.");
 			CPrintToChatAll("{green}[CompCtrl]{default} Final score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, bluScore, redName, redScore);
 			
+			CloseHandle(g_MatchConfigs);
+			g_MatchConfigs = INVALID_HANDLE;
 			g_InMatch = false;
 			g_MatchConfigName[256] = "";
 			g_InPeriod = false;
@@ -592,7 +594,7 @@ GetScore(TFTeam:team) {
 GetCurrentRoundConfig() {
 	KvRewind(g_MatchConfigs);
 	
-	if (!KvJumpToKey(g_MatchConfigs, g_MatchConfigName) || !KvJumpToKey(g_MatchConfigs, "periods") || !KvJumpToKey(g_MatchConfigs, g_CurrentPeriod)) {
+	if (!KvJumpToKey(g_MatchConfigs, "periods") || !KvJumpToKey(g_MatchConfigs, g_CurrentPeriod)) {
 		ThrowError("Failed to find period!");
 	}
 }
