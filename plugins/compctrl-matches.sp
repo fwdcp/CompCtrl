@@ -13,7 +13,7 @@ new String:g_CurrentPeriod[256];
 new bool:g_SwitchTeams = false;
 new bool:g_ReadiedUp = false;
 new bool:g_PeriodNeedsSetup = false;
-new bool:g_AllowScoreReset = false;
+new bool:g_AllowScoreReset = true;
 new g_RoundsPlayed;
 new g_RedTeamScore;
 new g_BluTeamScore;
