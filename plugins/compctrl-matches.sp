@@ -443,9 +443,9 @@ EndPeriod(redScore, bluScore, EndCondition:endCondition, TFTeam:cause) {
 			CPrintToChatAll("{green}[CompCtrl]{default} Final score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, bluScore, redName, redScore);
 			
 			g_InMatch = false;
-			g_MatchConfigName[256] = "";
+			g_MatchConfigName = "";
 			g_InPeriod = false;
-			g_CurrentPeriod[256] = "";
+			g_CurrentPeriod = "";
 			g_SwitchTeams = false;
 			g_PeriodNeedsSetup = false;
 			g_AllowScoreReset = true;
