@@ -445,9 +445,9 @@ EndPeriod(redScore, bluScore, EndCondition:endCondition, TFTeam:cause) {
 			CloseHandle(g_MatchConfig);
 			g_MatchConfig = INVALID_HANDLE;
 			g_InMatch = false;
-			g_MatchConfigName[256] = "";
+			g_MatchConfigName = "";
 			g_InPeriod = false;
-			g_CurrentPeriod[256] = "";
+			g_CurrentPeriod = "";
 			g_SwitchTeams = false;
 			g_PeriodNeedsSetup = false;
 			g_AllowScoreReset = true;
