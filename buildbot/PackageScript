@@ -9,6 +9,8 @@ folder_list = [
   'addons/sourcemod/scripting/include',
   'addons/sourcemod/scripting',
   'addons/sourcemod/configs',
+  'addons/sourcemod/configs/compctrl',
+  'addons/sourcemod/configs/compctrl/matches',
 #  'addons/sourcemod/translations',
   'addons/sourcemod/plugins',
 ]
@@ -68,7 +70,4 @@ CopyFiles('gamedata', 'addons/sourcemod/gamedata',
   ]
 )
 
-CopyFiles('configs', 'addons/sourcemod/configs',
-  [ 'compctrl-matches.cfg',
-  ]
-)
+CopyFiles('configs/compctrl/matches', 'addons/sourcemod/configs/compctrl/matches', os.listdir(os.path.join(builder.sourcePath, 'configs/compctrl/matches')))
