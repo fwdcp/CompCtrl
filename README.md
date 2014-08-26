@@ -10,6 +10,10 @@ Installation
 Changelog
 ---------
 
+**0.2.1**
+* matches
+  * prevent tournament from being restarted by CompCtrl if not managed by CompCtrl
+
 **0.2.0**
 * matches
   * split match configs into separate files
