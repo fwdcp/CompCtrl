@@ -40,7 +40,7 @@ public Plugin:myinfo =
 };
 
 public OnPluginStart() {
-	RegAdminCmd("sm_match", Command_SetupMatch, ADMFLAG_CONFIG, "sets up a match regulated by CompCtrl with the specified config", "compctrl");
+	RegAdminCmd("sm_startmatch", Command_StartMatch, ADMFLAG_CONFIG, "sets up and starts a match regulated by CompCtrl with the specified config", "compctrl");
 	RegAdminCmd("sm_cancelmatch", Command_CancelMatch, ADMFLAG_CONFIG, "cancels and stops a CompCtrl match", "compctrl");
 	
 	g_Tournament = FindConVar("mp_tournament");
@@ -59,7 +59,7 @@ public OnPluginStart() {
 	HookEvent("teamplay_round_start", Event_RoundStart);
 }
 
-public Action:Command_SetupMatch(client, args) {
+public Action:Command_StartMatch(client, args) {
 	decl String:arg[256];
 	GetCmdArg(1, arg, sizeof(arg));
 	
