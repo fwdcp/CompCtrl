@@ -10,6 +10,12 @@ Installation
 Changelog
 ---------
 
+**0.2.0**
+* matches
+  * split match configs into separate files
+  * adjust ozfortress configs as requested
+  * add command to cancel matches
+
 **0.1.4**
 * teams
   * fix ready status not working
