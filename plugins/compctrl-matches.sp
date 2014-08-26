@@ -111,6 +111,9 @@ public Action:Command_CancelMatch(client, args) {
 	g_SwitchTeams = false;
 	g_PeriodNeedsSetup = false;
 	g_AllowScoreReset = true;
+	g_RoundsPlayed = 0;
+	g_RedTeamScore = 0;
+	g_BluTeamScore = 0;
 	
 	return Plugin_Handled;
 }
@@ -470,6 +473,9 @@ EndPeriod(redScore, bluScore, EndCondition:endCondition, TFTeam:cause) {
 			g_SwitchTeams = false;
 			g_PeriodNeedsSetup = false;
 			g_AllowScoreReset = true;
+			g_RoundsPlayed = 0;
+			g_RedTeamScore = 0;
+			g_BluTeamScore = 0;
 		}
 	}
 	else {
