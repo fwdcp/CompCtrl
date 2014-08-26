@@ -60,6 +60,26 @@ public OnPluginStart() {
 }
 
 public Action:Command_StartMatch(client, args) {
+	if (g_InMatch) {
+		CPrintToChatAll("{green}[CompCtrl]{default} Current match is being restarted.");
+	}
+	
+	if (g_MatchConfig != INVALID_HANDLE) {
+		CloseHandle(g_MatchConfig);
+		g_MatchConfig = INVALID_HANDLE;
+	}
+	
+	g_InMatch = false;
+	g_MatchConfigName = "";
+	g_InPeriod = false;
+	g_CurrentPeriod = "";
+	g_SwitchTeams = false;
+	g_PeriodNeedsSetup = false;
+	g_AllowScoreReset = true;
+	g_RoundsPlayed = 0;
+	g_RedTeamScore = 0;
+	g_BluTeamScore = 0;
+	
 	decl String:arg[256];
 	GetCmdArg(1, arg, sizeof(arg));
 	
