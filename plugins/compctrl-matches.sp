@@ -118,12 +118,17 @@ public Action:Command_StartMatch(client, args) {
 }
 
 public Action:Command_CancelMatch(client, args) {
-	CPrintToChatAll("{green}[CompCtrl]{default} Match has been canceled.");
+	if (g_InMatch) {
+		CPrintToChatAll("{green}[CompCtrl]{default} Match has been canceled.");
+	}
 	
 	ServerCommand("mp_tournament_restart");
 	
-	CloseHandle(g_MatchConfig);
-	g_MatchConfig = INVALID_HANDLE;
+	if (g_MatchConfig != INVALID_HANDLE) {
+		CloseHandle(g_MatchConfig);
+		g_MatchConfig = INVALID_HANDLE;
+	}
+	
 	g_InMatch = false;
 	g_MatchConfigName = "";
 	g_InPeriod = false;
