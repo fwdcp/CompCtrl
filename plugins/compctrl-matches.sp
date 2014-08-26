@@ -120,9 +120,9 @@ public Action:Command_StartMatch(client, args) {
 public Action:Command_CancelMatch(client, args) {
 	if (g_InMatch) {
 		CPrintToChatAll("{green}[CompCtrl]{default} Match has been canceled.");
-	}
 	
-	ServerCommand("mp_tournament_restart");
+		ServerCommand("mp_tournament_restart");
+	}
 	
 	if (g_MatchConfig != INVALID_HANDLE) {
 		CloseHandle(g_MatchConfig);
