@@ -41,6 +41,7 @@ public Plugin:myinfo =
 
 public OnPluginStart() {
 	RegAdminCmd("sm_match", Command_SetupMatch, ADMFLAG_CONFIG, "sets up a match regulated by CompCtrl with the specified config", "compctrl");
+	RegAdminCmd("sm_cancelmatch", Command_CancelMatch, ADMFLAG_CONFIG, "cancels and stops a CompCtrl match", "compctrl");
 	
 	g_Tournament = FindConVar("mp_tournament");
 	g_TournamentNonAdminRestart = FindConVar("mp_tournament_allow_non_admin_restart");
@@ -93,6 +94,24 @@ public Action:Command_SetupMatch(client, args) {
 	BeginPeriod();
 	
 	KvRewind(g_MatchConfig);
+	return Plugin_Handled;
+}
+
+public Action:Command_CancelMatch(client, args) {
+	CPrintToChatAll("{green}[CompCtrl]{default} Match has been canceled.", arg);
+	
+	ServerCommand("mp_tournament_restart");
+	
+	CloseHandle(g_MatchConfig);
+	g_MatchConfig = INVALID_HANDLE;
+	g_InMatch = false;
+	g_MatchConfigName = "";
+	g_InPeriod = false;
+	g_CurrentPeriod = "";
+	g_SwitchTeams = false;
+	g_PeriodNeedsSetup = false;
+	g_AllowScoreReset = true;
+	
 	return Plugin_Handled;
 }
 
