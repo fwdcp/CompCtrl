@@ -118,7 +118,7 @@ public Action:Command_StartMatch(client, args) {
 }
 
 public Action:Command_CancelMatch(client, args) {
-	CPrintToChatAll("{green}[CompCtrl]{default} Match has been canceled.", arg);
+	CPrintToChatAll("{green}[CompCtrl]{default} Match has been canceled.");
 	
 	ServerCommand("mp_tournament_restart");
 	
