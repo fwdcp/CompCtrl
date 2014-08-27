@@ -301,7 +301,9 @@ public Action:Command_ChangeTeamReady(client, const String:command[], argc) {
 		new team = GetClientTeam(client);
 		
 		new teamPlayers;
-		new teamPlayersReady;
+		new teamPlayersNotReady;
+		
+		new String:unreadyPlayers[1024];
 		
 		for (new i = 1; i < MaxClients; i++) {
 			if (!IsClientConnected(i) || !IsClientInGame(i) || GetClientTeam(i) != team) {
@@ -310,8 +312,17 @@ public Action:Command_ChangeTeamReady(client, const String:command[], argc) {
 			
 			teamPlayers++;
 			
-			if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
-				teamPlayersReady++;
+			if (GameRules_GetProp("m_bPlayerReady", 1, i) == 0) {
+				if (teamPlayersNotReady > 0) {
+					StrCat(unreadyPlayers, sizeof(unreadyPlayers), "; ");
+				}
+				
+				decl String:playerName[64];
+				GetClientName(i, playerName, sizeof(playerName));
+				
+				Format(unreadyPlayers, sizeof(unreadyPlayers), "%s{team}%s{default}", unreadyPlayers, playerName);
+				
+				teamPlayersNotReady++;
 			}
 		}
 		
@@ -326,8 +337,8 @@ public Action:Command_ChangeTeamReady(client, const String:command[], argc) {
 			PrintToChat(client, "You cannot ready your team because it has %i player(s), which is more than the %i maximum player(s) allowed to play.", teamPlayers, maxPlayers);
 			return Plugin_Stop;
 		}
-		else if (teamPlayersReady < teamPlayers) {
-			PrintToChat(client, "You cannot ready your team because %i player(s) on it are not ready.", teamPlayers - teamPlayersReady);
+		else if (teamPlayersNotReady > 0) {
+			CPrintToChatEx(client, client, "You cannot ready your team because the following players on it are not ready: %s.", unreadyPlayers);
 			return Plugin_Stop;
 		}
 		else {
