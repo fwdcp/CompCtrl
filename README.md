@@ -10,6 +10,10 @@ Installation
 Changelog
 ---------
 
+**0.2.2**
+* teams
+  * list players on team that haven't readied up when team fails to ready up
+
 **0.2.1**
 * matches
   * prevent tournament from being restarted by CompCtrl if not managed by CompCtrl
