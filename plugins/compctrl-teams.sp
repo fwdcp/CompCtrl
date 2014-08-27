@@ -303,7 +303,7 @@ public Action:Command_ChangeTeamReady(client, const String:command[], argc) {
 		new teamPlayers;
 		new teamPlayersNotReady;
 		
-		new String:unreadyPlayers[512];
+		new String:unreadyPlayers[1024];
 		
 		for (new i = 1; i < MaxClients; i++) {
 			if (!IsClientConnected(i) || !IsClientInGame(i) || GetClientTeam(i) != team) {
