@@ -557,6 +557,6 @@ DisplayReadyHUD() {
 	
 	new Handle:keyHint = StartMessageAll("KeyHintText");
 	BfWriteByte(keyHint, 1);
-	BfWriteString(keyHint, sBuffer); 
+	BfWriteString(keyHint, message); 
 	EndMessage();
 }
