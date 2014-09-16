@@ -87,6 +87,9 @@ All of the files within the `configs/compctrl/matches` may be used by the `sm_st
 
 ##### Player Limit Variables
 `compctrl_team_players_min` and `compctrl_team_players_max` set limits on the number of players a team is allowed to play with. A setting of 0 indicates no limit.
+
+##### Team Ready HUD Variables
+`compctrl_team_ready_hud` sets whether or not to show a HUD that displays the players who are ready and not ready to all clients.
 	
 #### Console Commands
 
