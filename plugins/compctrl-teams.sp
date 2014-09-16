@@ -9,6 +9,9 @@
 new Handle:g_MinTeamPlayers = INVALID_HANDLE;
 new Handle:g_MaxTeamPlayers = INVALID_HANDLE;
 new Handle:g_AutoReadyTeam = INVALID_HANDLE;
+new Handle:g_DisplayReadyHUD = INVALID_HANDLE;
+
+new Handle:g_DisplayReadyHUDTimer = INVALID_HANDLE;
 
 public Plugin:myinfo =
 {
@@ -23,6 +26,7 @@ public OnPluginStart() {
 	g_MinTeamPlayers = CreateConVar("compctrl_team_players_min", "0", "the minimum number of players a team is required to play with (0 for no limit)", FCVAR_NOTIFY|FCVAR_REPLICATED|FCVAR_PLUGIN, true, 0.0);
 	g_MaxTeamPlayers = CreateConVar("compctrl_team_players_max", "0", "the maximum number of players a team is required to play with (0 for no limit)", FCVAR_NOTIFY|FCVAR_REPLICATED|FCVAR_PLUGIN, true, 0.0);
 	g_AutoReadyTeam = CreateConVar("compctrl_team_auto_ready", "0", "if non-zero, a team will be automatically readied when it has this number of players and all players are ready", FCVAR_NOTIFY|FCVAR_REPLICATED|FCVAR_PLUGIN, true, 0.0);
+	g_DisplayReadyHUD = CreateConVar("compctrl_team_ready_hud", "0", "displays a HUD with ready and unready players", FCVAR_NOTIFY|FCVAR_REPLICATED|FCVAR_PLUGIN, true, 0.0, true, 1.0);
 	
 	RegConsoleCmd("sm_ready", Command_ReadyPlayer, "set yourself as ready");
 	RegConsoleCmd("sm_unready", Command_UnreadyPlayer, "set yourself as not ready");
@@ -38,6 +42,12 @@ public OnPluginStart() {
 	AddCommandListener(Command_ChangeTeamName, "tournament_teamname");
 	
 	RegConsoleCmd("sm_readystatus", Command_CheckReadyStatus, "check the ready status of players");
+	
+	g_DisplayReadyHUDTimer = CreateTimer(0.1, Timer_DisplayReadyHUD, INVALID_HANDLE, TIMER_REPEAT);
+}
+
+public OnPluginEnd() {
+	KillTimer(g_DisplayReadyHUDTimer);
 }
 
 public OnClientDisconnect(client) {
@@ -239,6 +249,8 @@ public Action:Command_ReadyPlayer(client, args) {
 		}
 	}
 	
+	DisplayReadyHUD();
+	
 	return Plugin_Handled;
 }
 
@@ -261,8 +273,11 @@ public Action:Command_UnreadyPlayer(client, args) {
 	
 	FakeClientCommand(client, "tournament_readystate 0");
 	
+	DisplayReadyHUD();
+	
 	return Plugin_Handled;
 }
+
 public Action:Command_ReadyTeam(client, args) {
 	if (!IsClientConnected(client) || !IsClientInGame(client) || !(TFTeam:GetClientTeam(client) == TFTeam_Blue || TFTeam:GetClientTeam(client) == TFTeam_Red)) {
 		ReplyToCommand(client, "You cannot ready your team!");
@@ -468,4 +483,80 @@ public Action:Command_CheckReadyStatus(client, args) {
 	}
 	
 	return Plugin_Handled; 
+}
+
+public Action:Timer_DisplayReadyHUD(Handle:timer) {
+	DisplayReadyHUD();
+}
+
+DisplayReadyHUD() {
+	if (!GetConVarBool(g_DisplayReadyHUD)) {
+		return;
+	}
+	
+	new String:readyPlayers[512];
+	new String:unreadyPlayers[512];
+	
+	new readyCount = 0;
+	new unreadyCount = 0;
+	
+	for (new i = 1; i <= MaxClients; i++) {
+		if (!IsClientConnected(i) || !IsClientInGame(i) || TFTeam:GetClientTeam(i) != TFTeam_Blue) {
+			continue;
+		}
+		
+		decl String:name[64];
+		GetClientName(i, name, sizeof(name));
+		
+		if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+			Format(readyPlayers, sizeof(readyPlayers), "%s\n%s", readyPlayers, name);
+			
+			readyCount++;
+		}
+		else {
+			Format(unreadyPlayers, sizeof(unreadyPlayers), "%s\n%s", unreadyPlayers, name);
+			
+			unreadyCount++;
+		}
+	}
+	
+	for (new i = 1; i <= MaxClients; i++) {
+		if (!IsClientConnected(i) || !IsClientInGame(i) || TFTeam:GetClientTeam(i) != TFTeam_Red) {
+			continue;
+		}
+		
+		decl String:name[64];
+		GetClientName(i, name, sizeof(name));
+		
+		if (GameRules_GetProp("m_bPlayerReady", 1, i) == 1) {
+			Format(readyPlayers, sizeof(readyPlayers), "%s\n%s", readyPlayers, name);
+			
+			readyCount++;
+		}
+		else {
+			Format(unreadyPlayers, sizeof(unreadyPlayers), "%s\n%s", unreadyPlayers, name);
+			
+			unreadyCount++;
+		}
+	}
+	
+	decl String:message[1024];
+	
+	if (readyCount > 0 && unreadyCount > 0) {
+		Format(message, sizeof(message), "Ready:%s\n \nUnready:%s", readyPlayers, unreadyPlayers);
+	}
+	else if (readyCount > 0) {
+		Format(message, sizeof(message), "Ready:%s", readyPlayers);
+	}
+	else if (unreadyCount > 0) {
+		Format(message, sizeof(message), "Unready:%s", unreadyPlayers);
+	}
+	else {
+		Format(message, sizeof(message), " ");
+	}
+	
+	new Handle:keyHint = StartMessageAll("KeyHintText");
+	BfWriteByte(keyHint, 1);
+	BfWriteString(keyHint, message); 
+	EndMessage();
 }

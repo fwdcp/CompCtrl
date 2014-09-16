@@ -10,8 +10,8 @@
 #define COMPCTRL_V_REV			0
 #define COMPCTRL_V_CSET			"0"
 #define COMPCTRL_V_MAJOR		0				/**< CompCtrl Major version */
-#define COMPCTRL_V_MINOR		1				/**< CompCtrl Minor version */
-#define COMPCTRL_V_RELEASE		1				/**< CompCtrl Release version */
+#define COMPCTRL_V_MINOR		2				/**< CompCtrl Minor version */
+#define COMPCTRL_V_RELEASE		3				/**< CompCtrl Release version */
 
-#define COMPCTRL_VERSION		"0.1.1-manual"	/**< CompCtrl version string (major.minor.release-tag) */
+#define COMPCTRL_VERSION		"0.2.3-manual"	/**< CompCtrl version string (major.minor.release-tag) */
 #endif

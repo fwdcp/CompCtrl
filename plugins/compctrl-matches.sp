@@ -480,6 +480,7 @@ EndPeriod(redScore, bluScore, EndCondition:endCondition, TFTeam:cause) {
 			
 			GetCurrentRoundConfig();
 			if (KvGetNum(g_MatchConfig, "switch-teams-to-begin", 0)) {
+				CPrintToChatAll("{green}[CompCtrl]{default} Teams will be automatically switched prior to the start of the next period.");
 				g_SwitchTeams = true;
 			}
 			
@@ -511,6 +512,7 @@ EndPeriod(redScore, bluScore, EndCondition:endCondition, TFTeam:cause) {
 			
 		GetCurrentRoundConfig();
 		if (KvGetNum(g_MatchConfig, "switch-teams-to-begin", 0)) {
+			CPrintToChatAll("{green}[CompCtrl]{default} Teams will be automatically switched prior to the start of the next period.");
 			g_SwitchTeams = true;
 		}
 			
