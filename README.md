@@ -10,6 +10,14 @@ Installation
 Changelog
 ---------
 
+**0.2.3**
+* general
+  * fix offsets for 2014-09-10 update
+* matches
+  * add notification of team switch after period break
+* teams
+  * add HUD display of ready/unready players
+
 **0.2.2**
 * teams
   * list players on team that haven't readied up when team fails to ready up
