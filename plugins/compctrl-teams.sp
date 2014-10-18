@@ -494,6 +494,10 @@ DisplayReadyHUD() {
 		return;
 	}
 	
+	if (!GameRules_GetProp("m_bAwaitingReadyRestart")) {
+		return;
+	}
+	
 	new String:readyPlayers[512];
 	new String:unreadyPlayers[512];
 	
