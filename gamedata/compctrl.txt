@@ -36,15 +36,15 @@
 			}
 			"CTFTeam::GetTeamNumber"
 			{
-				"windows"	"188"
-				"linux"		"189"
-				"mac"		"189"
+				"windows"	"189"
+				"linux"		"190"
+				"mac"		"190"
 			}
 			"CTFTeam::ResetScores"
 			{
-				"windows"	"204"
-				"linux"		"205"
-				"mac"		"205"
+				"windows"	"205"
+				"linux"		"206"
+				"mac"		"206"
 			}
 		}
 	}
