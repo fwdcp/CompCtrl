@@ -43,6 +43,8 @@ public OnPluginStart() {
 	RegAdminCmd("sm_startmatch", Command_StartMatch, ADMFLAG_CONFIG, "sets up and starts a match regulated by CompCtrl with the specified config", "compctrl");
 	RegAdminCmd("sm_cancelmatch", Command_CancelMatch, ADMFLAG_CONFIG, "cancels and stops a CompCtrl match", "compctrl");
 	
+	RegConsoleCmd("sm_matchstatus", Command_MatchStatus, "get the status of the current match");
+	
 	g_Tournament = FindConVar("mp_tournament");
 	g_TournamentNonAdminRestart = FindConVar("mp_tournament_allow_non_admin_restart");
 	g_Stopwatch = FindConVar("mp_tournament_stopwatch");
@@ -139,6 +141,69 @@ public Action:Command_CancelMatch(client, args) {
 	g_RoundsPlayed = 0;
 	g_RedTeamScore = 0;
 	g_BluTeamScore = 0;
+	
+	return Plugin_Handled;
+}
+
+public Action:Command_MatchStatus(client, args) {
+	if (g_InMatch) {
+		CPrintToChat(client, "{green}[CompCtrl]{default} No match currently occurring.");
+	}
+	else {
+		GetCurrentRoundConfig();
+		
+		new currentRound = g_RoundsPlayed + 1;
+		
+		if (GameRules_GetProp("m_bStopWatch", 1)) {
+			if (KvGetNum(g_MatchConfig, "timelimit", 0) > 0) {
+				new timeLeft;
+				GetMapTimeLeft(timeLeft);
+				
+				switch (GetStopwatchStatus()) {
+					case StopwatchStatus_SetTarget: {
+						CPrintToChat(client, "{green}[CompCtrl]{default} Period status: set part of round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+					}
+					case StopwatchStatus_ChaseTarget: {
+						CPrintToChat(client, "{green}[CompCtrl]{default} Period status: chase part of round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+					}
+					default: {
+						CPrintToChat(client, "{green}[CompCtrl]{default} Period status: round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+					}
+				}
+			}
+			else {
+				switch (GetStopwatchStatus()) {
+					case StopwatchStatus_SetTarget: {
+						CPrintToChat(client, "{green}[CompCtrl]{default} Period status: set part of round {olive}%i{default}.", currentRound);
+					}
+					case StopwatchStatus_ChaseTarget: {
+						CPrintToChat(client, "{green}[CompCtrl]{default} Period status: chase part of round {olive}%i{default}.", currentRound);
+					}
+					default: {
+						CPrintToChat(client, "{green}[CompCtrl]{default} Period status: round {olive}%i{default}.", currentRound);
+					}
+				}
+			}
+		}
+		else {
+			if (KvGetNum(g_MatchConfig, "timelimit", 0) > 0) {
+				new timeLeft;
+				GetMapTimeLeft(timeLeft);
+				
+				CPrintToChat(client, "{green}[CompCtrl]{default} Period status: round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+			}
+			else {
+				CPrintToChat(client, "{green}[CompCtrl]{default} Period status: round {olive}%i{default}.", currentRound);
+			}
+		}
+		
+		decl String:redName[256];
+		GetConVarString(g_RedTeamName, redName, sizeof(redName));
+		decl String:bluName[256];
+		GetConVarString(g_BlueTeamName, bluName, sizeof(bluName));
+		
+		CPrintToChat(client, "{green}[CompCtrl]{default} Current score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+	}
 	
 	return Plugin_Handled;
 }

@@ -72,6 +72,11 @@ Modules
 ##### Match Management Commands
 `sm_startmatch <config>` is used to start a match with a specified config. The command requires the name of a match config file (without the `.cfg` extension) that will be used to regulate the match. `sm_cancelmatch` cancels any match that may be in progress.
 
+#### Console Commands
+
+##### Match Status Command
+`sm_matchstatus` will display the current status of the ongoing match.
+
 #### Configuration Files
 
 ##### Match Configurations
@@ -90,7 +95,7 @@ All of the files within the `configs/compctrl/matches` may be used by the `sm_st
 
 ##### Team Ready HUD Variables
 `compctrl_team_ready_hud` sets whether or not to show a HUD that displays the players who are ready and not ready to all clients.
-	
+
 #### Console Commands
 
 ##### Player Ready Commands
