@@ -53,8 +53,9 @@ def CopyFiles(src, dest, files):
     builder.AddCopy(source_path, dest_entry)
 
 CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
-  [ 'compctrl.inc',
-    'compctrl_version.inc',
+  [ 'compctrl_version.inc',
+    'compctrl_extension.inc',
+    'compctrl-matches.inc',
     'morecolors.inc'
   ]
 )

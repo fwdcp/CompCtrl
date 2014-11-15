@@ -1,9 +1,11 @@
 #include <sourcemod>
 
-#include <compctrl>
 #include <compctrl_version>
+#include <compctrl_extension>
+#include <compctrl-matches>
 #include <morecolors>
 #include <sdktools>
+#include <tf2>
 
 new Handle:g_MatchConfig = INVALID_HANDLE;
 new bool:g_InMatch = false;
