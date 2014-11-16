@@ -72,3 +72,4 @@ CopyFiles('gamedata', 'addons/sourcemod/gamedata',
 )
 
 CopyFiles('configs/compctrl/matches', 'addons/sourcemod/configs/compctrl/matches', os.listdir(os.path.join(builder.sourcePath, 'configs/compctrl/matches')))
+CopyFiles('configs/compctrl/drafts', 'addons/sourcemod/configs/compctrl/drafts', os.listdir(os.path.join(builder.sourcePath, 'configs/compctrl/drafts')))
