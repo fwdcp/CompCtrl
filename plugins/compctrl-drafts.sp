@@ -139,6 +139,11 @@ public Action:Command_CancelDraft(client, args) {
 }
 
 public Action:Command_SetConfig(client, args) {
+	if (g_InDraft) {
+		ReplyToCommand(client, "Cannot change options while a draft is occurring!");
+		return Plugin_Handled;
+	}
+	
 	if (args >= 1) {
 		if (g_DraftConfig != INVALID_HANDLE) {
 			CloseHandle(g_DraftConfig);
@@ -172,6 +177,11 @@ public Action:Command_SetConfig(client, args) {
 }
 
 public Action:Command_SetCaptain(client, args) {
+	if (g_InDraft) {
+		ReplyToCommand(client, "Cannot change options while a draft is occurring!");
+		return Plugin_Handled;
+	}
+	
 	if (args >= 1) {
 		decl String:captainName[64];
 		GetCmdArg(1, captainName, sizeof(captainName));
@@ -240,6 +250,11 @@ public Action:Command_SetCaptain(client, args) {
 }
 
 public Action:Command_SetFirstChoice(client, args) {
+	if (g_InDraft) {
+		ReplyToCommand(client, "Cannot change options while a draft is occurring!");
+		return Plugin_Handled;
+	}
+	
 	if (args >= 1) {
 		decl String:firstChooser[16];
 		GetCmdArg(1, firstChooser, sizeof(firstChooser));
