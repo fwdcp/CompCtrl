@@ -62,6 +62,7 @@ CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
 CopyFiles('plugins', 'addons/sourcemod/scripting',
   [ 'compctrl-teams.sp',
     'compctrl-matches.sp',
+    'compctrl-drafts.sp',
   ]
 )
 
