@@ -379,7 +379,7 @@ public Action:Command_Choose(client, args) {
 			CPrintToChatAllEx(client, "{green}[CompCtrl]{default} {teamcolor}%s{default} has {olive}picked{default} {teamcolor}%s{default}.", captainName, playerName);
 		}
 		else if (StrEqual(choiceType, "ban")) {
-			CPrintToChatAllEx(client, "{green}[CompCtrl]{default} {teamcolor}%s{default} has {olive}banned{default} {olive}%s{default}.", captainName, playerName);
+			CPrintToChatAllEx(client, "{green}[CompCtrl]{default} {teamcolor}%s{default} has {olive}banned{default} {yellow}%s{default}.", captainName, playerName);
 		}
 		
 		BeginNextChoice();
