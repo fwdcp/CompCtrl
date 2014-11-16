@@ -102,22 +102,22 @@ public OnClientDisconnect(client) {
 public Action:Command_StartDraft(client, args) {
 	if (g_InDraft) {
 		ReplyToCommand(client, "Cannot start a draft while one is in progress!");
-		return Plugin_Stop;
+		return Plugin_Handled;
 	}
 	
 	if (g_DraftConfig == INVALID_HANDLE) {
 		ReplyToCommand(client, "Must set a valid config to begin draft!");
-		return Plugin_Stop;
+		return Plugin_Handled;
 	}
 	
 	if (g_RedCaptain == 0 || g_BluCaptain == 0) {
 		ReplyToCommand(client, "Must set team captains to begin draft!");
-		return Plugin_Stop;
+		return Plugin_Handled;
 	}
 	
 	if (g_FirstChoice != TFTeam_Red && g_FirstChoice != TFTeam_Blue) {
 		ReplyToCommand(client, "Must set team to choose first!");
-		return Plugin_Stop;
+		return Plugin_Handled;
 	}
 	
 	StartDraft();
@@ -128,7 +128,7 @@ public Action:Command_StartDraft(client, args) {
 public Action:Command_CancelDraft(client, args) {
 	if (!g_InDraft) {
 		ReplyToCommand(client, "There is no draft to cancel!");
-		return Plugin_Stop;
+		return Plugin_Handled;
 	}
 	
 	CPrintToChatAll("{green}[CompCtrl]{default} The current draft has been canceled.");
@@ -276,12 +276,12 @@ public Action:Command_SetFirstChoice(client, args) {
 public Action:Command_Choose(client, args) {
 	if (!g_InDraft) {
 		ReplyToCommand(client, "Cannot choose while not in a draft!");
-		return Plugin_Stop;
+		return Plugin_Handled;
 	}
 	
 	if (client != g_RedCaptain && client != g_BluCaptain) {
 		ReplyToCommand(client, "Cannot choose if you are not a captain!");
-		return Plugin_Stop;
+		return Plugin_Handled;
 	}
 	
 	GetDraftChoice(g_CurrentPosition);
@@ -303,12 +303,12 @@ public Action:Command_Choose(client, args) {
 	
 	if ((team == TFTeam_Red && client != g_RedCaptain) || (team == TFTeam_Blue && client != g_BluCaptain)) {
 		ReplyToCommand(client, "Cannot choose right now!");
-		return Plugin_Stop;
+		return Plugin_Handled;
 	}
 	
 	if (args < 1) {
 		ReplyToCommand(client, "Must specify a player to choose!");
-		return Plugin_Stop;
+		return Plugin_Handled;
 	}
 		
 	decl String:name[MAX_NAME_LENGTH];
@@ -325,18 +325,18 @@ public Action:Command_Choose(client, args) {
 		
 		if (!IsClientConnected(player) || !IsClientInGame(player) || !IsClientAuthorized(player) || IsClientSourceTV(player) || IsClientReplay(player)) {
 			ReplyToCommand(client, "Cannot choose a nonexistent player!");
-			return Plugin_Stop;
+			return Plugin_Handled;
 		}
 		
 		if (player == g_RedCaptain || player == g_BluCaptain) {
 			ReplyToCommand(client, "Cannot choose a captain!");
-			return Plugin_Stop;
+			return Plugin_Handled;
 		}
 		
 		for (new i = 1; i < g_CurrentPosition; i++) {
 			if (GetClientUserId(player) == g_ChosenUserIDs[i]) {
 				ReplyToCommand(client, "Cannot choose a player that has already been chosen!");
-				return Plugin_Stop;
+				return Plugin_Handled;
 			}
 		}
 	
@@ -364,7 +364,7 @@ public Action:Command_Choose(client, args) {
 	}
 	else if (result <= 0) {
 		ReplyToTargetError(client, result);
-		return Plugin_Stop;
+		return Plugin_Handled;
 	}
 	
 	return Plugin_Handled;
