@@ -23,9 +23,12 @@ new g_InDraft = false;
 new g_CurrentPosition;
 new g_ChosenUserIDs[MAXPLAYERS + 1];
 new String:g_ChosenSteamIDs[MAXPLAYERS + 1][32];
+new Handle:g_ChoiceMenu;
 
 public OnPluginStart() {
 	LoadTranslations("common.phrases");
+	
+	g_ChoiceMenu = CreateMenu(Menu_Choose);
 	
 	RegAdminCmd("sm_startdraft", Command_StartDraft, ADMFLAG_CONFIG, "starts the player draft with specified settings", "compctrl");
 	RegAdminCmd("sm_canceldraft", Command_CancelDraft, ADMFLAG_CONFIG, "cancels the current player draft", "compctrl");
@@ -322,7 +325,9 @@ public Action:Command_Choose(client, args) {
 	}
 	
 	if (args < 1) {
-		ReplyToCommand(client, "Must specify a player to choose!");
+		PrepareChoiceMenu();
+		DisplayMenu(g_ChoiceMenu, client, MENU_TIME_FOREVER);
+		
 		return Plugin_Handled;
 	}
 		
@@ -399,6 +404,16 @@ public Action:Command_ChangeTeam(client, const String:command[], argc) {
 	return Plugin_Continue;
 }
 
+public Menu_Choose(Handle:menu, MenuAction:action, param1, param2) {
+	if (action == MenuAction_Select) {
+		decl String:userid[8];
+		
+		if (GetMenuItem(g_ChoiceMenu, param2, userid, sizeof(userid))) {
+			ClientCommand(param1, "sm_choose %s", userid);
+		}
+	}
+}
+
 OpenDraft() {
 	g_InDraft = true;
 	g_CurrentPosition = 0;
@@ -435,6 +450,8 @@ CloseDraft() {
 }
 
 BeginNextChoice() {
+	CancelMenu(g_ChoiceMenu);
+	
 	g_CurrentPosition++;
 	
 	if (GetDraftChoice(g_CurrentPosition)) {
@@ -492,6 +509,41 @@ BeginNextChoice() {
 		CPrintToChatAll("{green}[CompCtrl]{default} Draft completed.");
 		
 		CloseDraft();
+	}
+}
+
+PrepareChoiceMenu() {
+	CancelMenu(g_ChoiceMenu);
+	RemoveAllMenuItems(g_ChoiceMenu);
+	
+	for (new client = 1; client <= MaxClients; i++) {
+		if (!IsClientConnected(client) || !IsClientInGame(client) || IsFakeClient(client) || !IsClientAuthorized(client) || IsClientSourceTV(client) || IsClientReplay(client)) {
+			continue;
+		}
+		
+		if (g_RedCaptain == client || g_BluCaptain == client) {
+			continue;
+		}
+		
+		new bool:chosen = false;
+		
+		for (new i = 1; i < g_CurrentPosition; i++) {
+			if (GetClientUserId(player) == g_ChosenUserIDs[i]) {
+				chosen = true;
+				break;
+			}
+		}
+		
+		if (chosen) {
+			continue;
+		}
+		
+		decl String:userid[8];
+		Format(userid, sizeof(userid), "#%i", GetClientUserId(client));
+		decl String:name[MAX_NAME_LENGTH];
+		GetClientName(client, name, sizeof(name));
+		
+		AddMenuItem(g_ChoiceMenu, userid, name);
 	}
 }
 
