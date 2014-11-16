@@ -120,7 +120,7 @@ public Action:Command_StartDraft(client, args) {
 		return Plugin_Handled;
 	}
 	
-	StartDraft();
+	OpenDraft();
 	
 	return Plugin_Handled;
 }
@@ -399,7 +399,7 @@ public Action:Command_ChangeTeam(client, const String:command[], argc) {
 	return Plugin_Continue;
 }
 
-StartDraft() {
+OpenDraft() {
 	g_InDraft = true;
 	g_CurrentPosition = 0;
 	
