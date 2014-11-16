@@ -749,5 +749,10 @@ bool:GetDraftChoice(choice) {
 	IntToString(choice, draftPosition, sizeof(draftPosition));
 	
 	KvRewind(g_DraftConfig);
+	
+	if (!KvJumpToKey(g_DraftConfig, "choices")) {
+		ThrowError("Failed to find choices!");
+	}
+	
 	return KvJumpToKey(g_DraftConfig, draftPosition);
 }
