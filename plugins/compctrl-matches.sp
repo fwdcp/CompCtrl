@@ -65,7 +65,9 @@ public OnPluginStart() {
 
 public Action:Command_StartMatch(client, args) {
 	if (g_InMatch) {
-		CPrintToChatAll("{green}[CompCtrl]{default} Current match is being restarted.");
+		CPrintToChatAll("{green}[CompCtrl]{default} Current match is being reset.");
+	
+		ServerCommand("mp_tournament_restart");
 	}
 	
 	if (g_MatchConfig != INVALID_HANDLE) {
