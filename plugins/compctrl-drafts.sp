@@ -399,7 +399,7 @@ public Action:Command_ChangeTeam(client, const String:command[], argc) {
 	}
 	
 	if (g_InDraft) {
-		CPrintToChat(client, "Cannot change your team manually while a draft is occurring!");
+		PrintToChat(client, "Cannot change your team manually while a draft is occurring!");
 		return Plugin_Stop;
 	}
 	
