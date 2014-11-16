@@ -11,6 +11,7 @@ folder_list = [
   'addons/sourcemod/configs',
   'addons/sourcemod/configs/compctrl',
   'addons/sourcemod/configs/compctrl/matches',
+  'addons/sourcemod/configs/compctrl/drafts',
 #  'addons/sourcemod/translations',
   'addons/sourcemod/plugins',
 ]
