@@ -343,8 +343,8 @@ public Action:Command_Choose(client, args) {
 	if (result == 1) {
 		new player = targets[0];
 		
-		if (!IsClientConnected(player) || !IsClientInGame(player) || !IsClientAuthorized(player) || IsClientSourceTV(player) || IsClientReplay(player)) {
-			ReplyToCommand(client, "Cannot choose a nonexistent player!");
+		if (!IsClientConnected(player) || !IsClientInGame(player) || IsFakeClient(i) || !IsClientAuthorized(player) || IsClientSourceTV(player) || IsClientReplay(player)) {
+			ReplyToCommand(client, "Cannot choose an invalid player!");
 			return Plugin_Handled;
 		}
 		
