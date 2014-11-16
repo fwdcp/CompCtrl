@@ -422,7 +422,6 @@ public Action:Command_DraftStatus(client, args) {
 				new player = GetClientOfUserId(g_ChosenUserIDs[i]);
 				
 				new captain;
-				decl String:captainName[MAX_NAME_LENGTH];
 				new TFTeam:team;
 				new choosingTeam = KvGetNum(g_DraftConfig, "team");
 										
@@ -546,19 +545,19 @@ public Action:Command_DraftStatus(client, args) {
 			CReplyToCommand(client, "{yellow}Banned{default}: %s.", bannedPlayers);
 		}
 		
-		for (new client = 1; client <= MaxClients; client++) {
-			if (!IsClientConnected(client) || !IsClientInGame(client) || IsFakeClient(client) || !IsClientAuthorized(client) || IsClientSourceTV(client) || IsClientReplay(client)) {
+		for (new i = 1; i <= MaxClients; i++) {
+			if (!IsClientConnected(i) || !IsClientInGame(i) || IsFakeClient(i) || !IsClientAuthorized(i) || IsClientSourceTV(i) || IsClientReplay(i)) {
 				continue;
 			}
 			
-			if (g_RedCaptain == client || g_BluCaptain == client) {
+			if (g_RedCaptain == i || g_BluCaptain == i) {
 				continue;
 			}
 			
 			new bool:chosen = false;
 			
-			for (new i = 1; i < g_CurrentPosition; i++) {
-				if (GetClientUserId(client) == g_ChosenUserIDs[i]) {
+			for (new j = 1; j < g_CurrentPosition; j++) {
+				if (GetClientUserId(i) == g_ChosenUserIDs[j]) {
 					chosen = true;
 					break;
 				}
@@ -569,7 +568,7 @@ public Action:Command_DraftStatus(client, args) {
 			}
 			
 			decl String:name[MAX_NAME_LENGTH];
-			GetClientName(client, name, sizeof(name));
+			GetClientName(i, name, sizeof(name));
 			
 			if (unchosenPlayersCount > 0) {
 				StrCat(unchosenPlayers, sizeof(unchosenPlayers), "; ");
