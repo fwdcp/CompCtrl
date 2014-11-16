@@ -345,7 +345,7 @@ public Action:Command_Choose(client, args) {
 	if (result == 1) {
 		new player = targets[0];
 		
-		if (!IsClientConnected(player) || !IsClientInGame(player) || IsFakeClient(i) || !IsClientAuthorized(player) || IsClientSourceTV(player) || IsClientReplay(player)) {
+		if (!IsClientConnected(player) || !IsClientInGame(player) || IsFakeClient(player) || !IsClientAuthorized(player) || IsClientSourceTV(player) || IsClientReplay(player)) {
 			ReplyToCommand(client, "Cannot choose an invalid player!");
 			return Plugin_Handled;
 		}
@@ -518,7 +518,7 @@ PrepareChoiceMenu() {
 	CancelMenu(g_ChoiceMenu);
 	RemoveAllMenuItems(g_ChoiceMenu);
 	
-	for (new client = 1; client <= MaxClients; i++) {
+	for (new client = 1; client <= MaxClients; client++) {
 		if (!IsClientConnected(client) || !IsClientInGame(client) || IsFakeClient(client) || !IsClientAuthorized(client) || IsClientSourceTV(client) || IsClientReplay(client)) {
 			continue;
 		}
@@ -530,7 +530,7 @@ PrepareChoiceMenu() {
 		new bool:chosen = false;
 		
 		for (new i = 1; i < g_CurrentPosition; i++) {
-			if (GetClientUserId(player) == g_ChosenUserIDs[i]) {
+			if (GetClientUserId(client) == g_ChosenUserIDs[i]) {
 				chosen = true;
 				break;
 			}
