@@ -73,6 +73,8 @@ public OnClientPostAdminCheck(client) {
 							}
 						}
 					}
+					
+					break;
 				}
 			}
 		}
@@ -443,7 +445,7 @@ OpenDraft() {
 CloseDraft() {
 	g_InDraft = false;
 	
-	for (new i = 0; i < 64; i++) {
+	for (new i = 1; i <= MAXPLAYERS; i++) {
 		g_ChosenUserIDs[i] = 0;
 		g_ChosenSteamIDs[i] = "";
 	}
