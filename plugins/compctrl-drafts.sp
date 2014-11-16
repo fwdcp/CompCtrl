@@ -392,6 +392,202 @@ public Action:Command_Choose(client, args) {
 	return Plugin_Handled;
 }
 
+public Action:Command_DraftStatus(client, args) {
+	if (!g_InDraft) {
+		CReplyToCommand(client, "No draft currently occurring.");
+	}
+	else {
+		CReplyToCommand(client, "Drafting with config {olive}%s{default}.", g_DraftConfigName);
+		
+		new String:bluTeamPlayers[2048];
+		new String:redTeamPlayers[2048];
+		new String:bannedPlayers[2048];
+		new bannedPlayersCount;
+		new String:unchosenPlayers[2048];
+		new unchosenPlayersCount;
+		
+		decl String:bluCaptainName[MAX_NAME_LENGTH];
+		GetClientName(g_BluCaptain, bluCaptainName, sizeof(bluCaptainName));
+		decl String:redCaptainName[MAX_NAME_LENGTH];
+		GetClientName(g_RedCaptain, redCaptainName, sizeof(redCaptainName));
+		CReplyToCommand(client, "Captains: {blue}%s{default} and {red}%s{default}.", bluCaptainName, redCaptainName);
+		
+		Format(bluTeamPlayers, sizeof(bluTeamPlayers), "{blue}%s{default} (captain)", bluCaptainName);
+		Format(redTeamPlayers, sizeof(redTeamPlayers), "{red}%s{default} (captain)", redCaptainName);
+		
+		decl String:draftChoices[4096];
+		
+		for (new i = 1; i < g_CurrentPosition; i++) {
+			if (GetDraftChoice(g_CurrentPosition)) {
+				new player = GetClientOfUserId(g_ChosenUserIDs[i]);
+				
+				new captain;
+				decl String:captainName[MAX_NAME_LENGTH];
+				new TFTeam:team;
+				new choosingTeam = KvGetNum(g_DraftConfig, "team");
+										
+				if (choosingTeam == 1) {
+					team = g_FirstChoice;
+				}
+				else if (choosingTeam == 2) {
+					if (g_FirstChoice == TFTeam_Red) {
+						team = TFTeam_Blue;
+					}
+					else if (g_FirstChoice == TFTeam_Blue) {
+						team = TFTeam_Red;
+					}
+				}
+				
+				if (team == TFTeam_Red) {
+					captain = g_RedCaptain;
+				}
+				else if (team == TFTeam_Blue) {
+					captain = g_BluCaptain;
+				}
+				
+				decl String:captainName[MAX_NAME_LENGTH];
+				GetClientName(captain, captainName, sizeof(captainName));
+				decl String:playerName[MAX_NAME_LENGTH];
+				GetClientName(player, playerName, sizeof(playerName));
+				
+				decl String:choiceType[8];
+				KvGetString(g_DraftConfig, "type", choiceType, sizeof(choiceType));
+				
+				if (i > 1) {
+					StrCat(draftChoices, sizeof(draftChoices), "; ");
+				}
+				
+				if (StrEqual(choiceType, "pick")) {
+					if (team == TFTeam_Red) {
+						Format(draftChoices, sizeof(draftChoices), "%s{red}%s{default} {olive}picked{default} {red}%s{default}.", draftChoices, captainName, playerName);
+						
+						Format(redTeamPlayers, sizeof(redTeamPlayers), "%s; {red}%s{default}", redTeamPlayers, playerName);
+					}
+					else if (team == TFTeam_Blue) {
+						Format(draftChoices, sizeof(draftChoices), "%s{blue}%s{default} {olive}picked{default} {blue}%s{default}.", draftChoices, captainName, playerName);
+						
+						Format(bluTeamPlayers, sizeof(bluTeamPlayers), "%s; {blue}%s{default}", bluTeamPlayers, playerName);
+					}
+				}
+				else if (StrEqual(choiceType, "ban")) {
+					if (team == TFTeam_Red) {
+						Format(draftChoices, sizeof(draftChoices), "%s{red}%s{default} {olive}banned{default} {yellow}%s{default}.", draftChoices, captainName, playerName);
+					}
+					else if (team == TFTeam_Blue) {
+						Format(draftChoices, sizeof(draftChoices), "%s{blue}%s{default} {olive}banned{default} {yellow}%s{default}.", draftChoices, captainName, playerName);
+					}
+					
+					if (bannedPlayersCount > 0) {
+						StrCat(bannedPlayers, sizeof(bannedPlayers), "; ");
+					}
+					
+					Format(bannedPlayers, sizeof(bannedPlayers), "%s{yellow}%s{default}", bannedPlayers, playerName);
+			
+					bannedPlayersCount++;
+				}
+			}
+		}
+		
+		if (g_CurrentPosition > 1) {
+			CReplyToCommand(client, "Draft choices: %s.", draftChoices);
+		}
+		
+		if (GetDraftChoice(g_CurrentPosition)) {
+			new captain;
+			decl String:captainName[MAX_NAME_LENGTH];
+			new TFTeam:team;
+			new choosingTeam = KvGetNum(g_DraftConfig, "team");
+									
+			if (choosingTeam == 1) {
+				team = g_FirstChoice;
+			}
+			else if (choosingTeam == 2) {
+				if (g_FirstChoice == TFTeam_Red) {
+					team = TFTeam_Blue;
+				}
+				else if (g_FirstChoice == TFTeam_Blue) {
+					team = TFTeam_Red;
+				}
+			}
+			
+			if (team == TFTeam_Red) {
+				captain = g_RedCaptain;
+			}
+			else if (team == TFTeam_Blue) {
+				captain = g_BluCaptain;
+			}
+			
+			GetClientName(captain, captainName, sizeof(captainName));
+			
+			decl String:choiceType[8];
+			KvGetString(g_DraftConfig, "type", choiceType, sizeof(choiceType));
+			
+			if (StrEqual(choiceType, "pick")) {
+				if (team == TFTeam_Red) {
+					CReplyToCommand(client, "Currently choice {olive}%i{default}: {red}%s{default}'s turn to {olive}pick{default} a player.", g_CurrentPosition, captainName);
+				}
+				else if (team == TFTeam_Blue) {
+					CReplyToCommand(client, "Currently choice {olive}%i{default}: {blue}%s{default}'s turn to {olive}pick{default} a player.", g_CurrentPosition, captainName);
+				}
+			}
+			else if (StrEqual(choiceType, "ban")) {
+				if (team == TFTeam_Red) {
+					CReplyToCommand(client, "Currently choice {olive}%i{default}: {red}%s{default}'s turn to {olive}ban{default} a player.", g_CurrentPosition, captainName);
+				}
+				else if (team == TFTeam_Blue) {
+					CReplyToCommand(client, "Currently choice {olive}%i{default}: {blue}%s{default}'s turn to {olive}ban{default} a player.", g_CurrentPosition, captainName);
+				}
+			}
+		}
+		
+		CReplyToCommand(client, "{blue}BLU{default} team: %s.", bluTeamPlayers);
+		CReplyToCommand(client, "{red}RED{default} team: %s.", redTeamPlayers);
+		if (bannedPlayersCount > 0) {
+			CReplyToCommand(client, "{yellow}Banned{default}: %s.", bannedPlayers);
+		}
+		
+		for (new client = 1; client <= MaxClients; client++) {
+			if (!IsClientConnected(client) || !IsClientInGame(client) || IsFakeClient(client) || !IsClientAuthorized(client) || IsClientSourceTV(client) || IsClientReplay(client)) {
+				continue;
+			}
+			
+			if (g_RedCaptain == client || g_BluCaptain == client) {
+				continue;
+			}
+			
+			new bool:chosen = false;
+			
+			for (new i = 1; i < g_CurrentPosition; i++) {
+				if (GetClientUserId(client) == g_ChosenUserIDs[i]) {
+					chosen = true;
+					break;
+				}
+			}
+			
+			if (chosen) {
+				continue;
+			}
+			
+			decl String:name[MAX_NAME_LENGTH];
+			GetClientName(client, name, sizeof(name));
+			
+			if (unchosenPlayersCount > 0) {
+				StrCat(unchosenPlayers, sizeof(unchosenPlayers), "; ");
+			}
+			
+			Format(unchosenPlayers, sizeof(unchosenPlayers), "%s{gray}%s{default}", unchosenPlayers, name);
+			
+			unchosenPlayersCount++;
+		}
+		
+		if (unchosenPlayersCount > 0) {
+			CReplyToCommand(client, "{gray}Unchosen{default}: %s.", bannedPlayers);
+		}
+	}
+	
+	return Plugin_Handled;
+}
+
 public Action:Command_ChangeTeam(client, const String:command[], argc) {
 	if (!IsClientConnected(client) || !IsClientInGame(client)) {
 		ReplyToCommand(client, "Cannot change teams!");
