@@ -49,7 +49,7 @@ public OnClientPostAdminCheck(client) {
 		new TFTeam:team = TFTeam_Spectator;
 		
 		if (GetClientAuthId(client, AuthId_SteamID64, clientSteamID, sizeof(clientSteamID))) {
-			for (new i = 0; i < g_CurrentPosition; i++) {
+			for (new i = 1; i < g_CurrentPosition; i++) {
 				if (StrEqual(clientSteamID, g_ChosenSteamIDs[i])) {
 					g_ChosenUserIDs[i] = GetClientUserId(client);
 					
