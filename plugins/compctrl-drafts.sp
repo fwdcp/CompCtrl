@@ -372,12 +372,12 @@ public Action:Command_Choose(client, args) {
 
 public Action:Command_ChangeTeam(client, const String:command[], argc) {
 	if (!IsClientConnected(client) || !IsClientInGame(client)) {
-		ReplyToCommand(client, "You cannot change teams!");
+		ReplyToCommand(client, "Cannot change teams!");
 		return Plugin_Stop;
 	}
 	
 	if (g_InDraft) {
-		CPrintToChat(client, "You cannot change your team manually while a draft is occurring!");
+		CPrintToChat(client, "Cannot change your team manually while a draft is occurring!");
 		return Plugin_Stop;
 	}
 	
