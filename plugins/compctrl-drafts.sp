@@ -277,7 +277,7 @@ public Action:Command_SetFirstChoice(client, args) {
 			
 			CPrintToChatAll("{green}[CompCtrl]{default} First choice given to {red}RED{default}.");
 		}
-		else if (teamResult != _:TFTeam_Blue) {
+		else if (teamResult == _:TFTeam_Blue) {
 			g_FirstChoice = TFTeam_Blue;
 			
 			CPrintToChatAll("{green}[CompCtrl]{default} First choice given to {blue}BLU{default}.");
