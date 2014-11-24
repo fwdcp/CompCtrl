@@ -195,7 +195,7 @@ public Action:Command_SetCaptain(client, args) {
 		new String:targetCaptainName[64];
 		new bool:targetNameIsTranslation;
 		
-		new result = ProcessTargetString(captainName, client, targets, sizeof(targets), COMMAND_FILTER_NO_IMMUNITY|COMMAND_FILTER_NO_MULTI|COMMAND_FILTER_NO_BOTS, targetCaptainName, sizeof(targetCaptainName), targetNameIsTranslation);
+		new result = ProcessTargetString(captainName, client, targets, sizeof(targets), COMMAND_FILTER_NO_IMMUNITY|COMMAND_FILTER_NO_BOTS, targetCaptainName, sizeof(targetCaptainName), targetNameIsTranslation);
 		
 		if (result == 1) {
 			new captain = targets[0];
@@ -242,6 +242,9 @@ public Action:Command_SetCaptain(client, args) {
 				
 				CPrintToChatAll("{green}[CompCtrl]{default} {olive}%s{default} has been set as the captain for {blue}BLU{default}.", name);
 			}
+		}
+		else if (result > 1) {
+			ReplyToTargetError(client, COMMAND_TARGET_AMBIGUOUS);
 		}
 		else if (result <= 0) {
 			ReplyToTargetError(client, result);
