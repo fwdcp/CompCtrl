@@ -1798,12 +1798,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\engine.cpp" />
     <ClCompile Include="..\extension.cpp" />
     <ClCompile Include="$(SOURCEMOD_DEV)\public\smsdk_ext.cpp" />
     <ClCompile Include="..\gamerules.cpp" />
     <ClCompile Include="..\team.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\engine.h" />
     <ClInclude Include="..\extension.h" />
     <ClInclude Include="..\gamerules.h" />
     <ClInclude Include="..\sdk\smsdk_config.h" />

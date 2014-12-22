@@ -16,6 +16,7 @@ IForward *g_SwitchTeamsForward = NULL;
 IForward *g_RestartTournamentForward = NULL;
 IForward *g_CheckWinLimitForward = NULL;
 IForward *g_ResetTeamScoresForward = NULL;
+IForward *g_ChangeLevelForward = NULL;
 
 bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
 	sharesys->AddDependency(myself, "sdkhooks.ext", true, true);
@@ -35,6 +36,7 @@ bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
 }
 
 void CompCtrl::SDK_OnUnload() {
+	g_EngineManager.Disable();
 	g_GameRulesManager.Disable();
 	g_TeamManager.Disable();
 
@@ -44,14 +46,14 @@ void CompCtrl::SDK_OnUnload() {
 	forwards->ReleaseForward(g_RestartTournamentForward);
 	forwards->ReleaseForward(g_CheckWinLimitForward);
 	forwards->ReleaseForward(g_ResetTeamScoresForward);
+	forwards->ReleaseForward(g_ChangeLevelForward);
 }
 
 void CompCtrl::SDK_OnAllLoaded() {
 	SM_GET_LATE_IFACE(SDKHOOKS, g_pSDKHooks);
 	SM_GET_LATE_IFACE(SDKTOOLS, g_pSDKTools);
 
-	if (QueryRunning(NULL, 0))
-	{
+	if (QueryRunning(NULL, 0)) {
 		sharesys->AddNatives(myself, g_Natives);
 
 		g_SetWinningTeamForward = forwards->CreateForward("CompCtrl_OnSetWinningTeam", ET_Hook, 5, NULL, Param_CellByRef, Param_CellByRef, Param_CellByRef, Param_CellByRef, Param_CellByRef);
@@ -60,7 +62,9 @@ void CompCtrl::SDK_OnAllLoaded() {
 		g_RestartTournamentForward = forwards->CreateForward("CompCtrl_OnRestartTournament", ET_Hook, 0, NULL);
 		g_CheckWinLimitForward = forwards->CreateForward("CompCtrl_OnCheckWinLimit", ET_Hook, 1, NULL, Param_CellByRef);
 		g_ResetTeamScoresForward = forwards->CreateForward("CompCtrl_OnResetTeamScores", ET_Hook, 1, NULL, Param_Cell);
+		g_ChangeLevelForward = forwards->CreateForward("CompCtrl_OnChangeLevel", ET_Hook, 2, NULL, Param_String, Param_String);
 
+		g_EngineManager.Enable();
 		g_GameRulesManager.Enable();
 		g_TeamManager.Enable();
 
@@ -77,11 +81,17 @@ bool CompCtrl::QueryRunning(char *error, size_t maxlength) {
 bool CompCtrl::SDK_OnMetamodLoad(ISmmAPI *ismm, char *error, size_t maxlength, bool late) {
 	SH_ADD_HOOK(IServerGameDLL, LevelInit, gamedll, SH_MEMBER(this, &CompCtrl::OnLevelInit), true);
 
+	if (!g_EngineManager.IsRunning()) {
+		g_EngineManager.Enable();
+	}
+
 	return true;
 }
 
 bool CompCtrl::SDK_OnMetamodUnload(char *error, size_t maxlength) {
 	SH_REMOVE_HOOK(IServerGameDLL, LevelInit, gamedll, SH_MEMBER(this, &CompCtrl::OnLevelInit), true);
+
+	g_EngineManager.Disable();
 
 	return true;
 }
