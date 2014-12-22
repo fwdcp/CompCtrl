@@ -36,8 +36,19 @@ void EngineManager::Call_IVEngineServer_ChangeLevel(const char *s1, const char *
 }
 
 void EngineManager::Hook_IVEngineServer_ChangeLevel(const char *s1, const char *s2) {
-	g_ChangeLevelForward->PushString(s1);
-	g_ChangeLevelForward->PushString(s2);
+	if (s1) {
+		g_ChangeLevelForward->PushString(s1);
+	}
+	else {
+		g_ChangeLevelForward->PushString("");
+	}
+
+	if (s2) {
+		g_ChangeLevelForward->PushString(s2);
+	}
+	else {
+		g_ChangeLevelForward->PushString("");
+	}
 
 	cell_t result = 0;
 
