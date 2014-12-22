@@ -722,7 +722,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -748,7 +748,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -775,7 +775,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK)\public;$(HL2SDK)\public\dlls;$(HL2SDK)\public\engine;$(HL2SDK)\public\tier0;$(HL2SDK)\public\tier1;$(MMSOURCE_DEV)\core-legacy;$(MMSOURCE_DEV)\core-legacy\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK)\public;$(HL2SDK)\public\dlls;$(HL2SDK)\public\engine;$(HL2SDK)\public\tier0;$(HL2SDK)\public\tier1;$(MMSOURCE_DEV)\core-legacy;$(MMSOURCE_DEV)\core-legacy\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -802,7 +802,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK)\public;$(HL2SDK)\public\dlls;$(HL2SDK)\public\engine;$(HL2SDK)\public\tier0;$(HL2SDK)\public\tier1;$(MMSOURCE_DEV)\core-legacy;$(MMSOURCE_DEV)\core-legacy\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK)\public;$(HL2SDK)\public\dlls;$(HL2SDK)\public\engine;$(HL2SDK)\public\tier0;$(HL2SDK)\public\tier1;$(MMSOURCE_DEV)\core-legacy;$(MMSOURCE_DEV)\core-legacy\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -829,7 +829,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-DARKM)\public;$(HL2SDK-DARKM)\public\dlls;$(HL2SDK-DARKM)\public\engine;$(HL2SDK-DARKM)\public\tier0;$(HL2SDK-DARKM)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-DARKM)\public;$(HL2SDK-DARKM)\public\dlls;$(HL2SDK-DARKM)\public\engine;$(HL2SDK-DARKM)\public\tier0;$(HL2SDK-DARKM)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -856,7 +856,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-DARKM)\public;$(HL2SDK-DARKM)\public\dlls;$(HL2SDK-DARKM)\public\engine;$(HL2SDK-DARKM)\public\tier0;$(HL2SDK-DARKM)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-DARKM)\public;$(HL2SDK-DARKM)\public\dlls;$(HL2SDK-DARKM)\public\engine;$(HL2SDK-DARKM)\public\tier0;$(HL2SDK-DARKM)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -883,7 +883,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKOB)\public;$(HL2SDKOB)\public\engine;$(HL2SDKOB)\public\game\server;$(HL2SDKOB)\public\tier0;$(HL2SDKOB)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKOB)\public;$(HL2SDKOB)\public\engine;$(HL2SDKOB)\public\game\server;$(HL2SDKOB)\public\tier0;$(HL2SDKOB)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=3;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -910,7 +910,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKOB)\public;$(HL2SDKOB)\public\engine;$(HL2SDKOB)\public\game\server;$(HL2SDKOB)\public\tier0;$(HL2SDKOB)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKOB)\public;$(HL2SDKOB)\public\engine;$(HL2SDKOB)\public\game\server;$(HL2SDKOB)\public\tier0;$(HL2SDKOB)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=3;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -937,7 +937,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKDODS)\public;$(HL2SDKDODS)\public\engine;$(HL2SDKDODS)\public\game\server;$(HL2SDKDODS)\public\tier0;$(HL2SDKDODS)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKDODS)\public;$(HL2SDKDODS)\public\engine;$(HL2SDKDODS)\public\game\server;$(HL2SDKDODS)\public\tier0;$(HL2SDKDODS)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=8;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -964,7 +964,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKTF2)\public;$(HL2SDKTF2)\public\engine;$(HL2SDKTF2)\public\game\server;$(HL2SDKTF2)\public\tier0;$(HL2SDKTF2)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKTF2)\public;$(HL2SDKTF2)\public\engine;$(HL2SDKTF2)\public\game\server;$(HL2SDKTF2)\public\tier0;$(HL2SDKTF2)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -991,7 +991,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK2013)\public;$(HL2SDK2013)\public\engine;$(HL2SDK2013)\public\game\server;$(HL2SDK2013)\public\tier0;$(HL2SDK2013)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK2013)\public;$(HL2SDK2013)\public\engine;$(HL2SDK2013)\public\game\server;$(HL2SDK2013)\public\tier0;$(HL2SDK2013)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=9;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1018,7 +1018,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKHL2DM)\public;$(HL2SDKHL2DM)\public\engine;$(HL2SDKHL2DM)\public\game\server;$(HL2SDKHL2DM)\public\tier0;$(HL2SDKHL2DM)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKHL2DM)\public;$(HL2SDKHL2DM)\public\engine;$(HL2SDKHL2DM)\public\game\server;$(HL2SDKHL2DM)\public\tier0;$(HL2SDKHL2DM)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=7;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1072,7 +1072,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK2013)\public;$(HL2SDK2013)\public\engine;$(HL2SDK2013)\public\game\server;$(HL2SDK2013)\public\tier0;$(HL2SDK2013)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK2013)\public;$(HL2SDK2013)\public\engine;$(HL2SDK2013)\public\game\server;$(HL2SDK2013)\public\tier0;$(HL2SDK2013)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=9;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1099,7 +1099,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKDODS)\public;$(HL2SDKDODS)\public\engine;$(HL2SDKDODS)\public\game\server;$(HL2SDKDODS)\public\tier0;$(HL2SDKDODS)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKDODS)\public;$(HL2SDKDODS)\public\engine;$(HL2SDKDODS)\public\game\server;$(HL2SDKDODS)\public\tier0;$(HL2SDKDODS)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=8;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1126,7 +1126,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKHL2DM)\public;$(HL2SDKHL2DM)\public\engine;$(HL2SDKHL2DM)\public\game\server;$(HL2SDKHL2DM)\public\tier0;$(HL2SDKHL2DM)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKHL2DM)\public;$(HL2SDKHL2DM)\public\engine;$(HL2SDKHL2DM)\public\game\server;$(HL2SDKHL2DM)\public\tier0;$(HL2SDKHL2DM)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=7;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1153,7 +1153,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKCSS)\public;$(HL2SDKCSS)\public\engine;$(HL2SDKCSS)\public\game\server;$(HL2SDKCSS)\public\tier0;$(HL2SDKCSS)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKCSS)\public;$(HL2SDKCSS)\public\engine;$(HL2SDKCSS)\public\game\server;$(HL2SDKCSS)\public\tier0;$(HL2SDKCSS)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1180,7 +1180,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKCSS)\public;$(HL2SDKCSS)\public\engine;$(HL2SDKCSS)\public\game\server;$(HL2SDKCSS)\public\tier0;$(HL2SDKCSS)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKCSS)\public;$(HL2SDKCSS)\public\engine;$(HL2SDKCSS)\public\game\server;$(HL2SDKCSS)\public\tier0;$(HL2SDKCSS)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1207,7 +1207,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-BGT)\public;$(HL2SDK-BGT)\public\engine;$(HL2SDK-BGT)\public\game\server;$(HL2SDK-BGT)\public\tier0;$(HL2SDK-BGT)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-BGT)\public;$(HL2SDK-BGT)\public\engine;$(HL2SDK-BGT)\public\game\server;$(HL2SDK-BGT)\public\tier0;$(HL2SDK-BGT)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=4;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1234,7 +1234,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-BGT)\public;$(HL2SDK-BGT)\public\engine;$(HL2SDK-BGT)\public\game\server;$(HL2SDK-BGT)\public\tier0;$(HL2SDK-BGT)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-BGT)\public;$(HL2SDK-BGT)\public\engine;$(HL2SDK-BGT)\public\game\server;$(HL2SDK-BGT)\public\tier0;$(HL2SDK-BGT)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=4;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1261,7 +1261,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-EYE)\public;$(HL2SDK-EYE)\public\engine;$(HL2SDK-EYE)\public\game\server;$(HL2SDK-EYE)\public\tier0;$(HL2SDK-EYE)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-EYE)\public;$(HL2SDK-EYE)\public\engine;$(HL2SDK-EYE)\public\game\server;$(HL2SDK-EYE)\public\tier0;$(HL2SDK-EYE)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1288,7 +1288,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-EYE)\public;$(HL2SDK-EYE)\public\engine;$(HL2SDK-EYE)\public\game\server;$(HL2SDK-EYE)\public\tier0;$(HL2SDK-EYE)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-EYE)\public;$(HL2SDK-EYE)\public\engine;$(HL2SDK-EYE)\public\game\server;$(HL2SDK-EYE)\public\tier0;$(HL2SDK-EYE)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1315,7 +1315,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKL4D)\public;$(HL2SDKL4D)\public\engine;$(HL2SDKL4D)\public\game\server;$(HL2SDKL4D)\public\tier0;$(HL2SDKL4D)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKL4D)\public;$(HL2SDKL4D)\public\engine;$(HL2SDKL4D)\public\game\server;$(HL2SDKL4D)\public\tier0;$(HL2SDKL4D)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=11;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1342,7 +1342,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKL4D)\public;$(HL2SDKL4D)\public\engine;$(HL2SDKL4D)\public\game\server;$(HL2SDKL4D)\public\tier0;$(HL2SDKL4D)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKL4D)\public;$(HL2SDKL4D)\public\engine;$(HL2SDKL4D)\public\game\server;$(HL2SDKL4D)\public\tier0;$(HL2SDKL4D)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=11;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1369,7 +1369,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKL4D2)\public;$(HL2SDKL4D2)\public\engine;$(HL2SDKL4D2)\public\game\server;$(HL2SDKL4D2)\public\tier0;$(HL2SDKL4D2)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKL4D2)\public;$(HL2SDKL4D2)\public\engine;$(HL2SDKL4D2)\public\game\server;$(HL2SDKL4D2)\public\tier0;$(HL2SDKL4D2)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=13;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1396,7 +1396,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKND)\public;$(HL2SDKND)\public\engine;$(HL2SDKND)\public\game\server;$(HL2SDKND)\public\tier0;$(HL2SDKND)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKND)\public;$(HL2SDKND)\public\engine;$(HL2SDKND)\public\game\server;$(HL2SDKND)\public\tier0;$(HL2SDKND)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=12;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1423,7 +1423,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-SWARM)\public;$(HL2SDK-SWARM)\public\engine;$(HL2SDK-SWARM)\public\game\server;$(HL2SDK-SWARM)\public\tier0;$(HL2SDK-SWARM)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-SWARM)\public;$(HL2SDK-SWARM)\public\engine;$(HL2SDK-SWARM)\public\game\server;$(HL2SDK-SWARM)\public\tier0;$(HL2SDK-SWARM)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;COMPILER_MSVC;COMPILER_MSVC32;SOURCE_ENGINE=14;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1450,7 +1450,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKL4D2)\public;$(HL2SDKL4D2)\public\engine;$(HL2SDKL4D2)\public\game\server;$(HL2SDKL4D2)\public\tier0;$(HL2SDKL4D2)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKL4D2)\public;$(HL2SDKL4D2)\public\engine;$(HL2SDKL4D2)\public\game\server;$(HL2SDKL4D2)\public\tier0;$(HL2SDKL4D2)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=13;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1477,7 +1477,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKND)\public;$(HL2SDKND)\public\engine;$(HL2SDKND)\public\game\server;$(HL2SDKND)\public\tier0;$(HL2SDKND)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKND)\public;$(HL2SDKND)\public\engine;$(HL2SDKND)\public\game\server;$(HL2SDKND)\public\tier0;$(HL2SDKND)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=12;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1504,7 +1504,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-SWARM)\public;$(HL2SDK-SWARM)\public\engine;$(HL2SDK-SWARM)\public\game\server;$(HL2SDK-SWARM)\public\tier0;$(HL2SDK-SWARM)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK-SWARM)\public;$(HL2SDK-SWARM)\public\engine;$(HL2SDK-SWARM)\public\game\server;$(HL2SDK-SWARM)\public\tier0;$(HL2SDK-SWARM)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;COMPILER_MSVC;COMPILER_MSVC32;SOURCE_ENGINE=14;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1531,7 +1531,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKCSGO)\public;$(HL2SDKCSGO)\public\engine;$(HL2SDKCSGO)\public\game\server;$(HL2SDKCSGO)\public\tier0;$(HL2SDKCSGO)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKCSGO)\public;$(HL2SDKCSGO)\public\engine;$(HL2SDKCSGO)\public\game\server;$(HL2SDKCSGO)\public\tier0;$(HL2SDKCSGO)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;COMPILER_MSVC;COMPILER_MSVC32;SOURCE_ENGINE=18;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1558,7 +1558,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKINSURGENCY)\public;$(HL2SDKINSURGENCY)\public\engine;$(HL2SDKINSURGENCY)\public\game\server;$(HL2SDKINSURGENCY)\public\tier0;$(HL2SDKINSURGENCY)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKINSURGENCY)\public;$(HL2SDKINSURGENCY)\public\engine;$(HL2SDKINSURGENCY)\public\game\server;$(HL2SDKINSURGENCY)\public\tier0;$(HL2SDKINSURGENCY)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;COMPILER_MSVC;COMPILER_MSVC32;SOURCE_ENGINE=17;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1585,7 +1585,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKBLADE)\public;$(HL2SDKBLADE)\public\engine;$(HL2SDKBLADE)\public\game\server;$(HL2SDKBLADE)\public\tier0;$(HL2SDKBLADE)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKBLADE)\public;$(HL2SDKBLADE)\public\engine;$(HL2SDKBLADE)\public\game\server;$(HL2SDKBLADE)\public\tier0;$(HL2SDKBLADE)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;COMPILER_MSVC;COMPILER_MSVC32;SOURCE_ENGINE=16;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1612,7 +1612,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKDOTA)\public;$(HL2SDKDOTA)\public\engine;$(HL2SDKDOTA)\public\game\server;$(HL2SDKDOTA)\public\tier0;$(HL2SDKDOTA)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKDOTA)\public;$(HL2SDKDOTA)\public\engine;$(HL2SDKDOTA)\public\game\server;$(HL2SDKDOTA)\public\tier0;$(HL2SDKDOTA)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;COMPILER_MSVC;COMPILER_MSVC32;SOURCE_ENGINE=19;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1639,7 +1639,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKCSGO)\public;$(HL2SDKCSGO)\public\engine;$(HL2SDKCSGO)\public\game\server;$(HL2SDKCSGO)\public\tier0;$(HL2SDKCSGO)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKCSGO)\public;$(HL2SDKCSGO)\public\engine;$(HL2SDKCSGO)\public\game\server;$(HL2SDKCSGO)\public\tier0;$(HL2SDKCSGO)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;COMPILER_MSVC;COMPILER_MSVC32;SOURCE_ENGINE=18;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1666,7 +1666,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKINSURGENCY)\public;$(HL2SDKINSURGENCY)\public\engine;$(HL2SDKINSURGENCY)\public\game\server;$(HL2SDKINSURGENCY)\public\tier0;$(HL2SDKINSURGENCY)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKINSURGENCY)\public;$(HL2SDKINSURGENCY)\public\engine;$(HL2SDKINSURGENCY)\public\game\server;$(HL2SDKINSURGENCY)\public\tier0;$(HL2SDKINSURGENCY)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;COMPILER_MSVC;COMPILER_MSVC32;SOURCE_ENGINE=17;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1693,7 +1693,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKBLADE)\public;$(HL2SDKBLADE)\public\engine;$(HL2SDKBLADE)\public\game\server;$(HL2SDKBLADE)\public\tier0;$(HL2SDKBLADE)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKBLADE)\public;$(HL2SDKBLADE)\public\engine;$(HL2SDKBLADE)\public\game\server;$(HL2SDKBLADE)\public\tier0;$(HL2SDKBLADE)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;COMPILER_MSVC;COMPILER_MSVC32;SOURCE_ENGINE=16;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1720,7 +1720,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKDOTA)\public;$(HL2SDKDOTA)\public\engine;$(HL2SDKDOTA)\public\game\server;$(HL2SDKDOTA)\public\tier0;$(HL2SDKDOTA)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDKDOTA)\public;$(HL2SDKDOTA)\public\engine;$(HL2SDKDOTA)\public\game\server;$(HL2SDKDOTA)\public\tier0;$(HL2SDKDOTA)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;COMPILER_MSVC;COMPILER_MSVC32;SOURCE_ENGINE=19;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
@@ -1747,7 +1747,7 @@
     <ClCompile>
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK)\public;$(HL2SDK)\public\dlls;$(HL2SDK)\public\engine;$(HL2SDK)\public\tier0;$(HL2SDK)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK)\public;$(HL2SDK)\public\dlls;$(HL2SDK)\public\engine;$(HL2SDK)\public\tier0;$(HL2SDK)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1774,7 +1774,7 @@
     <ClCompile>
       <AdditionalOptions>/MP /D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_BLOODYGOODTIME=4 /D SE_EYE=5 /D SE_CSS=6 /D SE_HL2DM=7 /D SE_DODS=8 /D SE_SDK2013=9 /D SE_TF2=10 /D SE_LEFT4DEAD=11 /D SE_NUCLEARDAWN=12 /D SE_LEFT4DEAD2=13 /D SE_ALIENSWARM=14 /D SE_PORTAL2=15 /D SE_BLADE=16 /D SE_INSURGENCY=17 /D SE_CSGO=18 /D SE_DOTA=19</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK)\public;$(HL2SDK)\public\dlls;$(HL2SDK)\public\engine;$(HL2SDK)\public\tier0;$(HL2SDK)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\sdk;$(SOURCEMOD_DEV)\public;$(SOURCEMOD_DEV)\public\extensions;$(SOURCEMOD_DEV)\public\sourcepawn;$(HL2SDK)\public;$(HL2SDK)\public\dlls;$(HL2SDK)\public\engine;$(HL2SDK)\public\tier0;$(HL2SDK)\public\tier1;$(MMSOURCE_DEV)\core;$(MMSOURCE_DEV)\core\sourcehook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SDK_EXPORTS;_CRT_SECURE_NO_DEPRECATE;SOURCEMOD_BUILD;SOURCE_ENGINE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
