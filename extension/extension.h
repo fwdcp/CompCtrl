@@ -5,6 +5,7 @@
 #include "ISDKHooks.h"
 #include "ISDKTools.h"
 
+#include "engine.h"
 #include "gamerules.h"
 #include "team.h"
 
@@ -35,6 +36,7 @@ const sp_nativeinfo_t g_Natives[] =
 	{ "CompCtrl_SetWinningTeam", CompCtrl_SetWinningTeam },
 	{ "CompCtrl_SetStalemate", CompCtrl_SetStalemate },
 	{ "CompCtrl_SwitchTeams", CompCtrl_SwitchTeams },
+	{ "CompCtrl_ChangeLevel", CompCtrl_ChangeLevel },
 	{ NULL, NULL }
 };
 
@@ -44,5 +46,6 @@ extern IForward *g_SwitchTeamsForward;
 extern IForward *g_RestartTournamentForward;
 extern IForward *g_CheckWinLimitForward;
 extern IForward *g_ResetTeamScoresForward;
+extern IForward *g_ChangeLevelForward;
 
 #endif // _INCLUDE_COMPCTRL_H_
