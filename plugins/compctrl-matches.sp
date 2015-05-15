@@ -115,7 +115,7 @@ public Action Command_StartMatch(int client, int args) {
         return Plugin_Handled;
     }
 
-    SetConVarBool(g_Tournament, true, true, true);
+    g_Tournament.BoolValue = true;
     SetConVarBool(g_TournamentNonAdminRestart, false);
     g_InMatch = true;
     g_AllowScoreReset = true;
@@ -210,9 +210,9 @@ public Action Command_MatchStatus(int client, int args) {
         }
 
         char redName[256];
-        GetConVarString(g_RedTeamName, redName, sizeof(redName));
+        g_RedTeamName.GetString(redName, sizeof(redName));
         char bluName[256];
-        GetConVarString(g_BlueTeamName, bluName, sizeof(bluName));
+        g_BlueTeamName.GetString(bluName, sizeof(bluName));
 
         CPrintToChat(client, "{green}[CompCtrl]{default} Current score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
     }
@@ -241,11 +241,11 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
         }
 
         if (g_MatchConfig.GetNum("manual-scoring", 0)) {
-            SetConVarInt(g_TimeLimit, 0, true, true);
-            SetConVarInt(g_WinLimit, 0, true, true);
-            SetConVarInt(g_WinDifference, 0, true, true);
-            SetConVarInt(g_WinDifferenceMin, 0, true, true);
-            SetConVarInt(g_MaxRounds, 0, true, true);
+            g_TimeLimit.IntValue = 0;
+            g_WinLimit.IntValue = 0;
+            g_WinDifference.IntValue = 0;
+            g_WinDifferenceMin.IntValue = 0;
+            g_MaxRounds.IntValue = 0;
         }
 
         if (!GameRules_GetProp("m_bStopWatch", 1) || GetStopwatchStatus() == StopwatchStatus_SetTarget) {
@@ -303,9 +303,9 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
         }
 
         char redName[256];
-        GetConVarString(g_RedTeamName, redName, sizeof(redName));
+        g_RedTeamName.GetString(redName, sizeof(redName));
         char bluName[256];
-        GetConVarString(g_BlueTeamName, bluName, sizeof(bluName));
+        g_BlueTeamName.GetString(bluName, sizeof(bluName));
 
         CPrintToChatAll("{green}[CompCtrl]{default} Current score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
 
@@ -472,14 +472,14 @@ public Action CompCtrl_OnResetPlayerScores(int player) {
 void BeginPeriod() {
     GetCurrentRoundConfig();
 
-    SetConVarBool(g_Stopwatch, view_as<bool>(g_MatchConfig.GetNum("stopwatch", 1)), true, true);
-    SetConVarBool(g_SuddenDeath, view_as<bool>(g_MatchConfig.GetNum("sudden-death", 0)), true, true);
-    SetConVarInt(g_TimeLimit, g_MatchConfig.GetNum("timelimit", 0), true, true);
-    SetConVarInt(g_WinLimit, g_MatchConfig.GetNum("winlimit", 0), true, true);
-    SetConVarInt(g_WinDifference, g_MatchConfig.GetNum("windifference", 0), true, true);
-    SetConVarInt(g_WinDifferenceMin, g_MatchConfig.GetNum("windifference-min", 0), true, true);
-    SetConVarInt(g_MaxRounds, g_MatchConfig.GetNum("maxrounds", 0), true, true);
-    SetConVarInt(g_FlagCapsPerRound, g_MatchConfig.GetNum("flag-caps-per-round", 0), true, true);
+    g_Stopwatch.BoolValue = view_as<bool>(g_MatchConfig.GetNum("stopwatch", 1));
+    g_SuddenDeath.BoolValue = view_as<bool>(g_MatchConfig.GetNum("sudden-death", 0));
+    g_TimeLimit.IntValue = g_MatchConfig.GetNum("timelimit", 0);
+    g_WinLimit.IntValue = g_MatchConfig.GetNum("winlimit", 0);
+    g_WinDifference.IntValue = g_MatchConfig.GetNum("windifference", 0);
+    g_WinDifferenceMin.IntValue = g_MatchConfig.GetNum("windifference-min", 0);
+    g_MaxRounds.IntValue = g_MatchConfig.GetNum("maxrounds", 0);
+    g_FlagCapsPerRound.IntValue = g_MatchConfig.GetNum("flag-caps-per-round", 0);
     g_RestartsLeft = g_MatchConfig.GetNum("live-on", 0);
 
     g_RoundsPlayed = 0;
@@ -569,9 +569,9 @@ void EndPeriod(int redScore, int bluScore, EndCondition endCondition, TFTeam cau
     g_MatchConfig.GetString("name", periodName, sizeof(periodName), "period");
 
     char redName[256];
-    GetConVarString(g_RedTeamName, redName, sizeof(redName));
+    g_RedTeamName.GetString(redName, sizeof(redName));
     char bluName[256];
-    GetConVarString(g_BlueTeamName, bluName, sizeof(bluName));
+    g_BlueTeamName.GetString(bluName, sizeof(bluName));
 
     if (endCondition == EndCondition_TimeLimit) {
         CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} ends because the {olive}time limit{default} of {olive}%i{default} has expired.", periodName, g_MatchConfig.GetNum("timelimit", 0));
