@@ -18,6 +18,7 @@ char g_CurrentPeriod[256];
 bool g_SwitchTeams = false;
 bool g_PeriodNeedsSetup = false;
 bool g_AllowScoreReset = true;
+int g_RestartsLeft = 0;
 int g_RoundsPlayed = 0;
 int g_RedTeamScore = 0;
 int g_BluTeamScore = 0;
@@ -34,6 +35,7 @@ ConVar g_WinDifference;
 ConVar g_WinDifferenceMin;
 ConVar g_MaxRounds;
 ConVar g_FlagCapsPerRound;
+ConVar g_RestartGame;
 
 public Plugin myinfo =
 {
@@ -62,6 +64,7 @@ public void OnPluginStart() {
     g_WinDifferenceMin = FindConVar("mp_windifference_min");
     g_MaxRounds = FindConVar("mp_maxrounds");
     g_FlagCapsPerRound = FindConVar("tf_flag_caps_per_round");
+    g_RestartGame = FindConVar("mp_restartgame");
 
     HookEvent("teamplay_round_start", Event_RoundStart);
 }
@@ -85,6 +88,7 @@ public Action Command_StartMatch(int client, int args) {
     g_SwitchTeams = false;
     g_PeriodNeedsSetup = false;
     g_AllowScoreReset = true;
+    g_RestartsLeft = 0;
     g_RoundsPlayed = 0;
     g_RedTeamScore = 0;
     g_BluTeamScore = 0;
@@ -116,7 +120,7 @@ public Action Command_StartMatch(int client, int args) {
     g_InMatch = true;
     g_AllowScoreReset = true;
     strcopy(g_MatchConfigName, sizeof(g_MatchConfigName), arg);
-    KvGetSectionName(g_MatchConfig, g_CurrentPeriod, sizeof(g_CurrentPeriod));
+    g_MatchConfig.GetSectionName(g_CurrentPeriod, sizeof(g_CurrentPeriod));
 
     CPrintToChatAll("{green}[CompCtrl]{default} Match has been set up with config {olive}%s{default}.", arg);
 
@@ -145,6 +149,7 @@ public Action Command_CancelMatch(int client, int args) {
     g_SwitchTeams = false;
     g_PeriodNeedsSetup = false;
     g_AllowScoreReset = true;
+    g_RestartsLeft = 0;
     g_RoundsPlayed = 0;
     g_RedTeamScore = 0;
     g_BluTeamScore = 0;
@@ -222,6 +227,19 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
 
         GetCurrentRoundConfig();
 
+        char periodName[256];
+        g_MatchConfig.GetString("name", periodName, sizeof(periodName), "period");
+
+        if (g_RestartsLeft > 0) {
+            CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} will be live after {olive}%i{default} restarts.", periodName, g_RestartsLeft);
+
+            g_RestartGame.IntValue = 5;
+
+            g_RestartsLeft--;
+
+            return;
+        }
+
         if (g_MatchConfig.GetNum("manual-scoring", 0)) {
             SetConVarInt(g_TimeLimit, 0, true, true);
             SetConVarInt(g_WinLimit, 0, true, true);
@@ -232,18 +250,12 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
 
         if (!GameRules_GetProp("m_bStopWatch", 1) || GetStopwatchStatus() == StopwatchStatus_SetTarget) {
             if (g_RoundsPlayed == 0) {
-                char periodName[256];
-                KvGetString(g_MatchConfig, "name", periodName, sizeof(periodName), "period");
-
-                CPrintToChatAll("{green}[CompCtrl]{default} Starting {olive}%s{default}.", periodName);
-                HudNotifyAll("timer_icon", TFTeam_Unassigned, "Starting %s.", periodName);
+                CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} is {olive}live{default}.", periodName);
+                HudNotifyAll("timer_icon", TFTeam_Unassigned, "The %s is live.", periodName);
 
                 g_InPeriod = true;
             }
         }
-
-        char periodName[256];
-        KvGetString(g_MatchConfig, "name", periodName, sizeof(periodName), "period");
 
         int currentRound = g_RoundsPlayed + 1;
 
@@ -468,11 +480,12 @@ void BeginPeriod() {
     SetConVarInt(g_WinDifferenceMin, g_MatchConfig.GetNum("windifference-min", 0), true, true);
     SetConVarInt(g_MaxRounds, g_MatchConfig.GetNum("maxrounds", 0), true, true);
     SetConVarInt(g_FlagCapsPerRound, g_MatchConfig.GetNum("flag-caps-per-round", 0), true, true);
+    g_RestartsLeft = g_MatchConfig.GetNum("live-on", 0);
 
     g_RoundsPlayed = 0;
 
     char periodName[256];
-    KvGetString(g_MatchConfig, "name", periodName, sizeof(periodName), "period");
+    g_MatchConfig.GetString("name", periodName, sizeof(periodName), "period");
 
     CPrintToChatAll("{green}[CompCtrl]{default} The next period will be: {olive}%s{default}.", periodName);
     HudNotifyAll("timer_icon", TFTeam_Unassigned, "Next period: %s.", periodName);
@@ -524,13 +537,13 @@ void BeginPeriod() {
     }
 
     char nextPeriod[256];
-    KvGetString(g_MatchConfig, "next-period", nextPeriod, sizeof(nextPeriod), g_CurrentPeriod);
+    g_MatchConfig.GetString("next-period", nextPeriod, sizeof(nextPeriod), g_CurrentPeriod);
     char nextPeriodName[256];
     g_MatchConfig.Rewind();
     if (!g_MatchConfig.JumpToKey("periods") || !g_MatchConfig.JumpToKey(nextPeriod)) {
         ThrowError("Failed to find period!");
     }
-    KvGetString(g_MatchConfig, "name", nextPeriodName, sizeof(nextPeriodName));
+    g_MatchConfig.GetString("name", nextPeriodName, sizeof(nextPeriodName));
 
     GetCurrentRoundConfig();
 
@@ -553,7 +566,7 @@ void EndPeriod(int redScore, int bluScore, EndCondition endCondition, TFTeam cau
     GetCurrentRoundConfig();
 
     char periodName[256];
-    KvGetString(g_MatchConfig, "name", periodName, sizeof(periodName), "period");
+    g_MatchConfig.GetString("name", periodName, sizeof(periodName), "period");
 
     char redName[256];
     GetConVarString(g_RedTeamName, redName, sizeof(redName));
@@ -584,7 +597,7 @@ void EndPeriod(int redScore, int bluScore, EndCondition endCondition, TFTeam cau
     }
 
     char nextPeriod[256];
-    KvGetString(g_MatchConfig, "next-period", nextPeriod, sizeof(nextPeriod), g_CurrentPeriod);
+    g_MatchConfig.GetString("next-period", nextPeriod, sizeof(nextPeriod), g_CurrentPeriod);
 
     if (g_MatchConfig.GetNum("end-game", 1)) {
         if (redScore == bluScore && !g_MatchConfig.GetNum("allow-tie", 0)) {
@@ -634,6 +647,7 @@ void EndPeriod(int redScore, int bluScore, EndCondition endCondition, TFTeam cau
             g_SwitchTeams = false;
             g_PeriodNeedsSetup = false;
             g_AllowScoreReset = true;
+            g_RestartsLeft = 0;
             g_RoundsPlayed = 0;
             g_RedTeamScore = 0;
             g_BluTeamScore = 0;
