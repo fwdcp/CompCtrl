@@ -134,11 +134,14 @@ class SMConfig(object):
         '-fno-strict-aliasing',
         '-Wall',
         '-Werror',
-        '-Wno-uninitialized',
         '-Wno-unused',
         '-Wno-switch',
+        '-Wno-array-bounds',
         '-msse',
         '-m32',
+      ]
+      cfg.cxxflags += [
+        '-std=c++11',
       ]
 
       have_gcc = cxx.name == 'gcc'
