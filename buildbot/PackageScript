@@ -1,4 +1,4 @@
-# vim: set ts=8 sts=2 sw=2 tw=99 et ft=python: 
+# vim: set ts=8 sts=2 sw=2 tw=99 et ft=python:
 import os
 
 builder.SetBuildFolder('package')
@@ -11,7 +11,6 @@ folder_list = [
   'addons/sourcemod/configs',
   'addons/sourcemod/configs/compctrl',
   'addons/sourcemod/configs/compctrl/matches',
-  'addons/sourcemod/configs/compctrl/drafts',
 #  'addons/sourcemod/translations',
   'addons/sourcemod/plugins',
 ]
@@ -25,7 +24,7 @@ for folder in folder_list:
 # Copy binaries.
 for cxx_task in SM.extensions:
   builder.AddCopy(cxx_task.binary, folder_map['addons/sourcemod/extensions'])
-  
+
 # Copy version_auto.inc.
 for header in SM.generated_headers:
   if 'compctrl_version_auto.inc' in header.path:
@@ -64,8 +63,6 @@ CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
 CopyFiles('plugins', 'addons/sourcemod/scripting',
   [ 'compctrl-teams.sp',
     'compctrl-matches.sp',
-    'compctrl-drafts.sp',
-    'compctrl-mapchanges.sp',
   ]
 )
 
@@ -75,4 +72,3 @@ CopyFiles('gamedata', 'addons/sourcemod/gamedata',
 )
 
 CopyFiles('configs/compctrl/matches', 'addons/sourcemod/configs/compctrl/matches', os.listdir(os.path.join(builder.sourcePath, 'configs/compctrl/matches')))
-CopyFiles('configs/compctrl/drafts', 'addons/sourcemod/configs/compctrl/drafts', os.listdir(os.path.join(builder.sourcePath, 'configs/compctrl/drafts')))
