@@ -414,6 +414,18 @@ public Action CompCtrl_OnResetTeamScores(TFTeam team) {
     return Plugin_Continue;
 }
 
+public Action CompCtrl_OnResetPlayerScores(int player) {
+    if (g_InMatch) {
+        GetCurrentRoundConfig();
+
+        if (g_InMatch && !g_AllowScoreReset && !g_MatchConfig.GetNum("manual-scoring", 0)) {
+            return Plugin_Stop;
+        }
+    }
+
+    return Plugin_Continue;
+}
+
 void BeginPeriod() {
     GetCurrentRoundConfig();
 
