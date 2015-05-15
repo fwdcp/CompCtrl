@@ -155,7 +155,7 @@ public void Event_PlayerTeam(Event event, const char[] name, bool dontBroadcast)
 }
 
 public Action Command_ReadyPlayer(int client, int args) {
-    if (!IsClientConnected(client) || !IsClientInGame(client) || !(view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Blue || view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Red)) {
+    if (!IsClientConnected(client) || !IsClientInGame(client) || !(GetClientTeam(client) == view_as<int>(TFTeam_Blue) || GetClientTeam(client) == view_as<int>(TFTeam_Red))) {
         ReplyToCommand(client, "You cannot ready yourself!");
         return Plugin_Stop;
     }
@@ -255,7 +255,7 @@ public Action Command_ReadyPlayer(int client, int args) {
 }
 
 public Action Command_UnreadyPlayer(int client, int args) {
-    if (!IsClientConnected(client) || !IsClientInGame(client) || !(view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Blue || view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Red)) {
+    if (!IsClientConnected(client) || !IsClientInGame(client) || !(GetClientTeam(client) == view_as<int>(TFTeam_Blue) || GetClientTeam(client) == view_as<int>(TFTeam_Red))) {
         ReplyToCommand(client, "You cannot unready yourself!");
         return Plugin_Stop;
     }
@@ -279,7 +279,7 @@ public Action Command_UnreadyPlayer(int client, int args) {
 }
 
 public Action Command_ReadyTeam(int client, int args) {
-    if (!IsClientConnected(client) || !IsClientInGame(client) || !(view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Blue || view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Red)) {
+    if (!IsClientConnected(client) || !IsClientInGame(client) || !(GetClientTeam(client) == view_as<int>(TFTeam_Blue) || GetClientTeam(client) == view_as<int>(TFTeam_Red))) {
         ReplyToCommand(client, "You cannot ready your team!");
         return Plugin_Stop;
     }
@@ -290,7 +290,7 @@ public Action Command_ReadyTeam(int client, int args) {
 }
 
 public Action Command_UnreadyTeam(int client, int args) {
-    if (!IsClientConnected(client) || !IsClientInGame(client) || !(view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Blue || view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Red)) {
+    if (!IsClientConnected(client) || !IsClientInGame(client) || !(GetClientTeam(client) == view_as<int>(TFTeam_Blue) || GetClientTeam(client) == view_as<int>(TFTeam_Red))) {
         ReplyToCommand(client, "You cannot unready your team!");
         return Plugin_Stop;
     }
@@ -301,7 +301,7 @@ public Action Command_UnreadyTeam(int client, int args) {
 }
 
 public Action Command_ChangeTeamReady(int client, const char[] command, int argc) {
-    if (!IsClientConnected(client) || !IsClientInGame(client) || !(view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Blue || view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Red)) {
+    if (!IsClientConnected(client) || !IsClientInGame(client) || !(GetClientTeam(client) == view_as<int>(TFTeam_Blue) || GetClientTeam(client) == view_as<int>(TFTeam_Red))) {
         ReplyToCommand(client, "You cannot change your team ready state!");
         return Plugin_Stop;
     }
@@ -366,7 +366,7 @@ public Action Command_ChangeTeamReady(int client, const char[] command, int argc
 }
 
 public Action Command_SetTeamName(int client, int args) {
-    if (!IsClientConnected(client) || !IsClientInGame(client) || !(view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Blue || view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Red)) {
+    if (!IsClientConnected(client) || !IsClientInGame(client) || !(GetClientTeam(client) == view_as<int>(TFTeam_Blue) || GetClientTeam(client) == view_as<int>(TFTeam_Red))) {
         ReplyToCommand(client, "You cannot set your team name!");
         return Plugin_Stop;
     }
@@ -380,7 +380,7 @@ public Action Command_SetTeamName(int client, int args) {
 }
 
 public Action Command_ChangeTeamName(int client, const char[] command, int argc) {
-    if (!IsClientConnected(client) || !IsClientInGame(client) || !(view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Blue || view_as<TFTeam>(GetClientTeam(client)) == TFTeam_Red)) {
+    if (!IsClientConnected(client) || !IsClientInGame(client) || !(GetClientTeam(client) == view_as<int>(TFTeam_Blue) || GetClientTeam(client) == view_as<int>(TFTeam_Red))) {
         ReplyToCommand(client, "You cannot change your team name!");
         return Plugin_Stop;
     }
@@ -419,7 +419,7 @@ public Action Command_CheckReadyStatus(int client, int args) {
     int unreadyCount = 0;
 
     for (int i = 1; i <= MaxClients; i++) {
-        if (!IsClientConnected(i) || !IsClientInGame(i) || view_as<TFTeam>(GetClientTeam(i)) != TFTeam_Blue) {
+        if (!IsClientConnected(i) || !IsClientInGame(i) || GetClientTeam(i) != view_as<int>(TFTeam_Blue)) {
             continue;
         }
 
@@ -447,7 +447,7 @@ public Action Command_CheckReadyStatus(int client, int args) {
     }
 
     for (int i = 1; i <= MaxClients; i++) {
-        if (!IsClientConnected(i) || !IsClientInGame(i) || view_as<TFTeam>(GetClientTeam(i)) != TFTeam_Red) {
+        if (!IsClientConnected(i) || !IsClientInGame(i) || GetClientTeam(i) != view_as<int>(TFTeam_Red)) {
             continue;
         }
 
@@ -505,7 +505,7 @@ void DisplayReadyHUD() {
     int unreadyCount = 0;
 
     for (int i = 1; i <= MaxClients; i++) {
-        if (!IsClientConnected(i) || !IsClientInGame(i) || view_as<TFTeam>(GetClientTeam(i)) != TFTeam_Blue) {
+        if (!IsClientConnected(i) || !IsClientInGame(i) || GetClientTeam(i) != view_as<int>(TFTeam_Blue)) {
             continue;
         }
 
@@ -525,7 +525,7 @@ void DisplayReadyHUD() {
     }
 
     for (int i = 1; i <= MaxClients; i++) {
-        if (!IsClientConnected(i) || !IsClientInGame(i) || view_as<TFTeam>(GetClientTeam(i)) != TFTeam_Red) {
+        if (!IsClientConnected(i) || !IsClientInGame(i) || GetClientTeam(i) != view_as<int>(TFTeam_Red)) {
             continue;
         }
 
