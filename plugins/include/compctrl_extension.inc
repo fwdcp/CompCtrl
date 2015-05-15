@@ -117,4 +117,12 @@ forward Action CompCtrl_OnCheckWinLimit(bool &returnValue);
  */
 forward Action CompCtrl_OnResetTeamScores(TFTeam team);
 
+/**
+ * @brief				When ResetScores in CTFPlayer is called by the game.
+ *
+ * @param player		The player that is having its scores reset.
+ * @return				Plugin_Continue to allow the reset, Plugin_Changed or above to prevent the reset.
+ */
+forward Action CompCtrl_OnResetPlayerScores(int player);
+
 #pragma newdecls optional

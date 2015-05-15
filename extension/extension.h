@@ -6,6 +6,7 @@
 #include "ISDKTools.h"
 
 #include "gamerules.h"
+#include "player.h"
 #include "team.h"
 
 class CompCtrl : public SDKExtension
@@ -44,5 +45,6 @@ extern IForward *g_SwitchTeamsForward;
 extern IForward *g_RestartTournamentForward;
 extern IForward *g_CheckWinLimitForward;
 extern IForward *g_ResetTeamScoresForward;
+extern IForward *g_ResetPlayerScoresForward;
 
 #endif // _INCLUDE_COMPCTRL_H_
