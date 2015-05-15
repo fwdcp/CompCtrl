@@ -64,15 +64,6 @@ native CompCtrl_SetStalemate(StalemateReason:reason, bool:forceMapReset, bool:sw
 native CompCtrl_SwitchTeams();
 
 /**
- * @brief				Calls ChangeLevel in IVEngineServer.
- *
- * @param s1			The first map change string.
- * @param s2			The second map change string.
- * @noreturn
- */
-native CompCtrl_ChangeLevel(const String:s1[], const String:s2[]);
-
-/**
  * @brief				When SetWinningTeam in CTFGameRules is called by the game.
  *
  * @param team			The team that has won.
@@ -123,12 +114,3 @@ forward Action:CompCtrl_OnCheckWinLimit(&bool:returnValue);
  * @return				Plugin_Continue to allow the reset, Plugin_Changed or above to prevent the reset.
  */
 forward Action:CompCtrl_OnResetTeamScores(TFTeam:team);
-
-/**
- * @brief				When ChangeLevel in IVEngineServer is called by the game.
- *
- * @param s1			The first map change string.
- * @param s2			The second map change string.
- * @noreturn			Plugin_Continue to allow the level change, Plugin_Changed or above to prevent the level change.
- */
-forward Action:CompCtrl_OnChangeLevel(const String:s1[], const String:s2[]);
