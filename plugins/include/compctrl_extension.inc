@@ -1,6 +1,8 @@
 #include <tf2>
 
-public Extension:__ext_compctrl = 
+#pragma newdecls required
+
+public Extension __ext_compctrl =
 {
 	name = "CompCtrl",
 	file = "compctrl.ext",
@@ -44,7 +46,7 @@ enum StalemateReason {
  * @param dontAddScore	Whether to not score this round.
  * @noreturn
  */
-native CompCtrl_SetWinningTeam(TFTeam:team, WinReason:reason, bool:forceMapReset, bool:switchTeams, bool:dontAddScore);
+native void CompCtrl_SetWinningTeam(TFTeam team, WinReason reason, bool forceMapReset, bool switchTeams, bool dontAddScore);
 
 /**
  * @brief				Calls SetStalemate in CTFGameRules.
@@ -54,14 +56,14 @@ native CompCtrl_SetWinningTeam(TFTeam:team, WinReason:reason, bool:forceMapReset
  * @param switchTeams	Whether to switch teams.
  * @noreturn
  */
-native CompCtrl_SetStalemate(StalemateReason:reason, bool:forceMapReset, bool:switchTeams);
+native void CompCtrl_SetStalemate(StalemateReason reason, bool forceMapReset, bool switchTeams);
 
 /**
  * @brief				Calls HandleSwitchTeams in CTFGameRules.
  *
  * @noreturn
  */
-native CompCtrl_SwitchTeams();
+native void CompCtrl_SwitchTeams();
 
 /**
  * @brief				When SetWinningTeam in CTFGameRules is called by the game.
@@ -73,7 +75,7 @@ native CompCtrl_SwitchTeams();
  * @param dontAddScore	Whether to not score this round.
  * @return				Plugin_Continue to continue with original values, Plugin_Changed to use new values, Plugin_Handled or Plugin_Stop to stop the game call.
  */
-forward Action:CompCtrl_OnSetWinningTeam(&TFTeam:team, &WinReason:reason, &bool:forceMapReset, &bool:switchTeams, &bool:dontAddScore);
+forward Action CompCtrl_OnSetWinningTeam(TFTeam &team, WinReason &reason, bool &forceMapReset, bool &switchTeams, bool &dontAddScore);
 
 /**
  * @brief				When SetStalemate in CTFGameRules is called by the game.
@@ -83,21 +85,21 @@ forward Action:CompCtrl_OnSetWinningTeam(&TFTeam:team, &WinReason:reason, &bool:
  * @param switchTeams	Whether to switch teams.
  * @return				Plugin_Continue to continue with original values, Plugin_Changed to use new values, Plugin_Handled or Plugin_Stop to stop the game call.
  */
-forward Action:CompCtrl_OnSetStalemate(&StalemateReason:reason, &bool:forceMapReset, &bool:switchTeams);
+forward Action CompCtrl_OnSetStalemate(StalemateReason &reason, bool &forceMapReset, bool &switchTeams);
 
 /**
  * @brief				When HandleSwitchTeams in CTFGameRules is called by the game.
  *
  * @return				Plugin_Continue to allow the team switch, Plugin_Changed or above to prevent the team switch.
  */
-forward Action:CompCtrl_OnSwitchTeams();
+forward Action CompCtrl_OnSwitchTeams();
 
 /**
  * @brief				When RestartTournament in CTFGameRules is called by the game.
  *
  * @return				Plugin_Continue to allow the restart, Plugin_Changed or above to prevent the restart.
  */
-forward Action:CompCtrl_OnRestartTournament();
+forward Action CompCtrl_OnRestartTournament();
 
 /**
  * @brief				When CheckWinLimit in CTFGameRules is called by the game.
@@ -105,7 +107,7 @@ forward Action:CompCtrl_OnRestartTournament();
  * @param returnValue	The return value for the function (true for win limit reached, false for not).
  * @return				Plugin_Continue to return the original value, Plugin_Changed or above to use the new value.
  */
-forward Action:CompCtrl_OnCheckWinLimit(&bool:returnValue);
+forward Action CompCtrl_OnCheckWinLimit(bool &returnValue);
 
 /**
  * @brief				When ResetScores in CTFTeam is called by the game.
@@ -113,4 +115,6 @@ forward Action:CompCtrl_OnCheckWinLimit(&bool:returnValue);
  * @param team			The team that is having its scores reset.
  * @return				Plugin_Continue to allow the reset, Plugin_Changed or above to prevent the reset.
  */
-forward Action:CompCtrl_OnResetTeamScores(TFTeam:team);
+forward Action CompCtrl_OnResetTeamScores(TFTeam team);
+
+#pragma newdecls optional
