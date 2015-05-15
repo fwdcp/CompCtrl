@@ -3,6 +3,7 @@
 #include <compctrl_version>
 #include <compctrl_extension>
 #include <compctrl-matches>
+#include <hudnotify>
 #include <morecolors>
 #include <sdktools>
 #include <tf2>
@@ -72,7 +73,7 @@ public Action Command_StartMatch(int client, int args) {
         ServerCommand("mp_tournament_restart");
     }
 
-    if (g_MatchConfig != INVALID_HANDLE) {
+    if (g_MatchConfig != null) {
         CloseHandle(g_MatchConfig);
         g_MatchConfig = null;
     }
@@ -132,7 +133,7 @@ public Action Command_CancelMatch(int client, int args) {
         ServerCommand("mp_tournament_restart");
     }
 
-    if (g_MatchConfig != INVALID_HANDLE) {
+    if (g_MatchConfig != null) {
         CloseHandle(g_MatchConfig);
         g_MatchConfig = null;
     }
@@ -235,10 +236,14 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
                 KvGetString(g_MatchConfig, "name", periodName, sizeof(periodName), "period");
 
                 CPrintToChatAll("{green}[CompCtrl]{default} Starting {olive}%s{default}.", periodName);
+                HudNotifyAll("timer_icon", TFTeam_Unassigned, "Starting %s.", periodName);
 
                 g_InPeriod = true;
             }
         }
+
+        char periodName[256];
+        KvGetString(g_MatchConfig, "name", periodName, sizeof(periodName), "period");
 
         int currentRound = g_RoundsPlayed + 1;
 
@@ -249,26 +254,26 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
 
                 switch (GetStopwatchStatus()) {
                     case StopwatchStatus_SetTarget: {
-                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: set part of round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, set part of round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
                     }
                     case StopwatchStatus_ChaseTarget: {
-                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: chase part of round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, chase part of round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
                     }
                     default: {
-                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
                     }
                 }
             }
             else {
                 switch (GetStopwatchStatus()) {
                     case StopwatchStatus_SetTarget: {
-                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: set part of round {olive}%i{default}.", currentRound);
+                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, set part of round {olive}%i{default}.", periodName, currentRound);
                     }
                     case StopwatchStatus_ChaseTarget: {
-                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: chase part of round {olive}%i{default}.", currentRound);
+                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, chase part of round {olive}%i{default}.", periodName, currentRound);
                     }
                     default: {
-                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: round {olive}%i{default}.", currentRound);
+                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, round {olive}%i{default}.", periodName, currentRound);
                     }
                 }
             }
@@ -278,10 +283,10 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
                 int timeLeft;
                 GetMapTimeLeft(timeLeft);
 
-                CPrintToChatAll("{green}[CompCtrl]{default} Period status: round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+                CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
             }
             else {
-                CPrintToChatAll("{green}[CompCtrl]{default} Period status: round {olive}%i{default}.", currentRound);
+                CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, round {olive}%i{default}.", periodName, currentRound);
             }
         }
 
@@ -291,6 +296,32 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
         GetConVarString(g_BlueTeamName, bluName, sizeof(bluName));
 
         CPrintToChatAll("{green}[CompCtrl]{default} Current score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+
+        if (g_MatchConfig.GetNum("timelimit", 0) > 0) {
+            int timeLeft;
+            GetMapTimeLeft(timeLeft);
+
+            if (GetScore(TFTeam_Red) > GetScore(TFTeam_Blue)) {
+                HudNotifyAll("redcapture", TFTeam_Red, "With %i:%02i remaining in the %s, the score is %s %i, %s %i.", timeLeft / 60, timeLeft % 60, periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            }
+            else if (GetScore(TFTeam_Blue) > GetScore(TFTeam_Red)) {
+                HudNotifyAll("bluecapture", TFTeam_Blue, "With %i:%02i remaining in the %s, the score is %s %i, %s %i.", timeLeft / 60, timeLeft % 60, periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            }
+            else {
+                HudNotifyAll("timer_icon", TFTeam_Unassigned, "With %i:%02i remaining in the %s, the score is %s %i, %s %i.", timeLeft / 60, timeLeft % 60, periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            }
+        }
+        else {
+            if (GetScore(TFTeam_Red) > GetScore(TFTeam_Blue)) {
+                HudNotifyAll("redcapture", TFTeam_Red, "The current score in the %s is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            }
+            else if (GetScore(TFTeam_Blue) > GetScore(TFTeam_Red)) {
+                HudNotifyAll("bluecapture", TFTeam_Blue, "The current score in the %s is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            }
+            else {
+                HudNotifyAll("timer_icon", TFTeam_Unassigned, "The current score in the %s is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            }
+        }
     }
 }
 
@@ -444,6 +475,7 @@ void BeginPeriod() {
     KvGetString(g_MatchConfig, "name", periodName, sizeof(periodName), "period");
 
     CPrintToChatAll("{green}[CompCtrl]{default} The next period will be: {olive}%s{default}.", periodName);
+    HudNotifyAll("timer_icon", TFTeam_Unassigned, "Next period: %s.", periodName);
 
     int winConditions = 0;
     char winConditionInformation[512];
@@ -559,6 +591,16 @@ void EndPeriod(int redScore, int bluScore, EndCondition endCondition, TFTeam cau
             CPrintToChatAll("{green}[CompCtrl]{default} Score after {olive}%s{default}: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", periodName, bluName, bluScore, redName, redScore);
             CPrintToChatAll("{green}[CompCtrl]{default} Because no team has a lead, the match cannot end after this period and will proceed to another period.");
 
+            if (GetScore(TFTeam_Red) > GetScore(TFTeam_Blue)) {
+                HudNotifyAll("redcapture", TFTeam_Red, "After the %s, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            }
+            else if (GetScore(TFTeam_Blue) > GetScore(TFTeam_Red)) {
+                HudNotifyAll("bluecapture", TFTeam_Blue, "After the %s, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            }
+            else {
+                HudNotifyAll("timer_icon", TFTeam_Unassigned, "After the %s, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            }
+
             strcopy(g_CurrentPeriod, sizeof(g_CurrentPeriod), nextPeriod);
 
             GetCurrentRoundConfig();
@@ -572,6 +614,16 @@ void EndPeriod(int redScore, int bluScore, EndCondition endCondition, TFTeam cau
         else {
             CPrintToChatAll("{green}[CompCtrl]{default} The match is now over.");
             CPrintToChatAll("{green}[CompCtrl]{default} Final score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, bluScore, redName, redScore);
+
+            if (GetScore(TFTeam_Red) > GetScore(TFTeam_Blue)) {
+                HudNotifyAll("redcapture", TFTeam_Red, "The final score is %s %i, %s %i.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            }
+            else if (GetScore(TFTeam_Blue) > GetScore(TFTeam_Red)) {
+                HudNotifyAll("bluecapture", TFTeam_Blue, "The final score is %s %i, %s %i.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            }
+            else {
+                HudNotifyAll("timer_icon", TFTeam_Unassigned, "The final score is %s %i, %s %i.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            }
 
             CloseHandle(g_MatchConfig);
             g_MatchConfig = null;
@@ -590,6 +642,16 @@ void EndPeriod(int redScore, int bluScore, EndCondition endCondition, TFTeam cau
     else {
         CPrintToChatAll("{green}[CompCtrl]{default} Score after {olive}%s{default}: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", periodName, bluName, bluScore, redName, redScore);
         CPrintToChatAll("{green}[CompCtrl]{default} The match will continue to the next period.");
+
+        if (GetScore(TFTeam_Red) > GetScore(TFTeam_Blue)) {
+            HudNotifyAll("redcapture", TFTeam_Red, "After the %s, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+        }
+        else if (GetScore(TFTeam_Blue) > GetScore(TFTeam_Red)) {
+            HudNotifyAll("bluecapture", TFTeam_Blue, "After the %s, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+        }
+        else {
+            HudNotifyAll("timer_icon", TFTeam_Unassigned, "After the %s, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+        }
 
         strcopy(g_CurrentPeriod, sizeof(g_CurrentPeriod), nextPeriod);
 
