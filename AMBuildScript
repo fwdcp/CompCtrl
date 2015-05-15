@@ -196,7 +196,7 @@ class SMConfig(object):
         'uuid.lib',
         'odbc32.lib',
         'odbccp32.lib',
-      ] 
+      ]
 
     # Optimization
     if builder.options.opt == '1':
@@ -293,6 +293,7 @@ class SMConfig(object):
       os.path.join(self.sourcemod_root, 'public', 'extensions'),
       os.path.join(self.sourcemod_root, 'public', 'sourcepawn'),
       os.path.join(self.sourcemod_root, 'public', 'amtl'),
+      os.path.join(self.sourcemod_root, 'sourcepawn', 'include'),
     ]
     return compiler
 
@@ -308,7 +309,7 @@ class SMConfig(object):
       os.path.join(mms_path),
       os.path.join(mms_path, 'sourcehook'),
     ]
-	
+
     defines = ['SE_' + PossibleSDKs[i].define + '=' + PossibleSDKs[i].code for i in PossibleSDKs]
     compiler.defines += defines
     paths = [
@@ -341,7 +342,7 @@ class SMConfig(object):
       compiler.defines += ['COMPILER_MSVC', 'COMPILER_MSVC32']
     else:
       compiler.defines += ['COMPILER_GCC']
-	
+
 	# For everything after Swarm, this needs to be defined for entity networking
 	# to work properly with sendprop value changes.
     if sdk.name in ['blade', 'insurgency', 'csgo', 'dota']:
