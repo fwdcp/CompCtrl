@@ -335,7 +335,7 @@ public Action Command_ChangeTeamReady(int client, const char[] command, int argc
                 char playerName[64];
                 GetClientName(i, playerName, sizeof(playerName));
 
-                Format(unreadyPlayers, sizeof(unreadyPlayers), "%s{team}%s{default}", unreadyPlayers, playerName);
+                Format(unreadyPlayers, sizeof(unreadyPlayers), "%s{teamcolor}%s{default}", unreadyPlayers, playerName);
 
                 teamPlayersNotReady++;
             }
