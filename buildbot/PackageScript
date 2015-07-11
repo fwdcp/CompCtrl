@@ -53,7 +53,8 @@ def CopyFiles(src, dest, files):
     builder.AddCopy(source_path, dest_entry)
 
 CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
-  [ 'compctrl_version.inc',
+  [
+    'compctrl_version.inc',
     'compctrl_extension.inc',
     'compctrl-matches.inc',
     'hudnotify.inc',
@@ -62,13 +63,14 @@ CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
 )
 
 CopyFiles('plugins', 'addons/sourcemod/scripting',
-  [ 'compctrl-teams.sp',
+  [
     'compctrl-matches.sp',
   ]
 )
 
 CopyFiles('gamedata', 'addons/sourcemod/gamedata',
-  [ 'compctrl.txt',
+  [
+    'compctrl.txt',
   ]
 )
 
