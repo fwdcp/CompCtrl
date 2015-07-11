@@ -16,7 +16,6 @@ IForward *g_SwitchTeamsForward = NULL;
 IForward *g_RestartTournamentForward = NULL;
 IForward *g_CheckWinLimitForward = NULL;
 IForward *g_ResetTeamScoresForward = NULL;
-IForward *g_ResetPlayerScoresForward = NULL;
 
 bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
 	sharesys->AddDependency(myself, "sdkhooks.ext", true, true);
@@ -37,7 +36,6 @@ bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
 
 void CompCtrl::SDK_OnUnload() {
 	g_GameRulesManager.Disable();
-	g_PlayerManager.Disable();
 	g_TeamManager.Disable();
 
 	forwards->ReleaseForward(g_SetWinningTeamForward);
@@ -46,7 +44,6 @@ void CompCtrl::SDK_OnUnload() {
 	forwards->ReleaseForward(g_RestartTournamentForward);
 	forwards->ReleaseForward(g_CheckWinLimitForward);
 	forwards->ReleaseForward(g_ResetTeamScoresForward);
-	forwards->ReleaseForward(g_ResetPlayerScoresForward);
 }
 
 void CompCtrl::SDK_OnAllLoaded() {
@@ -62,13 +59,10 @@ void CompCtrl::SDK_OnAllLoaded() {
 		g_RestartTournamentForward = forwards->CreateForward("CompCtrl_OnRestartTournament", ET_Hook, 0, NULL);
 		g_CheckWinLimitForward = forwards->CreateForward("CompCtrl_OnCheckWinLimit", ET_Hook, 1, NULL, Param_CellByRef);
 		g_ResetTeamScoresForward = forwards->CreateForward("CompCtrl_OnResetTeamScores", ET_Hook, 1, NULL, Param_Cell);
-		g_ResetPlayerScoresForward = forwards->CreateForward("CompCtrl_OnResetPlayerScores", ET_Hook, 1, NULL, Param_Cell);
 
 		g_GameRulesManager.Enable();
-		g_PlayerManager.Enable();
 		g_TeamManager.Enable();
 
-		g_pSDKHooks->AddEntityListener(&g_PlayerManager);
 		g_pSDKHooks->AddEntityListener(&g_TeamManager);
 	}
 }

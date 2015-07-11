@@ -46,12 +46,6 @@
 				"linux"		"206"
 				"mac"		"206"
 			}
-			"CTFPlayer::ResetScores"
-			{
-				"windows"	"436"
-				"linux"		"437"
-				"mac"		"437"
-			}
 		}
 	}
 }

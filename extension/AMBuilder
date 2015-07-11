@@ -14,7 +14,6 @@ for sdk_name in SM.sdks:
   binary.sources += [
     'extension.cpp',
     'gamerules.cpp',
-    'player.cpp',
     'team.cpp',
     os.path.join(SM.sourcemod_root, 'public', 'smsdk_ext.cpp'),
   ]
