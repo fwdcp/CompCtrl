@@ -137,11 +137,12 @@ class SMConfig(object):
         '-Wno-unused',
         '-Wno-switch',
         '-Wno-array-bounds',
+        '-Wno-deprecated-register',
         '-msse',
         '-m32',
       ]
       cfg.cxxflags += [
-        '-std=c++11',
+        '-std=c++11'
       ]
 
       have_gcc = cxx.name == 'gcc'
