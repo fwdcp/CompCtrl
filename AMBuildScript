@@ -138,6 +138,7 @@ class SMConfig(object):
         '-Wno-switch',
         '-Wno-array-bounds',
         '-Wno-deprecated-register',
+		'-Wno-implicit-exception-spec-mismatch',
         '-msse',
         '-m32',
       ]
