@@ -12,7 +12,7 @@ addons:
 
 install:
 - git clone https://github.com/alliedmodders/ambuild.git $TRAVIS_BUILD_DIR/../ambuild
-  && cd $TRAVIS_BUILD_DIR/../ambuild && python setup.py build
+  && cd $TRAVIS_BUILD_DIR/../ambuild && python setup.py build && sudo python setup.py install
 - git clone https://github.com/alliedmodders/metamod-source.git -b 1.10-dev $TRAVIS_BUILD_DIR/../metamod-source
 - git clone https://github.com/alliedmodders/hl2sdk.git -b tf2 $TRAVIS_BUILD_DIR/../hl2sdk-tf2
 - git clone https://github.com/alliedmodders/sourcemod.git -b 1.7-dev $TRAVIS_BUILD_DIR/../sourcemod
@@ -21,7 +21,7 @@ script:
 - export SOURCEMOD_RELEASE=$(cd $TRAVIS_BUILD_DIR/../sourcemod/build/package/addons/sourcemod && pwd)
 - mkdir $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build
 - python ../configure.py --enable-optimize --sdks=tf2
-- $TRAVIS_BUILD_DIR/../ambuild/build/scripts-2.7/ambuild
+- ambuild
 before_deploy:
 - cd $TRAVIS_BUILD_DIR/build/package
 - zip -r compctrl-$TRAVIS_TAG-linux.zip *
