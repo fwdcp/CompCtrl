@@ -1,4 +1,4 @@
-# vim: set ts=8 sts=2 sw=2 tw=99 et ft=python: 
+# vim: set ts=8 sts=2 sw=2 tw=99 et ft=python:
 import os
 
 builder.SetBuildFolder('package')
@@ -24,7 +24,7 @@ for folder in folder_list:
 # Copy binaries.
 for cxx_task in SM.extensions:
   builder.AddCopy(cxx_task.binary, folder_map['addons/sourcemod/extensions'])
-  
+
 # Copy version_auto.inc.
 for header in SM.generated_headers:
   if 'compctrl_version_auto.inc' in header.path:
@@ -53,20 +53,24 @@ def CopyFiles(src, dest, files):
     builder.AddCopy(source_path, dest_entry)
 
 CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
-  [ 'compctrl.inc',
+  [
     'compctrl_version.inc',
+    'compctrl_extension.inc',
+    'compctrl-matches.inc',
+    'hudnotify.inc',
     'morecolors.inc'
   ]
 )
 
 CopyFiles('plugins', 'addons/sourcemod/scripting',
-  [ 'compctrl-teams.sp',
+  [
     'compctrl-matches.sp',
   ]
 )
 
 CopyFiles('gamedata', 'addons/sourcemod/gamedata',
-  [ 'compctrl.txt',
+  [
+    'compctrl.txt',
   ]
 )
 

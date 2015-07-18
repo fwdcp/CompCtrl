@@ -50,8 +50,7 @@ void CompCtrl::SDK_OnAllLoaded() {
 	SM_GET_LATE_IFACE(SDKHOOKS, g_pSDKHooks);
 	SM_GET_LATE_IFACE(SDKTOOLS, g_pSDKTools);
 
-	if (QueryRunning(NULL, 0))
-	{
+	if (QueryRunning(NULL, 0)) {
 		sharesys->AddNatives(myself, g_Natives);
 
 		g_SetWinningTeamForward = forwards->CreateForward("CompCtrl_OnSetWinningTeam", ET_Hook, 5, NULL, Param_CellByRef, Param_CellByRef, Param_CellByRef, Param_CellByRef, Param_CellByRef);
