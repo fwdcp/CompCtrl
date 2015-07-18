@@ -13,6 +13,7 @@ Changelog
 # WIP
 * general
   * update for new SourceMod syntax
+  * update gamedata for Gun Mettle update
 * matches
   * add HUD match status
   * add live on x restarts

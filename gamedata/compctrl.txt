@@ -6,33 +6,33 @@
 		{
 			"CTFGameRules::SetWinningTeam"
 			{
-				"windows"	"156"
-				"linux"		"157"
-				"mac"		"157"
+				"windows"	"158"
+				"linux"		"159"
+				"mac"		"159"
 			}
 			"CTFGameRules::SetStalemate"
 			{
-				"windows"	"157"
-				"linux"		"158"
-				"mac"		"158"
+				"windows"	"159"
+				"linux"		"160"
+				"mac"		"160"
 			}
 			"CTFGameRules::HandleSwitchTeams"
 			{
-				"windows"	"160"
-				"linux"		"161"
-				"mac"		"161"
+				"windows"	"162"
+				"linux"		"163"
+				"mac"		"163"
 			}
 			"CTFGameRules::RestartTournament"
 			{
-				"windows"	"200"
-				"linux"		"201"
-				"mac"		"201"
+				"windows"	"203"
+				"linux"		"204"
+				"mac"		"204"
 			}
 			"CTFGameRules::CheckWinLimit"
 			{
-				"windows"	"211"
-				"linux"		"212"
-				"mac"		"212"
+				"windows"	"214"
+				"linux"		"215"
+				"mac"		"215"
 			}
 			"CTFTeam::GetTeamNumber"
 			{
