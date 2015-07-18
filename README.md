@@ -10,7 +10,7 @@ Installation
 Changelog
 ---------
 
-# WIP
+# 0.3.0
 * general
   * update for new SourceMod syntax
   * update gamedata for Gun Mettle update
