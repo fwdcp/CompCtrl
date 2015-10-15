@@ -10,6 +10,10 @@ Installation
 Changelog
 ---------
 
+### 0.3.1
+* general
+  * update gamedata for Invasion update
+
 ### 0.3.0
 * general
   * update for new SourceMod syntax
