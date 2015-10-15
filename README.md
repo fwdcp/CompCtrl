@@ -10,7 +10,11 @@ Installation
 Changelog
 ---------
 
-# 0.3.0
+### 0.3.1
+* general
+  * update gamedata for Invasion update
+
+### 0.3.0
 * general
   * update for new SourceMod syntax
   * update gamedata for Gun Mettle update
@@ -21,7 +25,7 @@ Changelog
 * teams
   * remove module
 
-# 0.2.3
+### 0.2.3
 * general
   * fix offsets for 2014-09-10 update
 * matches
@@ -29,29 +33,29 @@ Changelog
 * teams
   * add HUD display of ready/unready players
 
-# 0.2.2
+### 0.2.2
 * teams
   * list players on team that haven't readied up when team fails to ready up
 
-# 0.2.1
+### 0.2.1
 * matches
   * prevent tournament from being restarted by CompCtrl if not managed by CompCtrl
 
-# 0.2.0
+### 0.2.0
 * matches
   * split match configs into separate files
   * adjust ozfortress configs as requested
   * add command to cancel matches
 
-# 0.1.4
+### 0.1.4
 * teams
   * fix ready status not working
 
-# 0.1.3
+### 0.1.3
 * general
   * fix automatic versioning for plugins (again)
 
-# 0.1.2
+### 0.1.2
 * matches
   * add ozfortress configs
   * improve win condition reporting
@@ -60,11 +64,11 @@ Changelog
   * add ability to automatically set teams as ready
   * check more cases for a team not being eligible for ready
 
-# 0.1.1
+### 0.1.1
 * general
   * fix automatic versioning
 
-# 0.1.0
+### 0.1.0
 * matches
   * release initial version of matches module
 * teams
