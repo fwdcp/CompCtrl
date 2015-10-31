@@ -22,11 +22,11 @@ for folder in folder_list:
   folder_map[folder] = builder.AddFolder(norm_folder)
 
 # Copy binaries.
-for cxx_task in SM.extensions:
+for cxx_task in CompCtrl.extensions:
   builder.AddCopy(cxx_task.binary, folder_map['addons/sourcemod/extensions'])
 
 # Copy version_auto.inc.
-for header in SM.generated_headers:
+for header in CompCtrl.generated_headers:
   if 'compctrl_version_auto.inc' in header.path:
     builder.AddCopy(header, folder_map['addons/sourcemod/scripting/include'])
 
@@ -34,13 +34,13 @@ for header in SM.generated_headers:
 # Export PDB files. We write to a file in the build folder which is pretty
 # verboten, but it's okay if it's in the root since AMBuild will never try
 # to rmdir the root.
-full_binary_list = SM.extensions
+full_binary_list = CompCtrl.extensions
 with open(os.path.join(builder.buildPath, 'pdblog.txt'), 'w') as fp:
   for task in full_binary_list:
     fp.write(task.debug.path + '\n')
 
-for smx_file in SM.smx_files:
-  smx_entry = SM.smx_files[smx_file]
+for smx_file in CompCtrl.smx_files:
+  smx_entry = CompCtrl.smx_files[smx_file]
   builder.AddCopy(smx_entry, folder_map['addons/sourcemod/plugins'])
 
 # Do all straight-up file copies from the source tree.

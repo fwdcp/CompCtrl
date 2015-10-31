@@ -1,4 +1,4 @@
-# vim: set ts=8 sts=2 sw=2 tw=99 et ft=python: 
+# vim: set ts=8 sts=2 sw=2 tw=99 et ft=python:
 import os
 
 scripts = []
@@ -58,7 +58,7 @@ def build_plugin(script_path, smx_file):
     script_path,
   ]
   inputs += includes
-  inputs += SM.generated_headers
+  inputs += CompCtrl.generated_headers
   outputs = [
     smx_file
   ]
@@ -68,7 +68,7 @@ def build_plugin(script_path, smx_file):
     argv = argv,
     outputs = outputs
   )
-  SM.smx_files[smx_file] = smx_entry
+  CompCtrl.smx_files[smx_file] = smx_entry
 
 for script_file in scripts:
   script_path = os.path.join(builder.currentSourcePath, script_file)
