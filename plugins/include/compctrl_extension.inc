@@ -44,9 +44,10 @@ enum StalemateReason {
  * @param forceMapReset	Whether to reset the map (usually after a full round is completed).
  * @param switchTeams	Whether to switch teams.
  * @param dontAddScore	Whether to not score this round.
+ * @param final			Whether this is the final round.
  * @noreturn
  */
-native void CompCtrl_SetWinningTeam(TFTeam team, WinReason reason, bool forceMapReset, bool switchTeams, bool dontAddScore);
+native void CompCtrl_SetWinningTeam(TFTeam team, WinReason reason, bool forceMapReset, bool switchTeams, bool dontAddScore, bool final);
 
 /**
  * @brief				Calls SetStalemate in CTFGameRules.
@@ -73,9 +74,10 @@ native void CompCtrl_SwitchTeams();
  * @param forceMapReset	Whether to reset the map (usually after a full round is completed).
  * @param switchTeams	Whether to switch teams.
  * @param dontAddScore	Whether to not score this round.
+ * @param final			Whether this is the final round.
  * @return				Plugin_Continue to continue with original values, Plugin_Changed to use new values, Plugin_Handled or Plugin_Stop to stop the game call.
  */
-forward Action CompCtrl_OnSetWinningTeam(TFTeam &team, WinReason &reason, bool &forceMapReset, bool &switchTeams, bool &dontAddScore);
+forward Action CompCtrl_OnSetWinningTeam(TFTeam &team, WinReason &reason, bool &forceMapReset, bool &switchTeams, bool &dontAddScore, bool &final);
 
 /**
  * @brief				When SetStalemate in CTFGameRules is called by the game.
@@ -104,10 +106,11 @@ forward Action CompCtrl_OnRestartTournament();
 /**
  * @brief				When CheckWinLimit in CTFGameRules is called by the game.
  *
+ * @param allowEnd		Whether to allow the map to end upon checking this.
  * @param returnValue	The return value for the function (true for win limit reached, false for not).
  * @return				Plugin_Continue to return the original value, Plugin_Changed or above to use the new value.
  */
-forward Action CompCtrl_OnCheckWinLimit(bool &returnValue);
+forward Action CompCtrl_OnCheckWinLimit(bool &allowEnd, bool &returnValue);
 
 /**
  * @brief				When ResetScores in CTFTeam is called by the game.

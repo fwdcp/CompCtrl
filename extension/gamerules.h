@@ -13,17 +13,17 @@ public:
 
 	// calls
 public:
-	void Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false);
+	void Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false, bool bFinal = false);
 	void Call_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset = true, bool bSwitchTeams = false);
 	void Call_CTFGameRules_HandleSwitchTeams();
 
 	// hooks
 public:
-	void Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false);
+	void Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false, bool bFinal = false);
 	void Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset = true, bool bSwitchTeams = false);
 	void Hook_CTFGameRules_HandleSwitchTeams();
 	void Hook_CTFGameRules_RestartTournament();
-	bool Hook_CTFGameRules_CheckWinLimit();
+	bool Hook_CTFGameRules_CheckWinLimit(bool bAllowEnd = true);
 
 private:
 	bool m_hooksSetup;

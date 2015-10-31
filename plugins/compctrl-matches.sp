@@ -337,7 +337,7 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
     }
 }
 
-public Action CompCtrl_OnSetWinningTeam(TFTeam &team, WinReason &reason, bool &forceMapReset, bool &switchTeams, bool &dontAddScore) {
+public Action CompCtrl_OnSetWinningTeam(TFTeam &team, WinReason &reason, bool &forceMapReset, bool &switchTeams, bool &dontAddScore, bool &final) {
     if (g_InMatch) {
         GetCurrentRoundConfig();
 
@@ -381,9 +381,13 @@ public Action CompCtrl_OnSetWinningTeam(TFTeam &team, WinReason &reason, bool &f
             if (g_MatchConfig.GetNum("switch-teams-each-round", 0)) {
                 g_SwitchTeams = true;
             }
+
+            final = false;
         }
         else {
             EndPeriod(redScore, bluScore, endCondition, cause);
+
+            final = true;
         }
 
         if (g_SwitchTeams) {
@@ -427,7 +431,7 @@ public Action CompCtrl_OnRestartTournament() {
     return Plugin_Continue;
 }
 
-public Action CompCtrl_OnCheckWinLimit(bool &returnValue) {
+public Action CompCtrl_OnCheckWinLimit(bool &allowEnd, bool &returnValue) {
     if (g_InMatch) {
         GetCurrentRoundConfig();
 

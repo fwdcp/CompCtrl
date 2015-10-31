@@ -3,11 +3,11 @@
 
 GameRulesManager g_GameRulesManager;
 
-SH_DECL_MANUALHOOK5_void(CTFGameRules_SetWinningTeam, 0, 0, 0, int, int, bool, bool, bool);
+SH_DECL_MANUALHOOK6_void(CTFGameRules_SetWinningTeam, 0, 0, 0, int, int, bool, bool, bool, bool);
 SH_DECL_MANUALHOOK3_void(CTFGameRules_SetStalemate, 0, 0, 0, int, bool, bool);
 SH_DECL_MANUALHOOK0_void(CTFGameRules_HandleSwitchTeams, 0, 0, 0);
 SH_DECL_MANUALHOOK0_void(CTFGameRules_RestartTournament, 0, 0, 0);
-SH_DECL_MANUALHOOK0(CTFGameRules_CheckWinLimit, 0, 0, 0, bool);
+SH_DECL_MANUALHOOK1(CTFGameRules_CheckWinLimit, 0, 0, 0, bool, bool);
 
 void GameRulesManager::Enable() {
 	if (!m_hooksSetup) {
@@ -78,9 +78,9 @@ void GameRulesManager::Disable() {
 	}
 }
 
-void GameRulesManager::Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset, bool bSwitchTeams, bool bDontAddScore) {
+void GameRulesManager::Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset, bool bSwitchTeams, bool bDontAddScore, bool bFinal) {
 	if (g_pSDKTools->GetGameRules()) {
-		SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_SetWinningTeam)(team, iWinReason, bForceMapReset, bSwitchTeams, bDontAddScore);
+		SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_SetWinningTeam)(team, iWinReason, bForceMapReset, bSwitchTeams, bDontAddScore, bFinal);
 	}
 }
 
@@ -96,18 +96,20 @@ void GameRulesManager::Call_CTFGameRules_HandleSwitchTeams() {
 	}
 }
 
-void GameRulesManager::Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset, bool bSwitchTeams, bool bDontAddScore) {
+void GameRulesManager::Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset, bool bSwitchTeams, bool bDontAddScore, bool bFinal) {
 	cell_t teamCell = team;
 	cell_t winReasonCell = iWinReason;
 	cell_t forceMapResetCell = bForceMapReset;
 	cell_t switchTeamsCell = bSwitchTeams;
 	cell_t dontAddScoreCell = bDontAddScore;
+	cell_t finalCell = bFinal;
 
 	g_SetWinningTeamForward->PushCellByRef(&teamCell);
 	g_SetWinningTeamForward->PushCellByRef(&winReasonCell);
 	g_SetWinningTeamForward->PushCellByRef(&forceMapResetCell);
 	g_SetWinningTeamForward->PushCellByRef(&switchTeamsCell);
 	g_SetWinningTeamForward->PushCellByRef(&dontAddScoreCell);
+	g_SetWinningTeamForward->PushCellByRef(&finalCell);
 
 	cell_t result = 0;
 
@@ -117,7 +119,7 @@ void GameRulesManager::Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason
 		RETURN_META(MRES_SUPERCEDE);
 	}
 	else if (result == Pl_Changed) {
-		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetWinningTeam, ((int)teamCell, (int)winReasonCell, (bool)forceMapResetCell, (bool)switchTeamsCell, (bool)dontAddScoreCell));
+		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_SetWinningTeam, ((int)teamCell, (int)winReasonCell, (bool)forceMapResetCell, (bool)switchTeamsCell, (bool)dontAddScoreCell, (bool)finalCell));
 	}
 	else {
 		RETURN_META(MRES_IGNORED);
@@ -174,9 +176,11 @@ void GameRulesManager::Hook_CTFGameRules_RestartTournament() {
 	}
 }
 
-bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit() {
-	cell_t returnValue = SH_MCALL(META_IFACEPTR(CBaseEntity), CTFGameRules_CheckWinLimit)();
+bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit(bool bAllowEnd) {
+	cell_t allowEndCell = bAllowEnd;
+	cell_t returnValue = SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_CheckWinLimit)(false);
 
+	g_CheckWinLimitForward->PushCellByRef(&allowEndCell);
 	g_CheckWinLimitForward->PushCellByRef(&returnValue);
 
 	cell_t result = 0;
@@ -197,12 +201,13 @@ cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params) {
 	bool bForceMapReset = (bool)params[3];
 	bool bSwitchTeams = (bool)params[4];
 	bool bDontAddScore = (bool)params[5];
+	bool bFinal = (bool)params[6];
 
 	if (!g_pSDKTools->GetGameRules()) {
 		pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
 	}
 
-	g_GameRulesManager.Call_CTFGameRules_SetWinningTeam(team, iWinReason, bForceMapReset, bSwitchTeams, bDontAddScore);
+	g_GameRulesManager.Call_CTFGameRules_SetWinningTeam(team, iWinReason, bForceMapReset, bSwitchTeams, bDontAddScore, bFinal);
 
 	return 0;
 }
