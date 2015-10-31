@@ -12,11 +12,7 @@ class SDK(object):
     self.name = dir
     self.path = None
 
-WinOnly = ['windows']
-WinLinux = ['windows', 'linux']
-WinLinuxMac = ['windows', 'linux', 'mac']
-
-PossibleSDK = SDK('HL2SDKTF2', '2.tf2', '10', 'TF2', WinLinuxMac, 'tf2')
+PossibleSDK = SDK('HL2SDKTF2', '2.tf2', '11', 'TF2', ['windows', 'linux', 'mac'], 'tf2')
 
 def ResolveEnvPath(env, folder):
   if env in os.environ:
@@ -89,7 +85,7 @@ class CompCtrlConfig(object):
       if not self.mms_root:
         self.mms_root = ResolveEnvPath('MMSOURCE', 'metamod-source')
       if not self.mms_root:
-        self.mms_root = ResolveEnvPath('MMSOURCE_DEV', 'metamod-source')
+        self.mms_root = ResolveEnvPath('MMSOURCE_DEV', 'mmsource-central')
 
     if not self.mms_root:
         raise Exception('Could not find a source copy of Metamod:Source')
@@ -102,7 +98,7 @@ class CompCtrlConfig(object):
       if not self.sm_root:
         self.sm_root = ResolveEnvPath('SOURCEMOD', 'sourcemod')
       if not self.sm_root:
-        self.sm_root = ResolveEnvPath('SOURCEMOD_DEV', 'sourcemod')
+        self.sm_root = ResolveEnvPath('SOURCEMOD_DEV', 'sourcemod-central')
 
     if not self.sm_root:
       raise Exception('Could not find a source copy of SourceMod')
@@ -248,7 +244,10 @@ class CompCtrlConfig(object):
       'EXTENSION_BUILD',
       'EXT_GENERATED_BUILD',
     ]
-    cxx.includes += [os.path.join(builder.buildPath, 'includes')]
+    cxx.includes += [
+      os.path.join(builder.buildPath, 'includes'),
+      os.path.join(self.sm_root, 'public'),
+    ]
 
   def ConfigureForHL2(self, binary, sdk):
     compiler = binary.compiler
@@ -262,6 +261,7 @@ class CompCtrlConfig(object):
 
     defines = ['SE_' + PossibleSDK.define + '=' + PossibleSDK.code]
     compiler.defines += defines
+
     paths = [
       ['public'],
       ['public', 'engine'],
@@ -277,7 +277,7 @@ class CompCtrlConfig(object):
 
     compiler.defines += ['SOURCE_ENGINE=' + sdk.code]
 
-    if compiler.cc.behavior == 'msvc':
+    if compiler.like('msvc'):
       compiler.defines += ['COMPILER_MSVC', 'COMPILER_MSVC32']
     else:
       compiler.defines += ['COMPILER_GCC']
