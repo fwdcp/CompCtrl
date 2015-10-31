@@ -64,6 +64,7 @@ CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
 
 CopyFiles('plugins', 'addons/sourcemod/scripting',
   [
+    'compctrl-maptimers.sp',
     'compctrl-matches.sp',
   ]
 )
