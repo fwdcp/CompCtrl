@@ -24,13 +24,13 @@
 			}
 			"CTFGameRules::RestartTournament"
 			{
-				"windows"	"205"
+				"windows"	"204"
 				"linux"		"206"
 				"mac"		"206"
 			}
 			"CTFGameRules::CheckWinLimit"
 			{
-				"windows"	"216"
+				"windows"	"215"
 				"linux"		"217"
 				"mac"		"217"
 			}
