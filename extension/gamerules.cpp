@@ -196,6 +196,10 @@ bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit(bool bAllowEnd) {
 }
 
 cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params) {
+	if (!g_pSDKTools->GetGameRules()) {
+		return pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
+	}
+
 	int team = (int)params[1];
 	int iWinReason = (int)params[2];
 	bool bForceMapReset = (bool)params[3];
@@ -203,23 +207,19 @@ cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params) {
 	bool bDontAddScore = (bool)params[5];
 	bool bFinal = (bool)params[6];
 
-	if (!g_pSDKTools->GetGameRules()) {
-		pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
-	}
-
 	g_GameRulesManager.Call_CTFGameRules_SetWinningTeam(team, iWinReason, bForceMapReset, bSwitchTeams, bDontAddScore, bFinal);
 
 	return 0;
 }
 
 cell_t CompCtrl_SetStalemate(IPluginContext *pContext, const cell_t *params) {
+	if (!g_pSDKTools->GetGameRules()) {
+		return pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
+	}
+
 	int iReason = (int)params[1];
 	bool bForceMapReset = (bool)params[2];
 	bool bSwitchTeams = (bool)params[3];
-
-	if (!g_pSDKTools->GetGameRules()) {
-		pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
-	}
 
 	g_GameRulesManager.Call_CTFGameRules_SetStalemate(iReason, bForceMapReset, bSwitchTeams);
 
@@ -228,7 +228,7 @@ cell_t CompCtrl_SetStalemate(IPluginContext *pContext, const cell_t *params) {
 
 cell_t CompCtrl_SwitchTeams(IPluginContext *pContext, const cell_t *params) {
 	if (!g_pSDKTools->GetGameRules()) {
-		pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
+		return pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
 	}
 
 	g_GameRulesManager.Call_CTFGameRules_HandleSwitchTeams();
