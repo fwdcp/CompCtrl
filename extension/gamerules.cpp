@@ -6,8 +6,13 @@ GameRulesManager g_GameRulesManager;
 SH_DECL_MANUALHOOK6_void(CTFGameRules_SetWinningTeam, 0, 0, 0, int, int, bool, bool, bool, bool);
 SH_DECL_MANUALHOOK3_void(CTFGameRules_SetStalemate, 0, 0, 0, int, bool, bool);
 SH_DECL_MANUALHOOK0_void(CTFGameRules_HandleSwitchTeams, 0, 0, 0);
+SH_DECL_MANUALHOOK0_void(CTFGameRules_BetweenRounds_Start, 0, 0, 0);
+SH_DECL_MANUALHOOK0_void(CTFGameRules_BetweenRounds_End, 0, 0, 0);
+SH_DECL_MANUALHOOK0_void(CTFGameRules_BetweenRounds_Think, 0, 0, 0);
 SH_DECL_MANUALHOOK0_void(CTFGameRules_RestartTournament, 0, 0, 0);
 SH_DECL_MANUALHOOK1(CTFGameRules_CheckWinLimit, 0, 0, 0, bool, bool);
+SH_DECL_MANUALHOOK0_void(CTFGameRules_RoundRespawn, 0, 0, 0);
+SH_DECL_MANUALHOOK0_void(CTFGameRules_CleanUpMap, 0, 0, 0);
 
 void GameRulesManager::Enable() {
 	if (!m_hooksSetup) {
@@ -34,6 +39,27 @@ void GameRulesManager::Enable() {
 
 		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_HandleSwitchTeams, offset, 0, 0);
 
+		if (!g_pGameConfig->GetOffset("CTFGameRules::BetweenRounds_Start", &offset)) {
+			g_pSM->LogError(myself, "Failed to find CTFGameRules::BetweenRounds_Start offset");
+			return;
+		}
+
+		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_BetweenRounds_Start, offset, 0, 0);
+
+		if (!g_pGameConfig->GetOffset("CTFGameRules::BetweenRounds_End", &offset)) {
+			g_pSM->LogError(myself, "Failed to find CTFGameRules::BetweenRounds_End offset");
+			return;
+		}
+
+		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_BetweenRounds_End, offset, 0, 0);
+
+		if (!g_pGameConfig->GetOffset("CTFGameRules::BetweenRounds_Think", &offset)) {
+			g_pSM->LogError(myself, "Failed to find CTFGameRules::BetweenRounds_Think offset");
+			return;
+		}
+
+		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_BetweenRounds_Think, offset, 0, 0);
+
 		if (!g_pGameConfig->GetOffset("CTFGameRules::RestartTournament", &offset)) {
 			g_pSM->LogError(myself, "Failed to find CTFGameRules::RestartTournament offset");
 			return;
@@ -48,6 +74,20 @@ void GameRulesManager::Enable() {
 
 		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_CheckWinLimit, offset, 0, 0);
 
+		if (!g_pGameConfig->GetOffset("CTFGameRules::RoundRespawn", &offset)) {
+			g_pSM->LogError(myself, "Failed to find CTFGameRules::RoundRespawn offset");
+			return;
+		}
+
+		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_RoundRespawn, offset, 0, 0);
+
+		if (!g_pGameConfig->GetOffset("CTFGameRules::CleanUpMap", &offset)) {
+			g_pSM->LogError(myself, "Failed to find CTFGameRules::CleanUpMap offset");
+			return;
+		}
+
+		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_CleanUpMap, offset, 0, 0);
+
 		m_hooksSetup = true;
 	}
 
@@ -59,6 +99,9 @@ void GameRulesManager::Enable() {
 		m_setWinningTeamHook = SH_ADD_MANUALVPHOOK(CTFGameRules_SetWinningTeam, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_SetWinningTeam), false);
 		m_setStalemateHook = SH_ADD_MANUALVPHOOK(CTFGameRules_SetStalemate, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_SetStalemate), false);
 		m_handleSwitchTeamsHook = SH_ADD_MANUALVPHOOK(CTFGameRules_HandleSwitchTeams, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_HandleSwitchTeams), false);
+		m_betweenRoundsStartHook = SH_ADD_MANUALVPHOOK(CTFGameRules_BetweenRounds_Start, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_BetweenRounds_Start), false);
+		m_betweenRoundsEndHook = SH_ADD_MANUALVPHOOK(CTFGameRules_BetweenRounds_End, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_BetweenRounds_End), false);
+		m_betweenRoundsThinkHook = SH_ADD_MANUALVPHOOK(CTFGameRules_BetweenRounds_Think, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_BetweenRounds_Think), false);
 		m_restartTournamentHook = SH_ADD_MANUALVPHOOK(CTFGameRules_RestartTournament, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_RestartTournament), false);
 		m_checkWinLimitHook = SH_ADD_MANUALVPHOOK(CTFGameRules_CheckWinLimit, g_pSDKTools->GetGameRules(), SH_MEMBER(this, &GameRulesManager::Hook_CTFGameRules_CheckWinLimit), false);
 
@@ -71,6 +114,9 @@ void GameRulesManager::Disable() {
 		SH_REMOVE_HOOK_ID(m_setWinningTeamHook);
 		SH_REMOVE_HOOK_ID(m_setStalemateHook);
 		SH_REMOVE_HOOK_ID(m_handleSwitchTeamsHook);
+		SH_REMOVE_HOOK_ID(m_betweenRoundsStartHook);
+		SH_REMOVE_HOOK_ID(m_betweenRoundsEndHook);
+		SH_REMOVE_HOOK_ID(m_betweenRoundsThinkHook);
 		SH_REMOVE_HOOK_ID(m_restartTournamentHook);
 		SH_REMOVE_HOOK_ID(m_checkWinLimitHook);
 
@@ -93,6 +139,18 @@ void GameRulesManager::Call_CTFGameRules_SetStalemate(int iReason, bool bForceMa
 void GameRulesManager::Call_CTFGameRules_HandleSwitchTeams() {
 	if (g_pSDKTools->GetGameRules()) {
 		SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_HandleSwitchTeams)();
+	}
+}
+
+void GameRulesManager::Call_CTFGameRules_RoundRespawn() {
+	if (g_pSDKTools->GetGameRules()) {
+		SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_RoundRespawn)();
+	}
+}
+
+void GameRulesManager::Call_CTFGameRules_CleanUpMap() {
+	if (g_pSDKTools->GetGameRules()) {
+		SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_CleanUpMap)();
 	}
 }
 
@@ -154,6 +212,45 @@ void GameRulesManager::Hook_CTFGameRules_HandleSwitchTeams() {
 	cell_t result = 0;
 
 	g_SwitchTeamsForward->Execute(&result);
+
+	if (result > Pl_Continue) {
+		RETURN_META(MRES_SUPERCEDE);
+	}
+	else {
+		RETURN_META(MRES_IGNORED);
+	}
+}
+
+void GameRulesManager::Hook_CTFGameRules_BetweenRounds_Start() {
+	cell_t result = 0;
+
+	g_BetweenRoundsStartForward->Execute(&result);
+
+	if (result > Pl_Continue) {
+		RETURN_META(MRES_SUPERCEDE);
+	}
+	else {
+		RETURN_META(MRES_IGNORED);
+	}
+}
+
+void GameRulesManager::Hook_CTFGameRules_BetweenRounds_End() {
+	cell_t result = 0;
+
+	g_BetweenRoundsEndForward->Execute(&result);
+
+	if (result > Pl_Continue) {
+		RETURN_META(MRES_SUPERCEDE);
+	}
+	else {
+		RETURN_META(MRES_IGNORED);
+	}
+}
+
+void GameRulesManager::Hook_CTFGameRules_BetweenRounds_Think() {
+	cell_t result = 0;
+
+	g_BetweenRoundsThinkForward->Execute(&result);
 
 	if (result > Pl_Continue) {
 		RETURN_META(MRES_SUPERCEDE);
@@ -232,6 +329,26 @@ cell_t CompCtrl_SwitchTeams(IPluginContext *pContext, const cell_t *params) {
 	}
 
 	g_GameRulesManager.Call_CTFGameRules_HandleSwitchTeams();
+
+	return 0;
+}
+
+cell_t CompCtrl_RoundRespawn(IPluginContext *pContext, const cell_t *params) {
+	if (!g_pSDKTools->GetGameRules()) {
+		return pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
+	}
+
+	g_GameRulesManager.Call_CTFGameRules_RoundRespawn();
+
+	return 0;
+}
+
+cell_t CompCtrl_CleanUpMap(IPluginContext *pContext, const cell_t *params) {
+	if (!g_pSDKTools->GetGameRules()) {
+		return pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
+	}
+
+	g_GameRulesManager.Call_CTFGameRules_CleanUpMap();
 
 	return 0;
 }

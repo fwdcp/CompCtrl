@@ -67,6 +67,20 @@ native void CompCtrl_SetStalemate(StalemateReason reason, bool forceMapReset, bo
 native void CompCtrl_SwitchTeams();
 
 /**
+ * @brief				Calls RoundRespawn in CTFGameRules.
+ *
+ * @noreturn
+ */
+native void CompCtrl_RoundRespawn();
+
+/*
+ * @brief				Calls CleanUpMap in CTFGameRules.
+ *
+ * @noreturn
+ */
+native void CompCtrl_CleanUpMap();
+
+/**
  * @brief				When SetWinningTeam in CTFGameRules is called by the game.
  *
  * @param team			The team that has won.
@@ -95,6 +109,27 @@ forward Action CompCtrl_OnSetStalemate(StalemateReason &reason, bool &forceMapRe
  * @return				Plugin_Continue to allow the team switch, Plugin_Changed or above to prevent the team switch.
  */
 forward Action CompCtrl_OnSwitchTeams();
+
+/**
+ * @brief				When BetweenRounds_Start in CTFGameRules is called by the game.
+ *
+ * @return				Plugin_Continue to allow the function to execute, Plugin_Changed or above to prevent the function from executing.
+ */
+forward Action CompCtrl_OnBetweenRoundsStart();
+
+/**
+ * @brief				When BetweenRounds_End in CTFGameRules is called by the game.
+ *
+ * @return				Plugin_Continue to allow the function to execute, Plugin_Changed or above to prevent the function from executing.
+ */
+forward Action CompCtrl_OnBetweenRoundsEnd();
+
+/**
+ * @brief				When BetweenRounds_Think in CTFGameRules is called by the game.
+ *
+ * @return				Plugin_Continue to allow the function to execute, Plugin_Changed or above to prevent the function from executing.
+ */
+forward Action CompCtrl_OnBetweenRoundsThink();
 
 /**
  * @brief				When RestartTournament in CTFGameRules is called by the game.

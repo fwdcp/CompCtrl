@@ -16,12 +16,17 @@ public:
 	void Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false, bool bFinal = false);
 	void Call_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset = true, bool bSwitchTeams = false);
 	void Call_CTFGameRules_HandleSwitchTeams();
+	void Call_CTFGameRules_RoundRespawn();
+	void Call_CTFGameRules_CleanUpMap();
 
 	// hooks
 public:
 	void Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false, bool bFinal = false);
 	void Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset = true, bool bSwitchTeams = false);
 	void Hook_CTFGameRules_HandleSwitchTeams();
+	void Hook_CTFGameRules_BetweenRounds_Start();
+	void Hook_CTFGameRules_BetweenRounds_End();
+	void Hook_CTFGameRules_BetweenRounds_Think();
 	void Hook_CTFGameRules_RestartTournament();
 	bool Hook_CTFGameRules_CheckWinLimit(bool bAllowEnd = true);
 
@@ -31,6 +36,9 @@ private:
 	int m_setWinningTeamHook;
 	int m_setStalemateHook;
 	int m_handleSwitchTeamsHook;
+	int m_betweenRoundsStartHook;
+	int m_betweenRoundsEndHook;
+	int m_betweenRoundsThinkHook;
 	int m_restartTournamentHook;
 	int m_checkWinLimitHook;
 };
@@ -38,6 +46,8 @@ private:
 cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params);
 cell_t CompCtrl_SetStalemate(IPluginContext *pContext, const cell_t *params);
 cell_t CompCtrl_SwitchTeams(IPluginContext *pContext, const cell_t *params);
+cell_t CompCtrl_RoundRespawn(IPluginContext *pContext, const cell_t *params);
+cell_t CompCtrl_CleanUpMap(IPluginContext *pContext, const cell_t *params);
 
 extern GameRulesManager g_GameRulesManager;
 

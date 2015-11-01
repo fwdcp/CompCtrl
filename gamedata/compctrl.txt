@@ -22,6 +22,24 @@
 				"linux"		"165"
 				"mac"		"165"
 			}
+			"CTFGameRules::BetweenRounds_Start"
+			{
+				"windows"	"198"
+				"linux"		"200"
+				"mac"		"200"
+			}
+			"CTFGameRules::BetweenRounds_End"
+			{
+				"windows"	"199"
+				"linux"		"201"
+				"mac"		"201"
+			}
+			"CTFGameRules::BetweenRounds_Think"
+			{
+				"windows"	"200"
+				"linux"		"202"
+				"mac"		"202"
+			}
 			"CTFGameRules::RestartTournament"
 			{
 				"windows"	"204"
@@ -33,6 +51,18 @@
 				"windows"	"215"
 				"linux"		"217"
 				"mac"		"217"
+			}
+			"CTFGameRules::RoundRespawn"
+			{
+				"windows"	"220"
+				"linux"		"222"
+				"mac"		"222"
+			}
+			"CTFGameRules::CleanUpMap"
+			{
+				"windows"	"221"
+				"linux"		"223"
+				"mac"		"223"
 			}
 			"CTFTeam::GetTeamNumber"
 			{
