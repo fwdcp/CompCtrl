@@ -36,12 +36,12 @@ void AutoPauseMapTimer() {
 	RoundState state = GameRules_GetRoundState();
 
 	if (g_Paused) {
-		if (state == RoundState_Preround || state == RoundState_RoundRunning || state == RoundState_Stalemate) {
+		if ((state == RoundState_Preround || state == RoundState_RoundRunning || state == RoundState_Stalemate) && !GameRules_GetProp("m_bInWaitingForPlayers")) {
 			UnpauseMapTimer();
 		}
 	}
 	else {
-		if (state != RoundState_Preround && state != RoundState_RoundRunning && state != RoundState_Stalemate) {
+		if ((state != RoundState_Preround && state != RoundState_RoundRunning && state != RoundState_Stalemate) || GameRules_GetProp("m_bInWaitingForPlayers")) {
 			PauseMapTimer();
 		}
 	}
