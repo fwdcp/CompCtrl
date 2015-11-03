@@ -11,8 +11,6 @@ SH_DECL_MANUALHOOK0_void(CTFGameRules_BetweenRounds_End, 0, 0, 0);
 SH_DECL_MANUALHOOK0_void(CTFGameRules_BetweenRounds_Think, 0, 0, 0);
 SH_DECL_MANUALHOOK0_void(CTFGameRules_RestartTournament, 0, 0, 0);
 SH_DECL_MANUALHOOK1(CTFGameRules_CheckWinLimit, 0, 0, 0, bool, bool);
-SH_DECL_MANUALHOOK0_void(CTFGameRules_RoundRespawn, 0, 0, 0);
-SH_DECL_MANUALHOOK0_void(CTFGameRules_CleanUpMap, 0, 0, 0);
 
 void GameRulesManager::Enable() {
 	if (!m_hooksSetup) {
@@ -74,20 +72,6 @@ void GameRulesManager::Enable() {
 
 		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_CheckWinLimit, offset, 0, 0);
 
-		if (!g_pGameConfig->GetOffset("CTFGameRules::RoundRespawn", &offset)) {
-			g_pSM->LogError(myself, "Failed to find CTFGameRules::RoundRespawn offset");
-			return;
-		}
-
-		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_RoundRespawn, offset, 0, 0);
-
-		if (!g_pGameConfig->GetOffset("CTFGameRules::CleanUpMap", &offset)) {
-			g_pSM->LogError(myself, "Failed to find CTFGameRules::CleanUpMap offset");
-			return;
-		}
-
-		SH_MANUALHOOK_RECONFIGURE(CTFGameRules_CleanUpMap, offset, 0, 0);
-
 		m_hooksSetup = true;
 	}
 
@@ -139,18 +123,6 @@ void GameRulesManager::Call_CTFGameRules_SetStalemate(int iReason, bool bForceMa
 void GameRulesManager::Call_CTFGameRules_HandleSwitchTeams() {
 	if (g_pSDKTools->GetGameRules()) {
 		SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_HandleSwitchTeams)();
-	}
-}
-
-void GameRulesManager::Call_CTFGameRules_RoundRespawn() {
-	if (g_pSDKTools->GetGameRules()) {
-		SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_RoundRespawn)();
-	}
-}
-
-void GameRulesManager::Call_CTFGameRules_CleanUpMap() {
-	if (g_pSDKTools->GetGameRules()) {
-		SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_CleanUpMap)();
 	}
 }
 
@@ -329,26 +301,6 @@ cell_t CompCtrl_SwitchTeams(IPluginContext *pContext, const cell_t *params) {
 	}
 
 	g_GameRulesManager.Call_CTFGameRules_HandleSwitchTeams();
-
-	return 0;
-}
-
-cell_t CompCtrl_RoundRespawn(IPluginContext *pContext, const cell_t *params) {
-	if (!g_pSDKTools->GetGameRules()) {
-		return pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
-	}
-
-	g_GameRulesManager.Call_CTFGameRules_RoundRespawn();
-
-	return 0;
-}
-
-cell_t CompCtrl_CleanUpMap(IPluginContext *pContext, const cell_t *params) {
-	if (!g_pSDKTools->GetGameRules()) {
-		return pContext->ThrowNativeError("Could not get pointer to CTFGameRules!");
-	}
-
-	g_GameRulesManager.Call_CTFGameRules_CleanUpMap();
 
 	return 0;
 }

@@ -16,8 +16,6 @@ public:
 	void Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false, bool bFinal = false);
 	void Call_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset = true, bool bSwitchTeams = false);
 	void Call_CTFGameRules_HandleSwitchTeams();
-	void Call_CTFGameRules_RoundRespawn();
-	void Call_CTFGameRules_CleanUpMap();
 
 	// hooks
 public:
@@ -46,8 +44,6 @@ private:
 cell_t CompCtrl_SetWinningTeam(IPluginContext *pContext, const cell_t *params);
 cell_t CompCtrl_SetStalemate(IPluginContext *pContext, const cell_t *params);
 cell_t CompCtrl_SwitchTeams(IPluginContext *pContext, const cell_t *params);
-cell_t CompCtrl_RoundRespawn(IPluginContext *pContext, const cell_t *params);
-cell_t CompCtrl_CleanUpMap(IPluginContext *pContext, const cell_t *params);
 
 extern GameRulesManager g_GameRulesManager;
 

@@ -1,3 +1,4 @@
+#include <sdktools>
 #include <tf2>
 
 #pragma newdecls required
@@ -66,19 +67,24 @@ native void CompCtrl_SetStalemate(StalemateReason reason, bool forceMapReset, bo
  */
 native void CompCtrl_SwitchTeams();
 
-/**
- * @brief				Calls RoundRespawn in CTFGameRules.
- *
- * @noreturn
- */
-native void CompCtrl_RoundRespawn();
-
 /*
  * @brief				Calls CleanUpMap in CTFGameRules.
  *
  * @noreturn
  */
-native void CompCtrl_CleanUpMap();
+stock void CompCtrl_CleanUpMap() {
+	static Handle cleanUpMapCall;
+
+	if (!IsValidHandle(cleanUpMapCall)) {
+		StartPrepSDKCall(SDKCall_GameRules);
+
+		Handle gameConf = LoadGameConfigFile("compctrl.txt");
+		PrepSDKCall_SetFromConf(gameConf, SDKConf_Virtual, "CTFGameRules::CleanUpMap");
+		cleanUpMapCall = EndPrepSDKCall();
+	}
+
+	SDKCall(cleanUpMapCall);
+}
 
 /**
  * @brief				When SetWinningTeam in CTFGameRules is called by the game.

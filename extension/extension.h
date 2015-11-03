@@ -35,8 +35,6 @@ const sp_nativeinfo_t g_Natives[] =
 	{ "CompCtrl_SetWinningTeam", CompCtrl_SetWinningTeam },
 	{ "CompCtrl_SetStalemate", CompCtrl_SetStalemate },
 	{ "CompCtrl_SwitchTeams", CompCtrl_SwitchTeams },
-	{ "CompCtrl_RoundRespawn", CompCtrl_RoundRespawn },
-	{ "CompCtrl_CleanUpMap", CompCtrl_CleanUpMap },
 	{ NULL, NULL }
 };
 
