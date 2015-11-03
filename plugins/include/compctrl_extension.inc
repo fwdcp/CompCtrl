@@ -78,7 +78,7 @@ stock void CompCtrl_CleanUpMap() {
 	if (cleanUpMapCall == null) {
 		StartPrepSDKCall(SDKCall_GameRules);
 
-		Handle gameConf = LoadGameConfigFile("compctrl.txt");
+		Handle gameConf = LoadGameConfigFile("compctrl");
 		PrepSDKCall_SetFromConf(gameConf, SDKConf_Virtual, "CTFGameRules::CleanUpMap");
 		cleanUpMapCall = EndPrepSDKCall();
 	}
@@ -97,8 +97,8 @@ stock void CompCtrl_StateTransition(RoundState state) {
 	if (stateTransitionCall == null) {
 		StartPrepSDKCall(SDKCall_GameRules);
 
-		Handle gameConf = LoadGameConfigFile("compctrl.txt");
-		PrepSDKCall_SetFromConf(gameConf, SDKConf_Signature, "CTFGameRules::State_Transition");
+		Handle gameConf = LoadGameConfigFile("compctrl");
+		PrepSDKCall_SetFromConf(gameConf, SDKConf_Signature, "CTeamplayRoundBasedRules::State_Transition");
 		PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
 		stateTransitionCall = EndPrepSDKCall();
 	}
