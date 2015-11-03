@@ -8,6 +8,7 @@
 
 bool g_StrategyPeriodActive = false;
 bool g_StrategyPeriodCompleted = false;
+int g_StrategyPeriodTimer = -1;
 float g_TransitionTime = 0.0;
 
 Handle g_OnStart;
@@ -99,6 +100,31 @@ public void StrategyPeriodRequested(any data) {
 
 void SetUpStrategyPeriod() {
 	g_TransitionTime = GetGameTime() + g_Time.FloatValue;
+
+	int timer = FindEntityByClassname(-1, "team_round_timer");
+
+	while (timer != -1) {
+		AcceptEntityInput(timer, "Disable");
+
+		timer = FindEntityByClassname(timer, "team_round_timer");
+	}
+
+	g_StrategyPeriodTimer = CreateEntityByName("team_round_timer");
+
+	if (g_StrategyPeriodTimer != -1) {
+		DispatchKeyValue(g_StrategyPeriodTimer, "targetname", "zz_teamplay_strategyperiod_timer");
+		DispatchKeyValue(g_StrategyPeriodTimer, "show_in_hud", "1");
+		DispatchSpawn(g_StrategyPeriodTimer);
+
+		SetVariantBool(false);
+		AcceptEntityInput(g_StrategyPeriodTimer, "AutoCountdown");
+
+		SetVariantInt(RoundToCeil(g_Time.FloatValue));
+		AcceptEntityInput(g_StrategyPeriodTimer, "SetTime");
+
+		AcceptEntityInput(g_StrategyPeriodTimer, "Resume");
+		AcceptEntityInput(g_StrategyPeriodTimer, "Enable");
+	}
 }
 
 void MaintainStrategyPeriod() {
@@ -125,30 +151,17 @@ void MaintainStrategyPeriod() {
 }
 
 void TearDownStrategyPeriod() {
-	CompCtrl_CleanUpMap();
+	int timer = FindEntityByClassname(-1, "team_round_timer");
 
-	int timelimit = 0;
-	GetMapTimeLimit(timelimit);
-	if (timelimit != 0 && GameRules_GetProp("m_nGameType") != 4 && !GameRules_GetProp("m_bPlayingKoth") && g_MatchEndAtTimelimit.BoolValue) {
-		int timer = FindEntityByClassname(-1, "team_round_timer");
+	while (timer != -1) {
+		AcceptEntityInput(timer, "Enable");
 
-		if (timer == -1) {
-			timer = CreateEntityByName("team_round_timer");
+		timer = FindEntityByClassname(timer, "team_round_timer");
+	}
 
-			if (timer != -1) {
-				DispatchKeyValue(timer, "targetname", "zz_teamplay_timelimit_timer");
-				DispatchKeyValue(timer, "show_in_hud", "1");
-				DispatchSpawn(timer);
-
-				int timeleft = 0;
-				GetMapTimeLeft(timeleft);
-				SetVariantInt(timeleft);
-				AcceptEntityInput(timer, "SetTime");
-
-				AcceptEntityInput(timer, "Resume");
-				AcceptEntityInput(timer, "Enable");
-			}
-		}
+	if (g_StrategyPeriodTimer != -1) {
+		AcceptEntityInput(g_StrategyPeriodTimer, "Disable");
+		AcceptEntityInput(g_StrategyPeriodTimer, "Kill");
 	}
 
 	g_StrategyPeriodActive = false;
