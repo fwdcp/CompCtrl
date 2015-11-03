@@ -111,11 +111,9 @@ void SetUpStrategyPeriod() {
 
 	if (g_StrategyPeriodTimer != -1) {
 		DispatchKeyValue(g_StrategyPeriodTimer, "targetname", "zz_teamplay_strategyperiod_timer");
+		DispatchKeyValue(g_StrategyPeriodTimer, "auto_countdown", "0");
 		DispatchKeyValue(g_StrategyPeriodTimer, "show_in_hud", "1");
 		DispatchSpawn(g_StrategyPeriodTimer);
-
-		SetVariantBool(false);
-		AcceptEntityInput(g_StrategyPeriodTimer, "AutoCountdown");
 
 		SetVariantInt(RoundToCeil(g_Time.FloatValue));
 		AcceptEntityInput(g_StrategyPeriodTimer, "SetTime");
