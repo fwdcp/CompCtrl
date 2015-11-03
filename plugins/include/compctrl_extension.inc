@@ -86,6 +86,26 @@ stock void CompCtrl_CleanUpMap() {
 	SDKCall(cleanUpMapCall);
 }
 
+/*
+ * @brief				Calls State_Transition in CTFGameRules.
+ *
+ * @noreturn
+ */
+stock void CompCtrl_StateTransition(RoundState state) {
+	static Handle stateTransitionCall;
+
+	if (!IsValidHandle(stateTransitionCall)) {
+		StartPrepSDKCall(SDKCall_GameRules);
+
+		Handle gameConf = LoadGameConfigFile("compctrl.txt");
+		PrepSDKCall_SetFromConf(gameConf, SDKConf_Signature, "CTFGameRules::State_Transition");
+		PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
+		cleanUpMapCall = EndPrepSDKCall();
+	}
+
+	SDKCall(stateTransitionCall, state);
+}
+
 /**
  * @brief				When SetWinningTeam in CTFGameRules is called by the game.
  *

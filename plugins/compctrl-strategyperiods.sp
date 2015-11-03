@@ -45,7 +45,7 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
 }
 
 public Action CompCtrl_OnBetweenRoundsStart() {
-	if (g_Time.FloatValue > 0.0) {
+	if (!g_StrategyPeriodActive) {
 		return Plugin_Continue;
 	}
 
@@ -73,14 +73,13 @@ public Action CompCtrl_OnBetweenRoundsThink() {
 }
 
 public void StrategyPeriodRequested(any data) {
-	SetUpStrategyPeriod();
+	g_StrategyPeriodActive = true;
+    CompCtrl_StateTransition(RoundState_BetweenRounds);
 }
 
 void SetUpStrategyPeriod() {
-	g_StrategyPeriodActive = true;
 	g_TransitionTime = GetGameTime() + g_Time.FloatValue;
 
-	GameRules_SetProp("m_iRoundState", RoundState_BetweenRounds);
 	GameRules_SetPropFloat("m_flRestartRoundTime", g_TransitionTime);
 }
 

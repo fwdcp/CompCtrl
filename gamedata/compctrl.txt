@@ -77,5 +77,28 @@
 				"mac"		"206"
 			}
 		}
+
+		"Signatures"
+		{
+			"CTeamplayRoundBasedRules::State_Transition"
+			{
+				"library"	"server"
+				"windows"	"\x55\x8B\xEC\x56\x8B\xF1\x8B\x8E****\x8B\x86****"
+				"linux"		"@_ZN24CTeamplayRoundBasedRules16State_TransitionE22gamerules_roundstate_t"
+			}
+
+			"CTeamplayRoundBasedRules::State_Enter"
+			{
+				"library"	"server"
+				"windows"	"\x55\x8B\xEC\x56\x8B\xF1\x8D\x4D\x08\x57"
+				"linux"		"@_ZN24CTeamplayRoundBasedRules11State_EnterE22gamerules_roundstate_t"
+			}
+
+			"CTeamplayRoundBasedRules::State_Leave"
+			{
+				"library"	"server"
+				"linux"		"@_ZN24CTeamplayRoundBasedRules11State_LeaveEv"
+			}
+		}
 	}
 }
