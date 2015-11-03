@@ -104,7 +104,13 @@ void SetUpStrategyPeriod() {
 void MaintainStrategyPeriod() {
 	for (int i = 1; i <= MaxClients; i++) {
 		if (IsClientConnected(i) && IsClientInGame(i) && !IsClientObserver(i)) {
-			SetEntityFlags(i, GetEntityFlags(i) | FL_FROZEN);
+			SetEntityMoveType(i, MOVETYPE_NONE);
+			SetEntProp(i, Prop_Send, "m_bAllowMoveDuringTaunt", 0);
+			SetEntPropFloat(i, Prop_Send, "m_flEnergyDrinkMeter", 0.0);
+			SetEntPropFloat(i, Prop_Send, "m_flHypeMeter", 0.0);
+			SetEntPropFloat(i, Prop_Send, "m_flChargeMeter", 0.0);
+			SetEntPropFloat(i, Prop_Send, "m_flCloakMeter", 0.0);
+			SetEntPropFloat(i, Prop_Send, "m_flRageMeter", 0.0);
 
 			for (int j = 0; j < 6; j++) {
 				int weapon = GetPlayerWeaponSlot(i, j);
