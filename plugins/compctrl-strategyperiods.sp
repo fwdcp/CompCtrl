@@ -70,6 +70,8 @@ public Action CompCtrl_OnBetweenRoundsThink() {
 		return Plugin_Continue;
 	}
 
+	MaintainStrategyPeriod();
+
 	if (GetGameTime() >= g_TransitionTime) {
 		CompCtrl_StateTransition(RoundState_Preround);
 	}
@@ -97,6 +99,23 @@ public void StrategyPeriodRequested(any data) {
 
 void SetUpStrategyPeriod() {
 	g_TransitionTime = GetGameTime() + g_Time.FloatValue;
+}
+
+void MaintainStrategyPeriod() {
+	for (int i = 1; i <= MaxClients; i++) {
+		if (IsClientConnected(i) && IsClientInGame(i) && !IsClientObserver(i)) {
+			SetEntityFlags(i, GetEntityFlags(i) | FL_FROZEN);
+
+			for (int j = 0; j < 6; j++) {
+				int weapon = GetPlayerWeaponSlot(i, j);
+
+				if (weapon != -1) {
+					SetEntPropFloat(weapon, Prop_Send, "m_flNextPrimaryAttack", g_TransitionTime);
+					SetEntPropFloat(weapon, Prop_Send, "m_flNextSecondaryAttack", g_TransitionTime);
+				}
+			}
+		}
+	}
 }
 
 void TearDownStrategyPeriod() {
