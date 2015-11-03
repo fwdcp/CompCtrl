@@ -74,21 +74,21 @@ public Action CompCtrl_OnBetweenRoundsThink() {
 }
 
 public Action CompCtrl_OnStrategyPeriodBegin() {
-    if (GameRules_GetProp("m_bInWaitingForPlayers")) {
-        return Plugin_Stop;
-    }
+	if (GameRules_GetProp("m_bInWaitingForPlayers")) {
+		return Plugin_Stop;
+	}
 
-    if (g_StrategyPeriodCompleted) {
-        g_StrategyPeriodCompleted = false;
-        return Plugin_Stop;
-    }
+	if (g_StrategyPeriodCompleted) {
+		g_StrategyPeriodCompleted = false;
+		return Plugin_Stop;
+	}
 
-    return Plugin_Continue;
+	return Plugin_Continue;
 }
 
 public void StrategyPeriodRequested(any data) {
 	g_StrategyPeriodActive = true;
-    CompCtrl_StateTransition(RoundState_BetweenRounds);
+	CompCtrl_StateTransition(RoundState_BetweenRounds);
 }
 
 void SetUpStrategyPeriod() {
@@ -125,6 +125,6 @@ void TearDownStrategyPeriod() {
 		}
 	}
 
-    g_StrategyPeriodActive = false;
-    g_StrategyPeriodCompleted = true;
+	g_StrategyPeriodActive = false;
+	g_StrategyPeriodCompleted = true;
 }
