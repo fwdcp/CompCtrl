@@ -13,7 +13,6 @@ float g_TransitionTime = 0.0;
 
 Handle g_OnStart;
 
-ConVar g_MatchEndAtTimelimit;
 ConVar g_Time;
 
 public Plugin myinfo =
@@ -26,7 +25,6 @@ public Plugin myinfo =
 };
 
 public void OnPluginStart() {
-	g_MatchEndAtTimelimit = FindConVar("mp_match_end_at_timelimit");
 	g_Time = CreateConVar("compctrl_strategyperiods_time", "15", "the amount of time between rounds");
 
 	g_OnStart = CreateGlobalForward("CompCtrl_OnStrategyPeriodBegin", ET_Hook);
