@@ -73,9 +73,9 @@ native void CompCtrl_SwitchTeams();
  * @noreturn
  */
 stock void CompCtrl_CleanUpMap() {
-	static Handle cleanUpMapCall;
+	static Handle cleanUpMapCall = null;
 
-	if (!IsValidHandle(cleanUpMapCall)) {
+	if (cleanUpMapCall == null) {
 		StartPrepSDKCall(SDKCall_GameRules);
 
 		Handle gameConf = LoadGameConfigFile("compctrl.txt");
@@ -92,15 +92,15 @@ stock void CompCtrl_CleanUpMap() {
  * @noreturn
  */
 stock void CompCtrl_StateTransition(RoundState state) {
-	static Handle stateTransitionCall;
+	static Handle stateTransitionCall = null;
 
-	if (!IsValidHandle(stateTransitionCall)) {
+	if (stateTransitionCall == null) {
 		StartPrepSDKCall(SDKCall_GameRules);
 
 		Handle gameConf = LoadGameConfigFile("compctrl.txt");
 		PrepSDKCall_SetFromConf(gameConf, SDKConf_Signature, "CTFGameRules::State_Transition");
 		PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
-		cleanUpMapCall = EndPrepSDKCall();
+		stateTransitionCall = EndPrepSDKCall();
 	}
 
 	SDKCall(stateTransitionCall, state);
