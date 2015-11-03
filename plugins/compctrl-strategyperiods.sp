@@ -70,6 +70,10 @@ public Action CompCtrl_OnBetweenRoundsThink() {
 		return Plugin_Continue;
 	}
 
+	if (GetGameTime() >= g_TransitionTime) {
+		CompCtrl_StateTransition(RoundState_Preround);
+	}
+
 	return Plugin_Handled;
 }
 
@@ -93,8 +97,6 @@ public void StrategyPeriodRequested(any data) {
 
 void SetUpStrategyPeriod() {
 	g_TransitionTime = GetGameTime() + g_Time.FloatValue;
-
-	GameRules_SetPropFloat("m_flRestartRoundTime", g_TransitionTime);
 }
 
 void TearDownStrategyPeriod() {
@@ -102,7 +104,6 @@ void TearDownStrategyPeriod() {
 
 	int timelimit = 0;
 	GetMapTimeLimit(timelimit);
-
 	if (timelimit != 0 && GameRules_GetProp("m_nGameType") != 4 && !GameRules_GetProp("m_bPlayingKoth") && g_MatchEndAtTimelimit.BoolValue) {
 		int timer = FindEntityByClassname(-1, "team_round_timer");
 
