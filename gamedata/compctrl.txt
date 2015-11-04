@@ -22,17 +22,47 @@
 				"linux"		"165"
 				"mac"		"165"
 			}
+			"CTFGameRules::BetweenRounds_Start"
+			{
+				"windows"	"198"
+				"linux"		"200"
+				"mac"		"200"
+			}
+			"CTFGameRules::BetweenRounds_End"
+			{
+				"windows"	"199"
+				"linux"		"201"
+				"mac"		"201"
+			}
+			"CTFGameRules::BetweenRounds_Think"
+			{
+				"windows"	"200"
+				"linux"		"202"
+				"mac"		"202"
+			}
 			"CTFGameRules::RestartTournament"
 			{
-				"windows"	"205"
+				"windows"	"204"
 				"linux"		"206"
 				"mac"		"206"
 			}
 			"CTFGameRules::CheckWinLimit"
 			{
-				"windows"	"216"
+				"windows"	"215"
 				"linux"		"217"
 				"mac"		"217"
+			}
+			"CTFGameRules::RoundRespawn"
+			{
+				"windows"	"220"
+				"linux"		"222"
+				"mac"		"222"
+			}
+			"CTFGameRules::CleanUpMap"
+			{
+				"windows"	"221"
+				"linux"		"223"
+				"mac"		"223"
 			}
 			"CTFTeam::GetTeamNumber"
 			{
@@ -45,6 +75,29 @@
 				"windows"	"205"
 				"linux"		"206"
 				"mac"		"206"
+			}
+		}
+
+		"Signatures"
+		{
+			"CTeamplayRoundBasedRules::State_Transition"
+			{
+				"library"	"server"
+				"windows"	"\x55\x8B\xEC\x56\x8B\xF1\x8B\x8E****\x8B\x86****"
+				"linux"		"@_ZN24CTeamplayRoundBasedRules16State_TransitionE22gamerules_roundstate_t"
+			}
+
+			"CTeamplayRoundBasedRules::State_Enter"
+			{
+				"library"	"server"
+				"windows"	"\x55\x8B\xEC\x56\x8B\xF1\x8D\x4D\x08\x57"
+				"linux"		"@_ZN24CTeamplayRoundBasedRules11State_EnterE22gamerules_roundstate_t"
+			}
+
+			"CTeamplayRoundBasedRules::State_Leave"
+			{
+				"library"	"server"
+				"linux"		"@_ZN24CTeamplayRoundBasedRules11State_LeaveEv"
 			}
 		}
 	}

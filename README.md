@@ -10,6 +10,14 @@ Installation
 Changelog
 ---------
 
+### 0.4.0
+* general
+  * fix gamedata for Windows servers
+* map timers
+  * release initial version of map timers module
+* strategy periods
+  * release initial version of strategy periods module
+
 ### 0.3.1
 * general
   * update gamedata for Invasion update
@@ -79,6 +87,12 @@ Modules
 **Notes:**
 * Any commands prefixed with `sm_` may also be used in chat via `/` or `!` - for example, `/ready` or `!ready` in chat is equivalent to `sm_ready` in the console.
 
+### Map Timers
+*manages the map timer*
+
+#### Console Variables
+`compctrl_maptimers_autopause` determines whether the map timer should pause when the game is not being actively played.
+
 ### Matches
 *manages the flow of a match*
 
@@ -96,3 +110,12 @@ Modules
 
 ##### Match Configurations
 All of the files within the `configs/compctrl/matches` may be used by the `sm_startmatch` command. You may add, remove, or modify configs in this folder as desired (but if you do, make sure to back up your configs in case they are overwritten during a CompCtrl update).
+
+### Strategy Periods
+*adds time between rounds to strategize*
+
+#### Console Commands
+`sm_requestpause` will pause the timer if currently in a strategy period, and otherwise will schedule a pause for the next strategy period. `sm_cancelpause` will cancel any current pause in a strategy period and any future requests.
+
+#### Console Variables
+`compctrl_strategyperiods_time` determines how long each strategy period is (in seconds).

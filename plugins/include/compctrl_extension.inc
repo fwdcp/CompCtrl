@@ -1,3 +1,4 @@
+#include <sdktools>
 #include <tf2>
 
 #pragma newdecls required
@@ -44,9 +45,10 @@ enum StalemateReason {
  * @param forceMapReset	Whether to reset the map (usually after a full round is completed).
  * @param switchTeams	Whether to switch teams.
  * @param dontAddScore	Whether to not score this round.
+ * @param final			Whether this is the final round.
  * @noreturn
  */
-native void CompCtrl_SetWinningTeam(TFTeam team, WinReason reason, bool forceMapReset, bool switchTeams, bool dontAddScore);
+native void CompCtrl_SetWinningTeam(TFTeam team, WinReason reason, bool forceMapReset, bool switchTeams, bool dontAddScore, bool final);
 
 /**
  * @brief				Calls SetStalemate in CTFGameRules.
@@ -65,6 +67,45 @@ native void CompCtrl_SetStalemate(StalemateReason reason, bool forceMapReset, bo
  */
 native void CompCtrl_SwitchTeams();
 
+/*
+ * @brief				Calls CleanUpMap in CTFGameRules.
+ *
+ * @noreturn
+ */
+stock void CompCtrl_CleanUpMap() {
+	static Handle cleanUpMapCall = null;
+
+	if (cleanUpMapCall == null) {
+		StartPrepSDKCall(SDKCall_GameRules);
+
+		Handle gameConf = LoadGameConfigFile("compctrl");
+		PrepSDKCall_SetFromConf(gameConf, SDKConf_Virtual, "CTFGameRules::CleanUpMap");
+		cleanUpMapCall = EndPrepSDKCall();
+	}
+
+	SDKCall(cleanUpMapCall);
+}
+
+/*
+ * @brief				Calls State_Transition in CTFGameRules.
+ *
+ * @noreturn
+ */
+stock void CompCtrl_StateTransition(RoundState state) {
+	static Handle stateTransitionCall = null;
+
+	if (stateTransitionCall == null) {
+		StartPrepSDKCall(SDKCall_GameRules);
+
+		Handle gameConf = LoadGameConfigFile("compctrl");
+		PrepSDKCall_SetFromConf(gameConf, SDKConf_Signature, "CTeamplayRoundBasedRules::State_Transition");
+		PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
+		stateTransitionCall = EndPrepSDKCall();
+	}
+
+	SDKCall(stateTransitionCall, state);
+}
+
 /**
  * @brief				When SetWinningTeam in CTFGameRules is called by the game.
  *
@@ -73,9 +114,10 @@ native void CompCtrl_SwitchTeams();
  * @param forceMapReset	Whether to reset the map (usually after a full round is completed).
  * @param switchTeams	Whether to switch teams.
  * @param dontAddScore	Whether to not score this round.
+ * @param final			Whether this is the final round.
  * @return				Plugin_Continue to continue with original values, Plugin_Changed to use new values, Plugin_Handled or Plugin_Stop to stop the game call.
  */
-forward Action CompCtrl_OnSetWinningTeam(TFTeam &team, WinReason &reason, bool &forceMapReset, bool &switchTeams, bool &dontAddScore);
+forward Action CompCtrl_OnSetWinningTeam(TFTeam &team, WinReason &reason, bool &forceMapReset, bool &switchTeams, bool &dontAddScore, bool &final);
 
 /**
  * @brief				When SetStalemate in CTFGameRules is called by the game.
@@ -95,6 +137,27 @@ forward Action CompCtrl_OnSetStalemate(StalemateReason &reason, bool &forceMapRe
 forward Action CompCtrl_OnSwitchTeams();
 
 /**
+ * @brief				When BetweenRounds_Start in CTFGameRules is called by the game.
+ *
+ * @return				Plugin_Continue to allow the function to execute, Plugin_Changed or above to prevent the function from executing.
+ */
+forward Action CompCtrl_OnBetweenRoundsStart();
+
+/**
+ * @brief				When BetweenRounds_End in CTFGameRules is called by the game.
+ *
+ * @return				Plugin_Continue to allow the function to execute, Plugin_Changed or above to prevent the function from executing.
+ */
+forward Action CompCtrl_OnBetweenRoundsEnd();
+
+/**
+ * @brief				When BetweenRounds_Think in CTFGameRules is called by the game.
+ *
+ * @return				Plugin_Continue to allow the function to execute, Plugin_Changed or above to prevent the function from executing.
+ */
+forward Action CompCtrl_OnBetweenRoundsThink();
+
+/**
  * @brief				When RestartTournament in CTFGameRules is called by the game.
  *
  * @return				Plugin_Continue to allow the restart, Plugin_Changed or above to prevent the restart.
@@ -104,10 +167,11 @@ forward Action CompCtrl_OnRestartTournament();
 /**
  * @brief				When CheckWinLimit in CTFGameRules is called by the game.
  *
+ * @param allowEnd		Whether to allow the map to end upon checking this.
  * @param returnValue	The return value for the function (true for win limit reached, false for not).
  * @return				Plugin_Continue to return the original value, Plugin_Changed or above to use the new value.
  */
-forward Action CompCtrl_OnCheckWinLimit(bool &returnValue);
+forward Action CompCtrl_OnCheckWinLimit(bool &allowEnd, bool &returnValue);
 
 /**
  * @brief				When ResetScores in CTFTeam is called by the game.

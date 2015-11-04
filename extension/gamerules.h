@@ -13,17 +13,20 @@ public:
 
 	// calls
 public:
-	void Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false);
+	void Call_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false, bool bFinal = false);
 	void Call_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset = true, bool bSwitchTeams = false);
 	void Call_CTFGameRules_HandleSwitchTeams();
 
 	// hooks
 public:
-	void Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false);
+	void Hook_CTFGameRules_SetWinningTeam(int team, int iWinReason, bool bForceMapReset = true, bool bSwitchTeams = false, bool bDontAddScore = false, bool bFinal = false);
 	void Hook_CTFGameRules_SetStalemate(int iReason, bool bForceMapReset = true, bool bSwitchTeams = false);
 	void Hook_CTFGameRules_HandleSwitchTeams();
+	void Hook_CTFGameRules_BetweenRounds_Start();
+	void Hook_CTFGameRules_BetweenRounds_End();
+	void Hook_CTFGameRules_BetweenRounds_Think();
 	void Hook_CTFGameRules_RestartTournament();
-	bool Hook_CTFGameRules_CheckWinLimit();
+	bool Hook_CTFGameRules_CheckWinLimit(bool bAllowEnd = true);
 
 private:
 	bool m_hooksSetup;
@@ -31,6 +34,9 @@ private:
 	int m_setWinningTeamHook;
 	int m_setStalemateHook;
 	int m_handleSwitchTeamsHook;
+	int m_betweenRoundsStartHook;
+	int m_betweenRoundsEndHook;
+	int m_betweenRoundsThinkHook;
 	int m_restartTournamentHook;
 	int m_checkWinLimitHook;
 };
