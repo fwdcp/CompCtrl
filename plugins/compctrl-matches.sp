@@ -116,8 +116,8 @@ public Action Command_StartMatch(int client, int args) {
 		return Plugin_Handled;
 	}
 
-	g_Tournament.SetBool(true);
-	g_TournamentNonAdminRestart.SetBool(false);
+	g_Tournament.BoolValue = true;
+	g_TournamentNonAdminRestart.BoolValue = false;
 	g_InMatch = true;
 	g_AllowScoreReset = true;
 	strcopy(g_MatchConfigName, sizeof(g_MatchConfigName), arg);
@@ -234,7 +234,7 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
 		if (g_RestartsLeft > 0) {
 			CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} will be live after {olive}%i{default} restarts.", periodName, g_RestartsLeft);
 
-			g_RestartGame.SetInt(5);
+			g_RestartGame.IntValue = 5;
 
 			g_RestartsLeft--;
 
@@ -242,11 +242,11 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
 		}
 
 		if (g_MatchConfig.GetNum("manual-scoring", 0)) {
-			g_TimeLimit.SetInt(0);
-			g_WinLimit.SetInt(0);
-			g_WinDifference.SetInt(0);
-			g_WinDifferenceMin.SetInt(0);
-			g_MaxRounds.SetInt(0);
+			g_TimeLimit.IntValue = 0;
+			g_WinLimit.IntValue = 0;
+			g_WinDifference.IntValue = 0;
+			g_WinDifferenceMin.IntValue = 0;
+			g_MaxRounds.IntValue = 0;
 		}
 
 		if (!GameRules_GetProp("m_bStopWatch", 1) || GetStopwatchStatus() == StopwatchStatus_SetTarget) {
@@ -475,14 +475,14 @@ public Action CompCtrl_OnStrategyPeriodBegin() {
 void BeginPeriod() {
 	GetCurrentRoundConfig();
 
-	g_Stopwatch.SetBool(view_as<bool>(g_MatchConfig.GetNum("stopwatch", 1)));
-	g_SuddenDeath.SetBool(view_as<bool>(g_MatchConfig.GetNum("sudden-death", 0)));
-	g_TimeLimit.SetInt(g_MatchConfig.GetNum("timelimit", 0));
-	g_WinLimit.SetInt(g_MatchConfig.GetNum("winlimit", 0));
-	g_WinDifference.SetInt(g_MatchConfig.GetNum("windifference", 0));
-	g_WinDifferenceMin.SetInt(g_MatchConfig.GetNum("windifference-min", 0));
-	g_MaxRounds.SetInt(g_MatchConfig.GetNum("maxrounds", 0));
-	g_FlagCapsPerRound.SetInt(g_MatchConfig.GetNum("flag-caps-per-round", 0));
+	g_Stopwatch.BoolValue = view_as<bool>(g_MatchConfig.GetNum("stopwatch", 1));
+	g_SuddenDeath.BoolValue = view_as<bool>(g_MatchConfig.GetNum("sudden-death", 0));
+	g_TimeLimit.IntValue = g_MatchConfig.GetNum("timelimit", 0);
+	g_WinLimit.IntValue = g_MatchConfig.GetNum("winlimit", 0);
+	g_WinDifference.IntValue = g_MatchConfig.GetNum("windifference", 0);
+	g_WinDifferenceMin.IntValue = g_MatchConfig.GetNum("windifference-min", 0);
+	g_MaxRounds.IntValue = g_MatchConfig.GetNum("maxrounds", 0);
+	g_FlagCapsPerRound.IntValue = g_MatchConfig.GetNum("flag-caps-per-round", 0);
 	g_RestartsLeft = g_MatchConfig.GetNum("live-on", 0);
 
 	g_RoundsPlayed = 0;
