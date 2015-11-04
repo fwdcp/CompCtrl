@@ -3,6 +3,7 @@
 #include <compctrl_version>
 #include <compctrl_extension>
 #include <compctrl-matches>
+#include <compctrl-strategyperiods>
 #include <hudnotify>
 #include <morecolors>
 #include <sdktools>
@@ -455,6 +456,16 @@ public Action CompCtrl_OnResetTeamScores(TFTeam team) {
 			if (team == TFTeam_Red || team == TFTeam_Blue) {
 				return Plugin_Stop;
 			}
+		}
+	}
+
+	return Plugin_Continue;
+}
+
+public Action CompCtrl_OnStrategyPeriodBegin() {
+	if (g_InMatch) {
+		if (g_RestartsLeft > 0 || g_RestartGame.IntValue == 5) {
+			return Plugin_Stop;
 		}
 	}
 
