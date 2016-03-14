@@ -8,6 +8,7 @@ install:
 
 build_script:
 - "cd %APPVEYOR_BUILD_FOLDER%\\..\\sourcemod\\build\\package\\addons\\sourcemod && set \"SOURCEMOD_RELEASE=%cd%\""
+- dir %APPVEYOR_BUILD_FOLDER\.. && dir %APPVEYOR_BUILD_FOLDER% && dir %APPVEYOR_BUILD_FOLDER\..\sourcemod && dir %SOURCEMOD_RELEASE% && dir %SOURCEMOD_RELEASE%\scripting
 - mkdir %APPVEYOR_BUILD_FOLDER%\build && cd %APPVEYOR_BUILD_FOLDER%\build
 - "\"%VS120COMNTOOLS%VsDevCmd.bat\" && python ..\\configure.py --enable-optimize"
 - "\"%VS120COMNTOOLS%VsDevCmd.bat\" && C:\\Python27\\Scripts\\ambuild.bat"
