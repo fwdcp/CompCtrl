@@ -4,10 +4,10 @@ install:
 - git clone https://github.com/alliedmodders/ambuild.git %APPVEYOR_BUILD_FOLDER%/../ambuild && cd %APPVEYOR_BUILD_FOLDER%/../ambuild && python setup.py build && python setup.py install
 - git clone https://github.com/alliedmodders/metamod-source.git -b 1.10-dev %APPVEYOR_BUILD_FOLDER%/../metamod-source
 - git clone https://github.com/alliedmodders/hl2sdk.git -b tf2 %APPVEYOR_BUILD_FOLDER%/../hl2sdk-tf2
-- "git clone https://github.com/alliedmodders/sourcemod.git -b 1.7-dev %APPVEYOR_BUILD_FOLDER%/../sourcemod && cd %APPVEYOR_BUILD_FOLDER%/../sourcemod && mkdir build && cd build && \"%VS120COMNTOOLS%VsDevCmd.bat\" && python ../configure.py --sdks=tf2 --no-mysql --enable-optimize && ambuild"
+- "git clone https://github.com/alliedmodders/sourcemod.git -b 1.7-dev %APPVEYOR_BUILD_FOLDER%/../sourcemod && cd %APPVEYOR_BUILD_FOLDER%/../sourcemod && mkdir build && cd build && \"%VS120COMNTOOLS%VsDevCmd.bat\" && python ../configure.py --sdks=tf2 --no-mysql --enable-optimize && C:\\Python27\\Scripts\\ambuild.bat"
 
 build_script:
 - for /f "delims=" %%a in ('cd %APPVEYOR_BUILD_FOLDER%/../sourcemod/build/package/addons/sourcemod && pwd') do @set SOURCEMOD_RELEASE=%%a
 - mkdir %APPVEYOR_BUILD_FOLDER%/build && cd %APPVEYOR_BUILD_FOLDER%/build
 - "\"%VS120COMNTOOLS%VsDevCmd.bat\" && python ../configure.py --enable-optimize"
-- "\"%VS120COMNTOOLS%VsDevCmd.bat\" && ambuild"
+- "\"%VS120COMNTOOLS%VsDevCmd.bat\" && C:\\Python27\\Scripts\\ambuild.bat"
