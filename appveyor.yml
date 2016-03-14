@@ -1,3 +1,5 @@
+version: {build}
+
 install:
 - git clone https://github.com/alliedmodders/ambuild.git %APPVEYOR_BUILD_FOLDER%/../ambuild && cd %APPVEYOR_BUILD_FOLDER%/../ambuild && python setup.py build && python setup.py install
 - git clone https://github.com/alliedmodders/metamod-source.git -b 1.10-dev %APPVEYOR_BUILD_FOLDER%/../metamod-source
