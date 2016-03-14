@@ -7,7 +7,7 @@ install:
 - "git clone https://github.com/alliedmodders/sourcemod.git -b 1.7-dev %APPVEYOR_BUILD_FOLDER%/../sourcemod && cd %APPVEYOR_BUILD_FOLDER%/../sourcemod && mkdir build && cd build && \"%VS120COMNTOOLS%VsDevCmd.bat\" && python ../configure.py --sdks=tf2 --no-mysql --enable-optimize && C:\\Python27\\Scripts\\ambuild.bat"
 
 build_script:
-- for /f "delims=" %%a in ('cd %APPVEYOR_BUILD_FOLDER%/../sourcemod/build/package/addons/sourcemod && pwd') do @set SOURCEMOD_RELEASE=%%a
+- "cd %APPVEYOR_BUILD_FOLDER%/../sourcemod/build/package/addons/sourcemod && set \"SOURCEMOD_RELEASE=%cd\""
 - mkdir %APPVEYOR_BUILD_FOLDER%/build && cd %APPVEYOR_BUILD_FOLDER%/build
 - "\"%VS120COMNTOOLS%VsDevCmd.bat\" && python ../configure.py --enable-optimize"
 - "\"%VS120COMNTOOLS%VsDevCmd.bat\" && C:\\Python27\\Scripts\\ambuild.bat"
