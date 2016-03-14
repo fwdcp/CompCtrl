@@ -1,4 +1,4 @@
-version: {branch}-{build}
+version: appveyor-{build}
 
 install:
 - git clone https://github.com/alliedmodders/ambuild.git %APPVEYOR_BUILD_FOLDER%/../ambuild && cd %APPVEYOR_BUILD_FOLDER%/../ambuild && python setup.py build && python setup.py install
