@@ -15,5 +15,4 @@ build_script:
 - C:\Python27\Scripts\ambuild.bat
 
 artifacts:
-- path: build\package\**\*
-  type: zip
+- path: build\package
