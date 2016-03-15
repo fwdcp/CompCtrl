@@ -20,3 +20,14 @@ after_build:
 
 artifacts:
 - path: build\*.zip
+
+deploy:
+- provider: GitHub
+  release: CompCtrl $(appveyor_repo_tag_name)
+  description: ""
+  auth_token:
+    secure: 951xPSsvO3PqZJHyMAlFcK9Xj8uLt61JX+J7clJKdf86lrVVZmokpcvTVDglPaQt
+  artifact: build\*.zip
+  draft: true
+  on:
+    appveyor_repo_tag: true
