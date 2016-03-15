@@ -107,6 +107,22 @@ stock void CompCtrl_StateTransition(RoundState state) {
 }
 
 /**
+ * @brief				When a SourceTV demo has started to record.
+ *
+ * @param file			The path to the demo file.
+ * @noreturn
+ */
+forward void CompCtrl_OnStartRecording(const char[] file);
+
+/**
+ * @brief				When a SourceTV demo has finished recording.
+ *
+ * @param file			The path to the demo file.
+ * @noreturn
+ */
+forward void CompCtrl_OnStopRecording(const char[] file);
+
+/**
  * @brief				When SetWinningTeam in CTFGameRules is called by the game.
  *
  * @param team			The team that has won.
