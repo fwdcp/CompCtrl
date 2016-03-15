@@ -5,6 +5,7 @@
 #include "ISDKHooks.h"
 #include "ISDKTools.h"
 
+#include "demorecorder.h"
 #include "gamerules.h"
 #include "team.h"
 
@@ -38,6 +39,8 @@ const sp_nativeinfo_t g_Natives[] =
 	{ NULL, NULL }
 };
 
+extern IForward *g_StartRecordingForward;
+extern IForward *g_StopRecordingForward;
 extern IForward *g_SetWinningTeamForward;
 extern IForward *g_SetStalemateForward;
 extern IForward *g_SwitchTeamsForward;

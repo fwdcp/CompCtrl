@@ -10,6 +10,11 @@ Installation
 Changelog
 ---------
 
+### 0.4.1
+* general
+  * update gamedata
+  * add forwards for demo recording
+
 ### 0.4.0
 * general
   * fix gamedata for Windows servers

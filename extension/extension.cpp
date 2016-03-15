@@ -1,5 +1,7 @@
 #include "extension.h"
 
+#include "CDetour/detours.h"
+
 CompCtrl g_CompCtrl;		/**< Global singleton for extension's main interface */
 
 SMEXT_LINK(&g_CompCtrl);
@@ -10,6 +12,8 @@ IGameConfig *g_pGameConfig = NULL;
 ISDKHooks *g_pSDKHooks = NULL;
 ISDKTools *g_pSDKTools = NULL;
 
+IForward *g_StartRecordingForward = NULL;
+IForward *g_StopRecordingForward = NULL;
 IForward *g_SetWinningTeamForward = NULL;
 IForward *g_SetStalemateForward = NULL;
 IForward *g_SwitchTeamsForward = NULL;
@@ -34,13 +38,18 @@ bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
 		return false;
 	}
 
+	CDetourManager::Init(g_pSM->GetScriptingEngine(), g_pGameConfig);
+
 	return true;
 }
 
 void CompCtrl::SDK_OnUnload() {
+	g_DemoRecorderManager.Disable();
 	g_GameRulesManager.Disable();
 	g_TeamManager.Disable();
 
+	forwards->ReleaseForward(g_StartRecordingForward);
+	forwards->ReleaseForward(g_StopRecordingForward);
 	forwards->ReleaseForward(g_SetWinningTeamForward);
 	forwards->ReleaseForward(g_SetStalemateForward);
 	forwards->ReleaseForward(g_SwitchTeamsForward);
@@ -59,6 +68,8 @@ void CompCtrl::SDK_OnAllLoaded() {
 	if (QueryRunning(NULL, 0)) {
 		sharesys->AddNatives(myself, g_Natives);
 
+		g_StartRecordingForward = forwards->CreateForward("CompCtrl_OnStartRecording", ET_Ignore, 1, NULL, Param_String);
+		g_StopRecordingForward = forwards->CreateForward("CompCtrl_OnStopRecording", ET_Ignore, 1, NULL, Param_String);
 		g_SetWinningTeamForward = forwards->CreateForward("CompCtrl_OnSetWinningTeam", ET_Hook, 6, NULL, Param_CellByRef, Param_CellByRef, Param_CellByRef, Param_CellByRef, Param_CellByRef, Param_CellByRef);
 		g_SetStalemateForward = forwards->CreateForward("CompCtrl_OnSetStalemate", ET_Hook, 3, NULL, Param_CellByRef, Param_CellByRef, Param_CellByRef);
 		g_SwitchTeamsForward = forwards->CreateForward("CompCtrl_OnSwitchTeams", ET_Hook, 0, NULL);
@@ -69,6 +80,7 @@ void CompCtrl::SDK_OnAllLoaded() {
 		g_CheckWinLimitForward = forwards->CreateForward("CompCtrl_OnCheckWinLimit", ET_Hook, 2, NULL, Param_CellByRef, Param_CellByRef);
 		g_ResetTeamScoresForward = forwards->CreateForward("CompCtrl_OnResetTeamScores", ET_Hook, 1, NULL, Param_Cell);
 
+		g_DemoRecorderManager.Enable();
 		g_GameRulesManager.Enable();
 		g_TeamManager.Enable();
 

@@ -32,7 +32,11 @@ sourcemod_path = ResolveEnvPath('SOURCEMOD_RELEASE', 'sourcemod')
 if not sourcemod_path:
   raise Exception('Could not find a copy of SourceMod')
 
+print os.listdir(sourcemod_path)
+
 scripting_path = os.path.join(sourcemod_path, 'scripting')
+
+print os.listdir(scripting_path)
 
 if builder.target_platform == 'windows':
   spcomp_path = os.path.join(scripting_path, 'spcomp.exe')
