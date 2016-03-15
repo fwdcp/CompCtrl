@@ -10,8 +10,11 @@ else:
   # Use the copy included with SM 1.6 and newer
   project.sources += [os.path.join(CompCtrl.sm_root, 'public', 'smsdk_ext.cpp')]
 
+project.sources += [os.path.join(CompCtrl.sm_root, 'public', 'CDetour', 'detours.cpp')]
+
 project.sources += [
   'extension.cpp',
+  'demorecorder.cpp',
   'gamerules.cpp',
   'team.cpp',
 ]
