@@ -13,3 +13,7 @@ build_script:
 - "\"%VS120COMNTOOLS%VsDevCmd.bat\""
 - python ..\configure.py --enable-optimize
 - C:\Python27\Scripts\ambuild.bat
+
+artifacts:
+- path: build\package\**\*
+  type: zip
