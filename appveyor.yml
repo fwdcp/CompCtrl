@@ -15,19 +15,20 @@ build_script:
 - C:\Python27\Scripts\ambuild.bat
 
 after_build:
-- cd %APPVEYOR_BUILD_FOLDER%\build
-- if /i "%APPVEYOR_REPO_TAG%"=="true" (7z a CompCtrl-%APPVEYOR_REPO_TAG_NAME%-windows.zip package\*) else (7z a CompCtrl-%APPVEYOR_REPO_COMMIT%-windows.zip package\*)
+- cd %APPVEYOR_BUILD_FOLDER%\build\package
+- if /i "%APPVEYOR_REPO_TAG%"=="true" (7z a ..\compctrl-%APPVEYOR_REPO_TAG_NAME%-windows.zip *) else (7z a ..\compctrl-%APPVEYOR_REPO_COMMIT%-windows.zip *)
 
 artifacts:
 - path: build\*.zip
 
 deploy:
 - provider: GitHub
+  tag: $(appveyor_repo_tag_name)
   release: CompCtrl $(appveyor_repo_tag_name)
   description: ""
   auth_token:
     secure: 951xPSsvO3PqZJHyMAlFcK9Xj8uLt61JX+J7clJKdf86lrVVZmokpcvTVDglPaQt
-  artifact: build\*.zip
+  artifact: /build\\.*.zip/
   draft: true
   on:
     appveyor_repo_tag: true

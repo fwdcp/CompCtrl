@@ -57,6 +57,7 @@ CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
     'compctrl_version.inc',
     'compctrl_extension.inc',
     'compctrl-matches.inc',
+    'compctrl-strategyperiods.inc',
     'hudnotify.inc',
     'morecolors.inc'
   ]
@@ -66,6 +67,7 @@ CopyFiles('plugins', 'addons/sourcemod/scripting',
   [
     'compctrl-maptimers.sp',
     'compctrl-matches.sp',
+    'compctrl-strategyperiods.sp',
   ]
 )
 

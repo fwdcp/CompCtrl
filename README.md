@@ -3,12 +3,21 @@ CompCtrl
 
 a Team Fortress 2 server plugin that improves competitive play handling
 
+Build Status
+------------
+[![Travis CI](https://travis-ci.org/fwdcp/CompCtrl.svg?branch=develop)](https://travis-ci.org/fwdcp/CompCtrl)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/qjsojaof27c14xks/branch/develop?svg=true)](https://ci.appveyor.com/project/thesupremecommander/compctrl)
+
 Installation
 ------------
 1. Unzip the files for your platform into the `tf` directory.
 
 Changelog
 ---------
+
+### 0.4.2
+* general
+  * include source for strategy periods plugin in package
 
 ### 0.4.1
 * general
