@@ -5,6 +5,9 @@
 
 #include "CDetour/detours.h"
 
+// because detours.h includes extension.h, we have to forward-declare CDetour to avoid issues
+class CDetour;
+
 class DemoRecorderManager
 {
 	// management
