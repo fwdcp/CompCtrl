@@ -14,5 +14,9 @@ build_script:
 - python ..\configure.py --enable-optimize
 - C:\Python27\Scripts\ambuild.bat
 
+after_build:
+- cd %APPVEYOR_BUILD_FOLDER%\build
+- if /i "%APPVEYOR_REPO_TAG%"=="true" (7z a CompCtrl-$APPVEYOR_REPO_TAG_NAME-windows.zip package\*) else (7z a CompCtrl-$APPVEYOR_REPO_COMMIT-windows.zip package\*)
+
 artifacts:
-- path: build\package
+- path: build\*.zip
