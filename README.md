@@ -15,6 +15,10 @@ Installation
 Changelog
 ---------
 
+### 0.4.2
+* general
+  * include source for strategy periods plugin in package
+
 ### 0.4.1
 * general
   * update gamedata
