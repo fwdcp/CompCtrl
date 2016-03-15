@@ -68,20 +68,30 @@
 
 		"Signatures"
 		{
+			"CHLTVDemoRecorder::StartRecording"
+			{
+				"library"	"engine"
+				"windows"	"\x55\x8B\xEC\x81\xEC****\x53\x56\x8B\xF1\x57\x8B\x06"
+				"linux"		"@_ZN17CHLTVDemoRecorder14StartRecordingEPKcb"
+			}
+			"CHLTVDemoRecorder::StopRecording"
+			{
+				"library"	"engine"
+				"windows"	"\x56\x8B\xF1\x80\xBE****\x00\x0F\x84****\x8B\x06\x53"
+				"linux"		"@_ZN17CHLTVDemoRecorder13StopRecordingEv"
+			}
 			"CTeamplayRoundBasedRules::State_Transition"
 			{
 				"library"	"server"
 				"windows"	"\x55\x8B\xEC\x56\x8B\xF1\x8B\x8E****\x8B\x86****"
 				"linux"		"@_ZN24CTeamplayRoundBasedRules16State_TransitionE22gamerules_roundstate_t"
 			}
-
 			"CTeamplayRoundBasedRules::State_Enter"
 			{
 				"library"	"server"
 				"windows"	"\x55\x8B\xEC\x56\x8B\xF1\x8D\x4D\x08\x57"
 				"linux"		"@_ZN24CTeamplayRoundBasedRules11State_EnterE22gamerules_roundstate_t"
 			}
-
 			"CTeamplayRoundBasedRules::State_Leave"
 			{
 				"library"	"server"
