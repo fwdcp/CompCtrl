@@ -37,6 +37,9 @@ public:
 	static void (CHLTVDemoRecorderProxy::*StopRecording_Actual)(void);
 };
 
+void (CHLTVDemoRecorderProxy::* CHLTVDemoRecorderProxy::StartRecording_Actual)(const char *filename, bool bContinuously) = NULL;
+void (CHLTVDemoRecorderProxy::* CHLTVDemoRecorderProxy::StopRecording_Actual)(void) = NULL;
+
 void CHLTVDemoRecorderProxy::StartRecording_Detour(const char *filename, bool bContinuously) {
 	bool newRecording = !this->IsRecording();
 
