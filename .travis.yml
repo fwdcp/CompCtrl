@@ -14,7 +14,7 @@ install:
   install
 - git clone https://github.com/alliedmodders/metamod-source.git -b 1.10-dev $TRAVIS_BUILD_DIR/../metamod-source
 - git clone https://github.com/alliedmodders/hl2sdk.git -b tf2 $TRAVIS_BUILD_DIR/../hl2sdk-tf2
-- git clone https://github.com/alliedmodders/sourcemod.git -b 1.7-dev $TRAVIS_BUILD_DIR/../sourcemod
+- git clone https://github.com/alliedmodders/sourcemod.git -b 1.8-dev $TRAVIS_BUILD_DIR/../sourcemod
   && cd $TRAVIS_BUILD_DIR/../sourcemod && mkdir build && cd build && python ../configure.py
   --sdks=tf2 --no-mysql --enable-optimize && ambuild
 script:
