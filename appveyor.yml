@@ -4,7 +4,7 @@ install:
 - git clone https://github.com/alliedmodders/ambuild.git %APPVEYOR_BUILD_FOLDER%\..\ambuild && cd %APPVEYOR_BUILD_FOLDER%\..\ambuild && python setup.py build && python setup.py install
 - git clone https://github.com/alliedmodders/metamod-source.git -b 1.10-dev %APPVEYOR_BUILD_FOLDER%\..\metamod-source
 - git clone https://github.com/alliedmodders/hl2sdk.git -b tf2 %APPVEYOR_BUILD_FOLDER%\..\hl2sdk-tf2
-- "git clone https://github.com/alliedmodders/sourcemod.git -b 1.7-dev %APPVEYOR_BUILD_FOLDER%\\..\\sourcemod && cd %APPVEYOR_BUILD_FOLDER%\\..\\sourcemod && mkdir build && cd build && \"%VS120COMNTOOLS%VsDevCmd.bat\" && python ..\\configure.py --sdks=tf2 --no-mysql --enable-optimize && C:\\Python27\\Scripts\\ambuild.bat"
+- "git clone https://github.com/alliedmodders/sourcemod.git --recursive -b 1.8-dev %APPVEYOR_BUILD_FOLDER%\\..\\sourcemod && cd %APPVEYOR_BUILD_FOLDER%\\..\\sourcemod && mkdir build && cd build && \"%VS120COMNTOOLS%VsDevCmd.bat\" && python ..\\configure.py --sdks=tf2 --no-mysql --enable-optimize && C:\\Python27\\Scripts\\ambuild.bat"
 
 build_script:
 - cd %APPVEYOR_BUILD_FOLDER%\..\sourcemod\build\\package\\addons\\sourcemod
@@ -28,7 +28,7 @@ deploy:
   description: ""
   auth_token:
     secure: 951xPSsvO3PqZJHyMAlFcK9Xj8uLt61JX+J7clJKdf86lrVVZmokpcvTVDglPaQt
-  artifact: /build\\.*.zip/
+  artifact: /build\\.*\.zip/
   draft: true
   on:
     appveyor_repo_tag: true

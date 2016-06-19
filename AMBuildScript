@@ -94,7 +94,7 @@ class CompCtrlConfig(object):
     if builder.options.mms_path:
       self.mms_root = builder.options.mms_path
     else:
-      self.sm_root = ResolveEnvPath('SOURCEMOD17', 'sourcemod-1.7')
+      self.sm_root = ResolveEnvPath('SOURCEMOD18', 'sourcemod-1.8')
       if not self.sm_root:
         self.sm_root = ResolveEnvPath('SOURCEMOD', 'sourcemod')
       if not self.sm_root:
