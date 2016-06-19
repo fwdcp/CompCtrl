@@ -91,8 +91,8 @@ class CompCtrlConfig(object):
         raise Exception('Could not find a source copy of Metamod:Source')
     self.mms_root = Normalize(self.mms_root)
 
-    if builder.options.mms_path:
-      self.mms_root = builder.options.mms_path
+    if builder.options.sm_path:
+      self.sm_root = builder.options.sm_path
     else:
       self.sm_root = ResolveEnvPath('SOURCEMOD18', 'sourcemod-1.8')
       if not self.sm_root:
@@ -102,7 +102,7 @@ class CompCtrlConfig(object):
 
     if not self.sm_root:
       raise Exception('Could not find a source copy of SourceMod')
-    self.mms_root = Normalize(self.mms_root)
+    self.sm_root = Normalize(self.sm_root)
 
   def configure(self):
     builder.AddConfigureFile('pushbuild.txt')
