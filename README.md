@@ -15,6 +15,10 @@ Installation
 Changelog
 ---------
 
+### 0.4.3
+* general
+  * recompile with latest SourceMod version
+
 ### 0.4.2
 * general
   * include source for strategy periods plugin in package
