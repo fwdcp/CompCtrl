@@ -41,18 +41,18 @@
 			}
 			"CTFGameRules::CheckWinLimit"
 			{
-				"windows"	"218"
-				"linux"		"220"
+				"windows"	"217"
+				"linux"		"219"
 			}
 			"CTFGameRules::RoundRespawn"
 			{
-				"windows"	"223"
-				"linux"		"225"
+				"windows"	"222"
+				"linux"		"224"
 			}
 			"CTFGameRules::CleanUpMap"
 			{
-				"windows"	"224"
-				"linux"		"226"
+				"windows"	"223"
+				"linux"		"225"
 			}
 			"CTFTeam::GetTeamNumber"
 			{
