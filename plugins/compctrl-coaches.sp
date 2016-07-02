@@ -9,7 +9,7 @@
 
 #define OBS_MODE_IN_EYE 4
 
-bool g_Coaches[MAX_PLAYERS + 1];
+bool g_Coaches[MAXPLAYERS + 1];
 
 public Plugin myinfo =
 {
