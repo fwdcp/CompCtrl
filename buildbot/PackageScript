@@ -65,6 +65,7 @@ CopyFiles('plugins/include', 'addons/sourcemod/scripting/include',
 
 CopyFiles('plugins', 'addons/sourcemod/scripting',
   [
+    'compctrl-coaches.sp',
     'compctrl-maptimers.sp',
     'compctrl-matches.sp',
     'compctrl-strategyperiods.sp',
