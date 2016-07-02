@@ -54,6 +54,11 @@
 				"windows"	"223"
 				"linux"		"225"
 			}
+			"CTFPlayer::ForceRespawn"
+			{
+				"windows"	"326"
+				"linux"		"327"
+			}
 			"CTFTeam::GetTeamNumber"
 			{
 				"windows"	"190"

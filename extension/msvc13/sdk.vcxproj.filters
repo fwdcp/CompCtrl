@@ -18,24 +18,42 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\demorecorder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gamerules.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\team.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\extension.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="$(SOURCEMOD_DEV)\public\smsdk_ext.cpp">
       <Filter>SourceMod SDK</Filter>
     </ClCompile>
-    <ClCompile Include="..\gamerules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\team.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\demorecorder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\demorecorder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gamerules.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\team.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\extension.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\smsdk_config.h">
@@ -43,18 +61,6 @@
     </ClInclude>
     <ClInclude Include="$(SOURCEMOD_DEV)\public\smsdk_ext.h">
       <Filter>SourceMod SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\version.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gamerules.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\team.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\demorecorder.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

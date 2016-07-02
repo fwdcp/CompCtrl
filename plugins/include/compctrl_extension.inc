@@ -190,6 +190,14 @@ forward Action CompCtrl_OnRestartTournament();
 forward Action CompCtrl_OnCheckWinLimit(bool &allowEnd, bool &returnValue);
 
 /**
+ * @brief				When ForceRespawn in CTFPlayer is called by the game.
+ *
+ * @param client		The player that is being respawned.
+ * @return				Plugin_Continue to allow the respawn, Plugin_Changed or above to prevent the respawn.
+ */
+forward Action CompCtrl_OnRespawn(int client);
+
+/**
  * @brief				When ResetScores in CTFTeam is called by the game.
  *
  * @param team			The team that is having its scores reset.

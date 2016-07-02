@@ -22,6 +22,7 @@ IForward *g_BetweenRoundsEndForward = NULL;
 IForward *g_BetweenRoundsThinkForward = NULL;
 IForward *g_RestartTournamentForward = NULL;
 IForward *g_CheckWinLimitForward = NULL;
+IForward *g_RespawnForward = NULL;
 IForward *g_ResetTeamScoresForward = NULL;
 
 bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
@@ -46,6 +47,7 @@ bool CompCtrl::SDK_OnLoad(char *error, size_t maxlength, bool late) {
 void CompCtrl::SDK_OnUnload() {
 	g_DemoRecorderManager.Disable();
 	g_GameRulesManager.Disable();
+	g_PlayerManager.Disable();
 	g_TeamManager.Disable();
 
 	forwards->ReleaseForward(g_StartRecordingForward);
@@ -58,6 +60,7 @@ void CompCtrl::SDK_OnUnload() {
 	forwards->ReleaseForward(g_BetweenRoundsThinkForward);
 	forwards->ReleaseForward(g_RestartTournamentForward);
 	forwards->ReleaseForward(g_CheckWinLimitForward);
+	forwards->ReleaseForward(g_RespawnForward);
 	forwards->ReleaseForward(g_ResetTeamScoresForward);
 }
 
@@ -78,12 +81,15 @@ void CompCtrl::SDK_OnAllLoaded() {
 		g_BetweenRoundsThinkForward = forwards->CreateForward("CompCtrl_OnBetweenRoundsThink", ET_Hook, 0, NULL);
 		g_RestartTournamentForward = forwards->CreateForward("CompCtrl_OnRestartTournament", ET_Hook, 0, NULL);
 		g_CheckWinLimitForward = forwards->CreateForward("CompCtrl_OnCheckWinLimit", ET_Hook, 2, NULL, Param_CellByRef, Param_CellByRef);
+		g_RespawnForward = forwards->CreateForward("CompCtrl_OnRespawn", ET_Hook, 1, NULL, Param_Cell);
 		g_ResetTeamScoresForward = forwards->CreateForward("CompCtrl_OnResetTeamScores", ET_Hook, 1, NULL, Param_Cell);
 
 		g_DemoRecorderManager.Enable();
 		g_GameRulesManager.Enable();
+		g_PlayerManager.Enable();
 		g_TeamManager.Enable();
 
+		g_pSDKHooks->AddEntityListener(&g_PlayerManager);
 		g_pSDKHooks->AddEntityListener(&g_TeamManager);
 	}
 }
