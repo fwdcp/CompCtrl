@@ -32,9 +32,7 @@ void PlayerManager::Hook_CTFPlayer_ForceRespawn() {
 	CBaseEntity *player = META_IFACEPTR(CBaseEntity);
 
 	if (player) {
-		int client = player->entindex();
-
-		g_RespawnForward->PushCell(client);
+		g_RespawnForward->PushCell(gamehelpers->EntityToBCompatRef(player));
 
 		cell_t result = 0;
 
