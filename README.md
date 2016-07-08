@@ -15,6 +15,10 @@ Installation
 Changelog
 ---------
 
+### 0.4.5
+* general
+  * update gamedata
+
 ### 0.4.4
 * general
   * update gamedata
