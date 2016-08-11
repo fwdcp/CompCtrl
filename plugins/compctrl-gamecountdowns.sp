@@ -3,6 +3,8 @@
 #include <compctrl_version>
 #include <sdktools_gamerules>
 
+float g_TargetTime = -1.0;
+
 ConVar g_AutoRun;
 ConVar g_Managed;
 ConVar g_Paused;
@@ -31,12 +33,12 @@ public void OnGameFrame() {
 }
 
 void ManageRestartTimer() {
-	RoundState state = GameRules_GetRoundState();
-
     if (GameRules_GetProp("m_bInWaitingForPlayers") && GameRules_GetPropFloat("m_flRestartRoundTime") > 0.0) {
         if (g_Paused.BoolValue) {
-            GameRules_SetPropFloat("m_flRestartRoundTime", GetGameTime() + g_Time.FloatValue, _, true);
+            g_TargetTime = GetGameTime() + g_Time.FloatValue;
         }
+
+        GameRules_SetPropFloat("m_flRestartRoundTime", g_TargetTime, _, true);
 
         if (g_AutoRun.BoolValue && g_Paused.BoolValue) {
             g_Paused.BoolValue = false;
@@ -44,5 +46,7 @@ void ManageRestartTimer() {
     }
     else {
         g_Paused.BoolValue = true;
+
+        g_TargetTime = -1.0;
     }
 }
