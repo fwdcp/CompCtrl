@@ -26,6 +26,11 @@ public void OnPluginStart() {
 }
 
 public Action Command_BecomeCoach(int client, int args) {
+	if (!IsClientInGame(client) || (GetClientTeam(client) != view_as<int>(TFTeam_Red) && GetClientTeam(client) != view_as<int>(TFTeam_Blue))) {
+		CReplyToCommand(client, "{green}[CompCtrl]{default} You cannot become a team coach!");
+		return Plugin_Handled;
+	}
+
 	if (!g_Coaches[client]) {
 		g_Coaches[client] = true;
 
@@ -41,9 +46,16 @@ public Action Command_BecomeCoach(int client, int args) {
 	else {
 		CReplyToCommand(client, "{green}[CompCtrl]{default} You are already a team coach!");
 	}
+
+	return Plugin_Handled;
 }
 
 public Action Command_BecomePlayer(int client, int args) {
+	if (!IsClientInGame(client) || (GetClientTeam(client) != view_as<int>(TFTeam_Red) && GetClientTeam(client) != view_as<int>(TFTeam_Blue))) {
+		CReplyToCommand(client, "{green}[CompCtrl]{default} You cannot become a player!");
+		return Plugin_Handled;
+	}
+
 	if (g_Coaches[client]) {
 		g_Coaches[client] = false;
 
@@ -54,6 +66,8 @@ public Action Command_BecomePlayer(int client, int args) {
 	else {
 		CReplyToCommand(client, "{green}[CompCtrl]{default} You are already a player!");
 	}
+
+	return Plugin_Handled;
 }
 
 public void OnClientConnected(int client) {
