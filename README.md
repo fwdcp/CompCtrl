@@ -113,6 +113,12 @@ Modules
 **Notes:**
 * Any commands prefixed with `sm_` may also be used in chat via `/` or `!` - for example, `/ready` or `!ready` in chat is equivalent to `sm_ready` in the console.
 
+### Game Countdowns
+*manages start countdowns for competitive games*
+
+#### Console Variables
+`compctrl_gamecountdowns_managed` determines whether the countdowns are managed - if not, game countdowns are run normally by the game. `compctrl_gamecountdowns_time` determines how long the countdowns will run, overriding the game's default countdown length of 5 or 10 seconds. `compctrl_gamecountdowns_paused` determines if the current countdown (if any) is paused - if a countdown is running and is paused, the countdown will be reset to full length. `compctrl_gamecountdowns_autorun` determines if the countdowns should automatically run when triggered by the game, though their length will still be customized and can still be paused/unpaused via the other console variables.
+
 ### Map Timers
 *manages the map timer*
 
