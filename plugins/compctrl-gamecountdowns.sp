@@ -3,6 +3,7 @@
 #include <compctrl_version>
 #include <sdktools_gamerules>
 
+bool g_AutoRunActivated = false;
 float g_TargetTime = -1.0;
 
 ConVar g_AutoRun;
@@ -40,13 +41,15 @@ void ManageRestartTimer() {
 
         GameRules_SetPropFloat("m_flRestartRoundTime", g_TargetTime, _, true);
 
-        if (g_AutoRun.BoolValue && g_Paused.BoolValue) {
+        if (g_AutoRun.BoolValue && !g_AutoRunActivated) {
+            g_AutoRunActivated = true;
             g_Paused.BoolValue = false;
         }
     }
     else {
         g_Paused.BoolValue = true;
 
+        g_AutoRunActivated = false;
         g_TargetTime = -1.0;
     }
 }
