@@ -3,6 +3,7 @@
 #include <compctrl_version>
 #include <compctrl_extension>
 #include <morecolors>
+#include <sdkhooks>
 #include <tf2>
 
 #pragma newdecls required
@@ -95,12 +96,12 @@ public Action CompCtrl_OnRespawn(int client) {
 
 public void Hook_OnPlayerManagerPostThink(int entity) {
 	for (int i = 1; i <= MaxClients; i++) {
-		if (!IsClientInGame(client) || (GetClientTeam(client) != view_as<int>(TFTeam_Red) && GetClientTeam(client) != view_as<int>(TFTeam_Blue))) {
-			g_Coaches[client] = false;
+		if (!IsClientInGame(i) || (GetClientTeam(i) != view_as<int>(TFTeam_Red) && GetClientTeam(i) != view_as<int>(TFTeam_Blue))) {
+			g_Coaches[i] = false;
 		}
 
-		if (g_Coaches[client]) {
-			SetEntProp(entity, Prop_Send, "m_bConnected", 0, _, client);
-		}		
+		if (g_Coaches[i]) {
+			SetEntProp(entity, Prop_Send, "m_bConnected", 0, _, i);
+		}
 	}
 }
