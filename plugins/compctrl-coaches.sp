@@ -97,6 +97,10 @@ public Action CompCtrl_OnRespawn(int client) {
 public void Hook_OnPlayerManagerPostThink(int entity) {
 	for (int i = 1; i <= MaxClients; i++) {
 		if (!IsClientInGame(i) || (GetClientTeam(i) != view_as<int>(TFTeam_Red) && GetClientTeam(i) != view_as<int>(TFTeam_Blue))) {
+			if (g_Coaches[i] && IsClientInGame(i)) {
+				CPrintToChat(i, "{green}[CompCtrl]{default} Your coach status was removed.");
+			}
+
 			g_Coaches[i] = false;
 		}
 
