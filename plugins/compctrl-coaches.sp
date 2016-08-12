@@ -25,6 +25,14 @@ public void OnPluginStart() {
 	RegConsoleCmd("sm_becomeplayer", Command_BecomePlayer, "become player for current team");
 }
 
+public void OnMapStart() {
+	int playerManager = FindEntityByClassname(-1, "tf_player_manager");
+
+	if (playerManager != -1) {
+		SDKHook(playerManager, SDKHook_PostThink, Hook_OnPlayerManagerPostThink);
+	}
+}
+
 public Action Command_BecomeCoach(int client, int args) {
 	if (!IsClientInGame(client) || (GetClientTeam(client) != view_as<int>(TFTeam_Red) && GetClientTeam(client) != view_as<int>(TFTeam_Blue))) {
 		CReplyToCommand(client, "{green}[CompCtrl]{default} You cannot become a team coach!");
@@ -83,4 +91,16 @@ public Action CompCtrl_OnRespawn(int client) {
 	SetEntProp(client, Prop_Send, "m_iDesiredPlayerClass", view_as<int>(TFClass_Unknown));
 
 	return Plugin_Stop;
+}
+
+public void Hook_OnPlayerManagerPostThink(int entity) {
+	for (int i = 1; i <= MaxClients; i++) {
+		if (!IsClientInGame(client) || (GetClientTeam(client) != view_as<int>(TFTeam_Red) && GetClientTeam(client) != view_as<int>(TFTeam_Blue))) {
+			g_Coaches[client] = false;
+		}
+
+		if (g_Coaches[client]) {
+			SetEntProp(entity, Prop_Send, "m_bConnected", 0, _, client);
+		}		
+	}
 }
