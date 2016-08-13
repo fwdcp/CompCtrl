@@ -159,11 +159,18 @@ public Action Command_CancelMatch(int client, int args) {
 }
 
 public Action Command_MatchStatus(int client, int args) {
-    if (g_InMatch) {
+    if (!g_InMatch) {
         CPrintToChat(client, "{green}[CompCtrl]{default} No match currently occurring.");
+        return Plugin_Handled;
     }
-    else {
-        GetCurrentRoundConfig();
+
+    GetCurrentRoundConfig();
+
+    char periodName[256];
+    g_MatchConfig.GetString("name", periodName, sizeof(periodName), "period");
+
+    if (g_InPeriod) {
+        CPrintToChat(client, "{green}[CompCtrl]{default} Currently in {olive}%s{default}.", periodName);
 
         int currentRound = g_RoundsPlayed + 1;
 
@@ -174,26 +181,26 @@ public Action Command_MatchStatus(int client, int args) {
 
                 switch (GetStopwatchStatus()) {
                     case StopwatchStatus_SetTarget: {
-                        CPrintToChat(client, "{green}[CompCtrl]{default} Period status: set part of round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, set part of round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
                     }
                     case StopwatchStatus_ChaseTarget: {
-                        CPrintToChat(client, "{green}[CompCtrl]{default} Period status: chase part of round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, chase part of round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
                     }
                     default: {
-                        CPrintToChat(client, "{green}[CompCtrl]{default} Period status: round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
                     }
                 }
             }
             else {
                 switch (GetStopwatchStatus()) {
                     case StopwatchStatus_SetTarget: {
-                        CPrintToChat(client, "{green}[CompCtrl]{default} Period status: set part of round {olive}%i{default}.", currentRound);
+                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, set part of round {olive}%i{default}.", periodName, currentRound);
                     }
                     case StopwatchStatus_ChaseTarget: {
-                        CPrintToChat(client, "{green}[CompCtrl]{default} Period status: chase part of round {olive}%i{default}.", currentRound);
+                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, chase part of round {olive}%i{default}.", periodName, currentRound);
                     }
                     default: {
-                        CPrintToChat(client, "{green}[CompCtrl]{default} Period status: round {olive}%i{default}.", currentRound);
+                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, round {olive}%i{default}.", periodName, currentRound);
                     }
                 }
             }
@@ -203,20 +210,23 @@ public Action Command_MatchStatus(int client, int args) {
                 int timeLeft;
                 GetMapTimeLeft(timeLeft);
 
-                CPrintToChat(client, "{green}[CompCtrl]{default} Period status: round {olive}%i{default} with {olive}%i:%02i{default} remaining.", currentRound, timeLeft / 60, timeLeft % 60);
+                CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
             }
             else {
-                CPrintToChat(client, "{green}[CompCtrl]{default} Period status: round {olive}%i{default}.", currentRound);
+                CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, round {olive}%i{default}.", periodName, currentRound);
             }
         }
-
-        char redName[256];
-        g_RedTeamName.GetString(redName, sizeof(redName));
-        char bluName[256];
-        g_BlueTeamName.GetString(bluName, sizeof(bluName));
-
-        CPrintToChat(client, "{green}[CompCtrl]{default} Current score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
     }
+    else {
+        CPrintToChat(client, "{green}[CompCtrl]{default} Period status: awaiting start of {olive}%s{default}.", periodName);
+    }
+
+    char redName[256];
+    g_RedTeamName.GetString(redName, sizeof(redName));
+    char bluName[256];
+    g_BlueTeamName.GetString(bluName, sizeof(bluName));
+
+    CPrintToChat(client, "{green}[CompCtrl]{default} Current score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
 
     return Plugin_Handled;
 }
