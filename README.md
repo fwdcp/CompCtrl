@@ -113,6 +113,12 @@ Modules
 **Notes:**
 * Any commands prefixed with `sm_` may also be used in chat via `/` or `!` - for example, `/ready` or `!ready` in chat is equivalent to `sm_ready` in the console.
 
+### Coaches
+*adds abilities for players to act as coaches*
+
+#### Console Commands
+`sm_becomecoach`, if used while a player is on a team, places them in a coach role where they are only able to spectate other teammates. `sm_becomeplayer` removes the coach status and allows the player to play normally.
+
 ### Game Countdowns
 *manages start countdowns for competitive games*
 

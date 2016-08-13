@@ -17,6 +17,7 @@ project.sources += [
   'extension.cpp',
   'demorecorder.cpp',
   'gamerules.cpp',
+  'player.cpp',
   'team.cpp',
 ]
 

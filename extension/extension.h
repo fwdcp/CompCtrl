@@ -7,6 +7,7 @@
 
 #include "demorecorder.h"
 #include "gamerules.h"
+#include "player.h"
 #include "team.h"
 
 class CompCtrl : public SDKExtension
@@ -49,6 +50,7 @@ extern IForward *g_BetweenRoundsEndForward;
 extern IForward *g_BetweenRoundsThinkForward;
 extern IForward *g_RestartTournamentForward;
 extern IForward *g_CheckWinLimitForward;
+extern IForward *g_RespawnForward;
 extern IForward *g_ResetTeamScoresForward;
 
 #endif // _INCLUDE_COMPCTRL_H_
