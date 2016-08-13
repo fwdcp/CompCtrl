@@ -13,24 +13,24 @@ ConVar g_Time;
 
 public Plugin myinfo =
 {
-	name = "CompCtrl Game Countdowns",
-	author = "Forward Command Post",
-	description = "a plugin to manage start countdowns for competitive games",
-	version = COMPCTRL_VERSION,
-	url = "http://github.com/fwdcp/CompCtrl/"
+    name = "CompCtrl Game Countdowns",
+    author = "Forward Command Post",
+    description = "a plugin to manage start countdowns for competitive games",
+    version = COMPCTRL_VERSION,
+    url = "http://github.com/fwdcp/CompCtrl/"
 };
 
 public void OnPluginStart() {
-	g_AutoRun = CreateConVar("compctrl_gamecountdowns_autorun", "0", "automatically run game countdowns");
-	g_Managed = CreateConVar("compctrl_gamecountdowns_managed", "0", "enables management of game countdowns");
-	g_Paused = CreateConVar("compctrl_gamecountdowns_paused", "1", "whether the countdown is paused");
-	g_Time = CreateConVar("compctrl_gamecountdowns_time", "60", "the amount of time that game countdowns should run");
+    g_AutoRun = CreateConVar("compctrl_gamecountdowns_autorun", "0", "automatically run game countdowns");
+    g_Managed = CreateConVar("compctrl_gamecountdowns_managed", "0", "enables management of game countdowns");
+    g_Paused = CreateConVar("compctrl_gamecountdowns_paused", "1", "whether the countdown is paused");
+    g_Time = CreateConVar("compctrl_gamecountdowns_time", "60", "the amount of time that game countdowns should run");
 }
 
 public void OnGameFrame() {
-	if (g_Managed.BoolValue) {
-		ManageRestartTimer();
-	}
+    if (g_Managed.BoolValue) {
+        ManageRestartTimer();
+    }
 }
 
 void ManageRestartTimer() {
