@@ -14,7 +14,7 @@ bool g_Coaches[MAXPLAYERS + 1];
 
 public Plugin myinfo =
 {
-    name = "CompCtrl Coach Support",
+    name = "CompCtrl Coaches",
     author = "Forward Command Post",
     description = "a plugin to allow players to assume a coach role",
     version = COMPCTRL_VERSION,
