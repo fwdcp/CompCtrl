@@ -69,6 +69,7 @@ CopyFiles('plugins', 'addons/sourcemod/scripting',
     'compctrl-gamecountdowns.sp',
     'compctrl-maptimers.sp',
     'compctrl-matches.sp',
+    'compctrl-playeraliases.sp',
     'compctrl-strategyperiods.sp',
   ]
 )
