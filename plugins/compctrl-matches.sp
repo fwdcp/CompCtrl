@@ -48,8 +48,8 @@ public Plugin myinfo =
 };
 
 public void OnPluginStart() {
-    RegAdminCmd("sm_startmatch", Command_StartMatch, ADMFLAG_CONFIG, "sets up and starts a match regulated by CompCtrl with the specified config", "compctrl");
-    RegAdminCmd("sm_cancelmatch", Command_CancelMatch, ADMFLAG_CONFIG, "cancels and stops a CompCtrl match", "compctrl");
+    RegAdminCmd("sm_startmatch", Command_StartMatch, ADMFLAG_CONFIG, "sets up and starts a match with the specified config");
+    RegAdminCmd("sm_cancelmatch", Command_CancelMatch, ADMFLAG_CONFIG, "cancels and stops a match");
 
     RegConsoleCmd("sm_matchstatus", Command_MatchStatus, "get the status of the current match");
 
