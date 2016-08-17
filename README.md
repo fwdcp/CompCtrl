@@ -15,6 +15,18 @@ Installation
 Changelog
 ---------
 
+### 0.5.0
+* coaches
+  * release initial version of coaches module
+* game countdowns
+  * release initial version of game countdowns module
+* matches
+  * fix match status command
+  * condense & update ozfortress configs
+  * add Insomnia configs
+* player aliases
+  * release initial version of player aliases module
+
 ### 0.4.5
 * general
   * update gamedata
@@ -113,6 +125,18 @@ Modules
 **Notes:**
 * Any commands prefixed with `sm_` may also be used in chat via `/` or `!` - for example, `/ready` or `!ready` in chat is equivalent to `sm_ready` in the console.
 
+### Coaches
+*adds abilities for players to act as coaches*
+
+#### Console Commands
+`sm_becomecoach`, if used while a player is on a team, places them in a coach role where they are only able to spectate other teammates. `sm_becomeplayer` removes the coach status and allows the player to play normally.
+
+### Game Countdowns
+*manages start countdowns for competitive games*
+
+#### Console Variables
+`compctrl_gamecountdowns_managed` determines whether the countdowns are managed - if not, game countdowns are run normally by the game. `compctrl_gamecountdowns_time` determines how long the countdowns will run, overriding the game's default countdown length of 5 or 10 seconds. `compctrl_gamecountdowns_paused` determines if the current countdown (if any) is paused - if a countdown is running and is paused, the countdown will be reset to full length. `compctrl_gamecountdowns_autorun` determines if the countdowns should automatically run when triggered by the game, though their length will still be customized and can still be paused/unpaused via the other console variables.
+
 ### Map Timers
 *manages the map timer*
 
@@ -123,19 +147,19 @@ Modules
 *manages the flow of a match*
 
 #### Admin Commands
-
-##### Match Management Commands
 `sm_startmatch <config>` is used to start a match with a specified config. The command requires the name of a match config file (without the `.cfg` extension) that will be used to regulate the match. `sm_cancelmatch` cancels any match that may be in progress.
 
 #### Console Commands
-
-##### Match Status Command
 `sm_matchstatus` will display the current status of the ongoing match.
 
 #### Configuration Files
-
-##### Match Configurations
 All of the files within the `configs/compctrl/matches` may be used by the `sm_startmatch` command. You may add, remove, or modify configs in this folder as desired (but if you do, make sure to back up your configs in case they are overwritten during a CompCtrl update).
+
+### Player Aliases
+*enforces player aliases*
+
+#### Admin Commands
+`sm_setalias <steamid> <alias>` will set the enforced alias for a user, while `sm_removealias <steamid>` will remove it.
 
 ### Strategy Periods
 *adds time between rounds to strategize*

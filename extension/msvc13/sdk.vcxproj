@@ -1799,19 +1799,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\demorecorder.cpp" />
+    <ClCompile Include="..\gamerules.cpp" />
+    <ClCompile Include="..\player.cpp" />
+    <ClCompile Include="..\team.cpp" />
     <ClCompile Include="..\extension.cpp" />
     <ClCompile Include="$(SOURCEMOD_DEV)\public\smsdk_ext.cpp" />
-    <ClCompile Include="..\gamerules.cpp" />
-    <ClCompile Include="..\team.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\demorecorder.h" />
-    <ClInclude Include="..\extension.h" />
     <ClInclude Include="..\gamerules.h" />
+    <ClInclude Include="..\player.h" />
+    <ClInclude Include="..\team.h" />
+    <ClInclude Include="..\extension.h" />
+    <ClInclude Include="..\version.h" />
     <ClInclude Include="..\sdk\smsdk_config.h" />
     <ClInclude Include="$(SOURCEMOD_DEV)\public\smsdk_ext.h" />
-    <ClInclude Include="..\team.h" />
-    <ClInclude Include="..\version.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\version.rc" />
