@@ -38,7 +38,7 @@ public void OnClientPostAdminCheck(int client) {
     }
 }
 
-public Action Command_SetAlias(int args) {
+public Action Command_SetAlias(int client, int args) {
     char steamID[32];
     GetCmdArg(1, steamID, sizeof(steamID));
 
@@ -59,7 +59,7 @@ public Action Command_SetAlias(int args) {
     }
 }
 
-public Action Command_RemoveAlias(int args) {
+public Action Command_RemoveAlias(int client, int args) {
     char steamID[32];
     GetCmdArg(1, steamID, sizeof(steamID));
 
