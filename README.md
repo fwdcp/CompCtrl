@@ -15,6 +15,18 @@ Installation
 Changelog
 ---------
 
+### 0.5.0
+* coaches
+  * release initial version of coaches module
+* game countdowns
+  * release initial version of game countdowns module
+* matches
+  * fix match status command
+  * condense & update ozfortress configs
+  * add Insomnia configs
+* player aliases
+  * release initial version of player aliases module
+
 ### 0.4.5
 * general
   * update gamedata
