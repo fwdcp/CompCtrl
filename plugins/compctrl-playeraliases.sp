@@ -1,6 +1,7 @@
 #include <sourcemod>
 
 #include <compctrl_version>
+#include <sdktools>
 
 #pragma newdecls required
 
