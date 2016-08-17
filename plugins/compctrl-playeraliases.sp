@@ -46,6 +46,17 @@ public Action Command_SetAlias(int args) {
     GetCmdArg(2, alias, sizeof(alias));
 
     playerAliases.SetString(steamID, alias, true);
+
+    for (int i = 1; i <= MaxClients; i++) {
+        if (IsClientConnected(i) && !IsFakeClient(i)) {
+            char playerSteamID[32];
+            if (GetClientAuthId(i, AuthId_SteamID64, playerSteamID, sizeof(playerSteamID))) {
+                if (StrEqual(steamID, playerSteamID)) {
+                    SetClientName(i, alias);
+                }
+            }
+        }
+    }
 }
 
 public Action Command_RemoveAlias(int args) {
