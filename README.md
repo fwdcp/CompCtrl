@@ -143,6 +143,12 @@ Modules
 #### Configuration Files
 All of the files within the `configs/compctrl/matches` may be used by the `sm_startmatch` command. You may add, remove, or modify configs in this folder as desired (but if you do, make sure to back up your configs in case they are overwritten during a CompCtrl update).
 
+### Player aliases
+*enforces player aliases*
+
+#### Admin Commands
+`sm_setalias <steamid> <alias>` will set the enforced alias for a user, while `sm_removealias <steamid>` will remove it.
+
 ### Strategy Periods
 *adds time between rounds to strategize*
 
