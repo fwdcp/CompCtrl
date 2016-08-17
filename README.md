@@ -15,6 +15,18 @@ Installation
 Changelog
 ---------
 
+### 0.5.0
+* coaches
+  * release initial version of coaches module
+* game countdowns
+  * release initial version of game countdowns module
+* matches
+  * fix match status command
+  * condense & update ozfortress configs
+  * add Insomnia configs
+* player aliases
+  * release initial version of player aliases module
+
 ### 0.4.5
 * general
   * update gamedata
@@ -143,7 +155,7 @@ Modules
 #### Configuration Files
 All of the files within the `configs/compctrl/matches` may be used by the `sm_startmatch` command. You may add, remove, or modify configs in this folder as desired (but if you do, make sure to back up your configs in case they are overwritten during a CompCtrl update).
 
-### Player aliases
+### Player Aliases
 *enforces player aliases*
 
 #### Admin Commands
