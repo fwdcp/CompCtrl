@@ -17,8 +17,8 @@ public Plugin myinfo =
 StringMap playerAliases;
 
 public void OnPluginStart() {
-    RegAdminCmd("compctrl_playeraliases_set", Command_SetAlias, ADMFLAG_CONFIG, "sets an enforced player alias");
-    RegAdminCmd("compctrl_playeraliases_remove", Command_RemoveAlias, ADMFLAG_CONFIG, "removes an enforced player alias");
+    RegAdminCmd("sm_setalias", Command_SetAlias, ADMFLAG_CONFIG, "sets an enforced player alias");
+    RegAdminCmd("sm_removealias", Command_RemoveAlias, ADMFLAG_CONFIG, "removes an enforced player alias");
 
     playerAliases = new StringMap();
 
