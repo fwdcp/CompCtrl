@@ -143,7 +143,7 @@ Modules
 #### Configuration Files
 All of the files within the `configs/compctrl/matches` may be used by the `sm_startmatch` command. You may add, remove, or modify configs in this folder as desired (but if you do, make sure to back up your configs in case they are overwritten during a CompCtrl update).
 
-### Player aliases
+### Player Aliases
 *enforces player aliases*
 
 #### Admin Commands
