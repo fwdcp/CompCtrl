@@ -135,18 +135,12 @@ Modules
 *manages the flow of a match*
 
 #### Admin Commands
-
-##### Match Management Commands
 `sm_startmatch <config>` is used to start a match with a specified config. The command requires the name of a match config file (without the `.cfg` extension) that will be used to regulate the match. `sm_cancelmatch` cancels any match that may be in progress.
 
 #### Console Commands
-
-##### Match Status Command
 `sm_matchstatus` will display the current status of the ongoing match.
 
 #### Configuration Files
-
-##### Match Configurations
 All of the files within the `configs/compctrl/matches` may be used by the `sm_startmatch` command. You may add, remove, or modify configs in this folder as desired (but if you do, make sure to back up your configs in case they are overwritten during a CompCtrl update).
 
 ### Strategy Periods
