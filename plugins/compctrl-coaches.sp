@@ -30,7 +30,7 @@ public void OnMapStart() {
     int playerManager = FindEntityByClassname(-1, "tf_player_manager");
 
     if (playerManager != -1) {
-        SDKHook(playerManager, SDKHook_PostThink, Hook_OnPlayerManagerPostThink);
+        SDKHook(playerManager, SDKHook_ThinkPost, Hook_OnPlayerManagerThinkPost);
     }
 }
 
@@ -94,7 +94,7 @@ public Action CompCtrl_OnRespawn(int client) {
     return Plugin_Stop;
 }
 
-public void Hook_OnPlayerManagerPostThink(int entity) {
+public void Hook_OnPlayerManagerThinkPost(int entity) {
     for (int i = 1; i <= MaxClients; i++) {
         if (!IsClientInGame(i) || (GetClientTeam(i) != view_as<int>(TFTeam_Red) && GetClientTeam(i) != view_as<int>(TFTeam_Blue))) {
             if (g_Coaches[i] && IsClientInGame(i)) {
