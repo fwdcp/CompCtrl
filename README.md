@@ -15,6 +15,10 @@ Installation
 Changelog
 ---------
 
+### 0.5.1
+* coaches
+  * fix coaches appearing on scoreboard
+
 ### 0.5.0
 * coaches
   * release initial version of coaches module
