@@ -12,10 +12,10 @@
 #define COMPCTRL_V_REV      0
 #define COMPCTRL_V_CSET     "0"
 #define COMPCTRL_V_MAJOR    0               /**< CompCtrl Major version */
-#define COMPCTRL_V_MINOR    4               /**< CompCtrl Minor version */
-#define COMPCTRL_V_RELEASE  5               /**< CompCtrl Release version */
+#define COMPCTRL_V_MINOR    5               /**< CompCtrl Minor version */
+#define COMPCTRL_V_RELEASE  1               /**< CompCtrl Release version */
 
-#define COMPCTRL_VERSION    "0.4.5-manual"  /**< CompCtrl version string (major.minor.release-tag) */
+#define COMPCTRL_VERSION    "0.5.1-manual"  /**< CompCtrl version string (major.minor.release-tag) */
 #endif
 
 #pragma newdecls optional
