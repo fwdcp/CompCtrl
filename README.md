@@ -15,6 +15,10 @@ Installation
 Changelog
 ---------
 
+### 0.5.2
+* matches
+  * update Insomnia configs
+
 ### 0.5.1
 * coaches
   * fix coaches appearing on scoreboard
