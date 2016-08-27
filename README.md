@@ -15,6 +15,10 @@ Installation
 Changelog
 ---------
 
+### 0.5.3
+* matches
+  * fix time left appearing incorrect
+
 ### 0.5.2
 * matches
   * update Insomnia configs
