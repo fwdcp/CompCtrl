@@ -176,8 +176,7 @@ public Action Command_MatchStatus(int client, int args) {
 
         if (GameRules_GetProp("m_bStopWatch", 1)) {
             if (g_MatchConfig.GetNum("timelimit", 0) > 0) {
-                int timeLeft;
-                GetMapTimeLeft(timeLeft);
+                int timeLeft = RoundToFloor(GetTimeLeft());
 
                 switch (GetStopwatchStatus()) {
                     case StopwatchStatus_SetTarget: {
@@ -207,8 +206,7 @@ public Action Command_MatchStatus(int client, int args) {
         }
         else {
             if (g_MatchConfig.GetNum("timelimit", 0) > 0) {
-                int timeLeft;
-                GetMapTimeLeft(timeLeft);
+                int timeLeft = RoundToFloor(GetTimeLeft());
 
                 CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
             }
@@ -272,8 +270,7 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
 
         if (GameRules_GetProp("m_bStopWatch", 1)) {
             if (g_MatchConfig.GetNum("timelimit", 0) > 0) {
-                int timeLeft;
-                GetMapTimeLeft(timeLeft);
+                int timeLeft = RoundToFloor(GetTimeLeft());
 
                 switch (GetStopwatchStatus()) {
                     case StopwatchStatus_SetTarget: {
@@ -303,8 +300,7 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
         }
         else {
             if (g_MatchConfig.GetNum("timelimit", 0) > 0) {
-                int timeLeft;
-                GetMapTimeLeft(timeLeft);
+                int timeLeft = RoundToFloor(GetTimeLeft());
 
                 CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
             }
@@ -321,8 +317,7 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
         CPrintToChatAll("{green}[CompCtrl]{default} Current score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
 
         if (g_MatchConfig.GetNum("timelimit", 0) > 0) {
-            int timeLeft;
-            GetMapTimeLeft(timeLeft);
+            int timeLeft = RoundToFloor(GetTimeLeft());
 
             if (GetScore(TFTeam_Red) > GetScore(TFTeam_Blue)) {
                 HudNotifyAll("redcapture", TFTeam_Red, "With %i:%02i remaining in the %s, the score is %s %i, %s %i.", timeLeft / 60, timeLeft % 60, periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
@@ -697,15 +692,10 @@ bool CheckEndConditions(int redScore, int bluScore, EndCondition &endCondition, 
 
     int timeLimit = g_MatchConfig.GetNum("timelimit", 0);
 
-    if (timeLimit > 0) {
-        int timeLeft;
-        GetMapTimeLeft(timeLeft);
-
-        if (timeLeft <= 0) {
-            endCondition = EndCondition_TimeLimit;
-            cause = TFTeam_Unassigned;
-            return true;
-        }
+    if (timeLimit > 0 && GetTimeLeft() <= 0) {
+        endCondition = EndCondition_TimeLimit;
+        cause = TFTeam_Unassigned;
+        return true;
     }
 
     int winLimit = g_MatchConfig.GetNum("winlimit", 0);
@@ -795,6 +785,14 @@ StopwatchStatus GetStopwatchStatus() {
     }
 
     return StopwatchStatus_Unknown;
+}
+
+float GetTimeLeft() {
+    float startTime = GameRules_GetPropFloat("m_flMapResetTime");
+    float timeLimit = g_TimeLimit.IntValue * 60;
+    float currentTime = GetGameTime();
+
+    return (startTime + timeLimit) - currentTime;
 }
 
 int GetScore(TFTeam team) {
