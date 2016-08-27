@@ -789,7 +789,7 @@ StopwatchStatus GetStopwatchStatus() {
 
 float GetTimeLeft() {
     float startTime = GameRules_GetPropFloat("m_flMapResetTime");
-    float timeLimit = g_TimeLimit.IntValue * 60;
+    float timeLimit = float(g_TimeLimit.IntValue * 60);
     float currentTime = GetGameTime();
 
     return (startTime + timeLimit) - currentTime;
