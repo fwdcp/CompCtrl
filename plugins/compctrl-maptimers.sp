@@ -4,6 +4,7 @@
 #include <sdktools_gamerules>
 
 bool g_Paused = false;
+float g_CurrentStartTime = 0.0;
 float g_TimeElapsed = 0.0;
 
 ConVar g_AutoPause;
@@ -23,36 +24,23 @@ public void OnPluginStart() {
 
 public void OnGameFrame() {
     if (g_AutoPause.BoolValue) {
-        AutoPauseMapTimer();
+        UpdatePauseStatus();
     }
 
     if (g_Paused) {
-        float newStartTime = GetGameTime() - g_TimeElapsed;
-        GameRules_SetPropFloat("m_flMapResetTime", newStartTime, _, true);
+        g_CurrentStartTime = GetGameTime() - g_TimeElapsed;
+        GameRules_SetPropFloat("m_flMapResetTime", g_CurrentStartTime, _, true);
     }
 }
 
-void AutoPauseMapTimer() {
+void UpdatePauseStatus() {
     RoundState state = GameRules_GetRoundState();
 
-    if (g_Paused) {
-        if ((state == RoundState_Preround || state == RoundState_RoundRunning || state == RoundState_Stalemate) && !GameRules_GetProp("m_bInWaitingForPlayers")) {
-            UnpauseMapTimer();
-        }
-    }
-    else {
-        if ((state != RoundState_Preround && state != RoundState_RoundRunning && state != RoundState_Stalemate) || GameRules_GetProp("m_bInWaitingForPlayers")) {
-            PauseMapTimer();
-        }
-    }
-}
+    g_Paused = ((state != RoundState_Preround && state != RoundState_RoundRunning && state != RoundState_Stalemate) || GameRules_GetProp("m_bInWaitingForPlayers"));
 
-void PauseMapTimer() {
-    g_Paused = true;
-    g_TimeElapsed = GetGameTime() - GameRules_GetPropFloat("m_flMapResetTime");
-}
+    float newStartTime = GameRules_GetPropFloat("m_flMapResetTime");
 
-void UnpauseMapTimer() {
-    g_Paused = false;
-    g_TimeElapsed = 0.0;
+    if (!g_Paused || g_CurrentStartTime != newStartTime) {
+        g_TimeElapsed = GetGameTime() - newStartTime;
+    }
 }
