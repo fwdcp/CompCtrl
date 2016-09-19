@@ -15,9 +15,13 @@ Installation
 Changelog
 ---------
 
+### 0.5.4
+* map timers
+  * fix map timers not syncing with game changes
+
 ### 0.5.3
 * matches
-  * fix time left appearing incorrect
+  * fix time left appearing incorrectly
 
 ### 0.5.2
 * matches
