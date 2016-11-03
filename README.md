@@ -15,6 +15,10 @@ Installation
 Changelog
 ---------
 
+### 0.5.5
+* general
+  * update gamedata
+
 ### 0.5.4
 * map timers
   * fix map timers not syncing with game changes
