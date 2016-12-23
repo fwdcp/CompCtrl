@@ -262,7 +262,7 @@ bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit(bool bAllowEnd, int iIncr
 		RETURN_META_VALUE(MRES_SUPERCEDE, (bool)returnValue);
 	}
 	else if (result == Pl_Changed) {
-		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_CheckWinLimit, ((bool)allowEndCell, (int)incrementScoresCell));
+		RETURN_META_VALUE_MNEWPARAMS(MRES_HANDLED, (bool)returnValue, CTFGameRules_CheckWinLimit, ((bool)allowEndCell, (int)incrementScoresCell));
 	}
 	else {
 		RETURN_META_VALUE(MRES_IGNORED, false);
