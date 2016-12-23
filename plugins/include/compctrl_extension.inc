@@ -38,37 +38,37 @@ enum StalemateReason {
 };
 
 /**
- * @brief               Calls SetWinningTeam in CTFGameRules.
+ * @brief                   Calls SetWinningTeam in CTFGameRules.
  *
- * @param team          The team that has won.
- * @param reason        The reason why the team is winning.
- * @param forceMapReset Whether to reset the map (usually after a full round is completed).
- * @param switchTeams   Whether to switch teams.
- * @param dontAddScore  Whether to not score this round.
- * @param final         Whether this is the final round.
+ * @param team              The team that has won.
+ * @param reason            The reason why the team is winning.
+ * @param forceMapReset     Whether to reset the map (usually after a full round is completed).
+ * @param switchTeams       Whether to switch teams.
+ * @param dontAddScore      Whether to not score this round.
+ * @param final             Whether this is the final round.
  * @noreturn
  */
 native void CompCtrl_SetWinningTeam(TFTeam team, WinReason reason, bool forceMapReset, bool switchTeams, bool dontAddScore, bool final);
 
 /**
- * @brief               Calls SetStalemate in CTFGameRules.
+ * @brief                   Calls SetStalemate in CTFGameRules.
  *
- * @param reason        The reason why the team is winning.
- * @param forceMapReset Whether to reset the map (usually after a full round is completed).
- * @param switchTeams   Whether to switch teams.
+ * @param reason            The reason why the team is winning.
+ * @param forceMapReset     Whether to reset the map (usually after a full round is completed).
+ * @param switchTeams       Whether to switch teams.
  * @noreturn
  */
 native void CompCtrl_SetStalemate(StalemateReason reason, bool forceMapReset, bool switchTeams);
 
 /**
- * @brief               Calls HandleSwitchTeams in CTFGameRules.
+ * @brief                   Calls HandleSwitchTeams in CTFGameRules.
  *
  * @noreturn
  */
 native void CompCtrl_SwitchTeams();
 
 /*
- * @brief               Calls CleanUpMap in CTFGameRules.
+ * @brief                   Calls CleanUpMap in CTFGameRules.
  *
  * @noreturn
  */
@@ -87,8 +87,9 @@ stock void CompCtrl_CleanUpMap() {
 }
 
 /*
- * @brief               Calls State_Transition in CTFGameRules.
+ * @brief                   Calls State_Transition in CTFGameRules.
  *
+ * @param state             The state to transition to.
  * @noreturn
  */
 stock void CompCtrl_StateTransition(RoundState state) {
@@ -107,101 +108,102 @@ stock void CompCtrl_StateTransition(RoundState state) {
 }
 
 /**
- * @brief               When a SourceTV demo has started to record.
+ * @brief                   When a SourceTV demo has started to record.
  *
- * @param file          The path to the demo file.
+ * @param file              The path to the demo file.
  * @noreturn
  */
 forward void CompCtrl_OnStartRecording(const char[] file);
 
 /**
- * @brief               When a SourceTV demo has finished recording.
+ * @brief                   When a SourceTV demo has finished recording.
  *
- * @param file          The path to the demo file.
+ * @param file              The path to the demo file.
  * @noreturn
  */
 forward void CompCtrl_OnStopRecording(const char[] file);
 
 /**
- * @brief               When SetWinningTeam in CTFGameRules is called by the game.
+ * @brief                   When SetWinningTeam in CTFGameRules is called by the game.
  *
- * @param team          The team that has won.
- * @param reason        The reason why the team is winning.
- * @param forceMapReset Whether to reset the map (usually after a full round is completed).
- * @param switchTeams   Whether to switch teams.
- * @param dontAddScore  Whether to not score this round.
- * @param final         Whether this is the final round.
- * @return              Plugin_Continue to continue with original values, Plugin_Changed to use new values, Plugin_Handled or Plugin_Stop to stop the game call.
+ * @param team              The team that has won.
+ * @param reason            The reason why the team is winning.
+ * @param forceMapReset     Whether to reset the map (usually after a full round is completed).
+ * @param switchTeams       Whether to switch teams.
+ * @param dontAddScore      Whether to not score this round.
+ * @param final             Whether this is the final round.
+ * @return                  Plugin_Continue to continue with original values, Plugin_Changed to use new values, Plugin_Handled or Plugin_Stop to stop the game call.
  */
 forward Action CompCtrl_OnSetWinningTeam(TFTeam &team, WinReason &reason, bool &forceMapReset, bool &switchTeams, bool &dontAddScore, bool &final);
 
 /**
- * @brief               When SetStalemate in CTFGameRules is called by the game.
+ * @brief                   When SetStalemate in CTFGameRules is called by the game.
  *
- * @param reason        The reason why the team is winning.
- * @param forceMapReset Whether to reset the map (usually after a full round is completed).
- * @param switchTeams   Whether to switch teams.
- * @return              Plugin_Continue to continue with original values, Plugin_Changed to use new values, Plugin_Handled or Plugin_Stop to stop the game call.
+ * @param reason            The reason why the team is winning.
+ * @param forceMapReset     Whether to reset the map (usually after a full round is completed).
+ * @param switchTeams       Whether to switch teams.
+ * @return                  Plugin_Continue to continue with original values, Plugin_Changed to use new values, Plugin_Handled or Plugin_Stop to stop the game call.
  */
 forward Action CompCtrl_OnSetStalemate(StalemateReason &reason, bool &forceMapReset, bool &switchTeams);
 
 /**
- * @brief               When HandleSwitchTeams in CTFGameRules is called by the game.
+ * @brief                   When HandleSwitchTeams in CTFGameRules is called by the game.
  *
- * @return              Plugin_Continue to allow the team switch, Plugin_Changed or above to prevent the team switch.
+ * @return                  Plugin_Continue to allow the team switch, Plugin_Changed or above to prevent the team switch.
  */
 forward Action CompCtrl_OnSwitchTeams();
 
 /**
- * @brief               When BetweenRounds_Start in CTFGameRules is called by the game.
+ * @brief                   When BetweenRounds_Start in CTFGameRules is called by the game.
  *
- * @return              Plugin_Continue to allow the function to execute, Plugin_Changed or above to prevent the function from executing.
+ * @return                  Plugin_Continue to allow the function to execute, Plugin_Changed or above to prevent the function from executing.
  */
 forward Action CompCtrl_OnBetweenRoundsStart();
 
 /**
- * @brief               When BetweenRounds_End in CTFGameRules is called by the game.
+ * @brief                   When BetweenRounds_End in CTFGameRules is called by the game.
  *
- * @return              Plugin_Continue to allow the function to execute, Plugin_Changed or above to prevent the function from executing.
+ * @return                  Plugin_Continue to allow the function to execute, Plugin_Changed or above to prevent the function from executing.
  */
 forward Action CompCtrl_OnBetweenRoundsEnd();
 
 /**
- * @brief               When BetweenRounds_Think in CTFGameRules is called by the game.
+ * @brief                   When BetweenRounds_Think in CTFGameRules is called by the game.
  *
- * @return              Plugin_Continue to allow the function to execute, Plugin_Changed or above to prevent the function from executing.
+ * @return                  Plugin_Continue to allow the function to execute, Plugin_Changed or above to prevent the function from executing.
  */
 forward Action CompCtrl_OnBetweenRoundsThink();
 
 /**
- * @brief               When RestartTournament in CTFGameRules is called by the game.
+ * @brief                   When RestartTournament in CTFGameRules is called by the game.
  *
- * @return              Plugin_Continue to allow the restart, Plugin_Changed or above to prevent the restart.
+ * @return                  Plugin_Continue to allow the restart, Plugin_Changed or above to prevent the restart.
  */
 forward Action CompCtrl_OnRestartTournament();
 
 /**
- * @brief               When CheckWinLimit in CTFGameRules is called by the game.
+ * @brief                   When CheckWinLimit in CTFGameRules is called by the game.
  *
- * @param allowEnd      Whether to allow the map to end upon checking this.
- * @param returnValue   The return value for the function (true for win limit reached, false for not).
- * @return              Plugin_Continue to return the original value, Plugin_Changed or above to use the new value.
+ * @param allowEnd          Whether to allow the map to end upon checking this.
+ * @param incrementScores   How much to increment the scores by when checking if a win limit was reached.
+ * @param returnValue       The return value for the function (true for win limit reached, false for not).
+ * @return                  Plugin_Continue to return the original value, Plugin_Changed or above to use the new value.
  */
-forward Action CompCtrl_OnCheckWinLimit(bool &allowEnd, bool &returnValue);
+forward Action CompCtrl_OnCheckWinLimit(bool &allowEnd, int &incrementScores, bool &returnValue);
 
 /**
- * @brief               When ForceRespawn in CTFPlayer is called by the game.
+ * @brief                   When ForceRespawn in CTFPlayer is called by the game.
  *
- * @param client        The player that is being respawned.
- * @return              Plugin_Continue to allow the respawn, Plugin_Changed or above to prevent the respawn.
+ * @param client            The player that is being respawned.
+ * @return                  Plugin_Continue to allow the respawn, Plugin_Changed or above to prevent the respawn.
  */
 forward Action CompCtrl_OnRespawn(int client);
 
 /**
- * @brief               When ResetScores in CTFTeam is called by the game.
+ * @brief                   When ResetScores in CTFTeam is called by the game.
  *
- * @param team          The team that is having its scores reset.
- * @return              Plugin_Continue to allow the reset, Plugin_Changed or above to prevent the reset.
+ * @param team              The team that is having its scores reset.
+ * @return                  Plugin_Continue to allow the reset, Plugin_Changed or above to prevent the reset.
  */
 forward Action CompCtrl_OnResetTeamScores(TFTeam team);
 

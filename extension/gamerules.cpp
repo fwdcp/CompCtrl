@@ -10,7 +10,7 @@ SH_DECL_MANUALHOOK0_void(CTFGameRules_BetweenRounds_Start, 0, 0, 0);
 SH_DECL_MANUALHOOK0_void(CTFGameRules_BetweenRounds_End, 0, 0, 0);
 SH_DECL_MANUALHOOK0_void(CTFGameRules_BetweenRounds_Think, 0, 0, 0);
 SH_DECL_MANUALHOOK0_void(CTFGameRules_RestartTournament, 0, 0, 0);
-SH_DECL_MANUALHOOK1(CTFGameRules_CheckWinLimit, 0, 0, 0, bool, bool);
+SH_DECL_MANUALHOOK2(CTFGameRules_CheckWinLimit, 0, 0, 0, bool, bool, int);
 
 void GameRulesManager::Enable() {
 	if (!m_hooksSetup) {
@@ -245,11 +245,13 @@ void GameRulesManager::Hook_CTFGameRules_RestartTournament() {
 	}
 }
 
-bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit(bool bAllowEnd) {
+bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit(bool bAllowEnd, int iIncrementScores) {
 	cell_t allowEndCell = bAllowEnd;
-	cell_t returnValue = SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_CheckWinLimit)(false);
+	cell_t incrementScoresCell = iIncrementScores;
+	cell_t returnValue = SH_MCALL(g_pSDKTools->GetGameRules(), CTFGameRules_CheckWinLimit)(false, iIncrementScores);
 
 	g_CheckWinLimitForward->PushCellByRef(&allowEndCell);
+	g_CheckWinLimitForward->PushCellByRef(&incrementScoresCell);
 	g_CheckWinLimitForward->PushCellByRef(&returnValue);
 
 	cell_t result = 0;
@@ -258,6 +260,9 @@ bool GameRulesManager::Hook_CTFGameRules_CheckWinLimit(bool bAllowEnd) {
 
 	if (result > Pl_Continue) {
 		RETURN_META_VALUE(MRES_SUPERCEDE, (bool)returnValue);
+	}
+	else if (result == Pl_Changed) {
+		RETURN_META_MNEWPARAMS(MRES_HANDLED, CTFGameRules_CheckWinLimit, ((bool)allowEndCell, (int)incrementScoresCell));
 	}
 	else {
 		RETURN_META_VALUE(MRES_IGNORED, false);

@@ -26,7 +26,7 @@ public:
 	void Hook_CTFGameRules_BetweenRounds_End();
 	void Hook_CTFGameRules_BetweenRounds_Think();
 	void Hook_CTFGameRules_RestartTournament();
-	bool Hook_CTFGameRules_CheckWinLimit(bool bAllowEnd = true);
+	bool Hook_CTFGameRules_CheckWinLimit(bool bAllowEnd = true, int iIncrementScores = 0);
 
 private:
 	bool m_hooksSetup;

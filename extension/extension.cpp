@@ -80,7 +80,7 @@ void CompCtrl::SDK_OnAllLoaded() {
 		g_BetweenRoundsEndForward = forwards->CreateForward("CompCtrl_OnBetweenRoundsEnd", ET_Hook, 0, NULL);
 		g_BetweenRoundsThinkForward = forwards->CreateForward("CompCtrl_OnBetweenRoundsThink", ET_Hook, 0, NULL);
 		g_RestartTournamentForward = forwards->CreateForward("CompCtrl_OnRestartTournament", ET_Hook, 0, NULL);
-		g_CheckWinLimitForward = forwards->CreateForward("CompCtrl_OnCheckWinLimit", ET_Hook, 2, NULL, Param_CellByRef, Param_CellByRef);
+		g_CheckWinLimitForward = forwards->CreateForward("CompCtrl_OnCheckWinLimit", ET_Hook, 3, NULL, Param_CellByRef, Param_CellByRef, Param_CellByRef);
 		g_RespawnForward = forwards->CreateForward("CompCtrl_OnRespawn", ET_Hook, 1, NULL, Param_Cell);
 		g_ResetTeamScoresForward = forwards->CreateForward("CompCtrl_OnResetTeamScores", ET_Hook, 1, NULL, Param_Cell);
 
