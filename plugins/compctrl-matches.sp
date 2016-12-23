@@ -446,7 +446,7 @@ public Action CompCtrl_OnCheckWinLimit(bool &allowEnd, int &incrementScores, boo
             TFTeam cause;
 
             returnValue = CheckEndConditions(GetScore(TFTeam_Red) + incrementScores, GetScore(TFTeam_Blue) + incrementScores, endCondition, cause);
-            return Plugin_Changed;
+            return Plugin_Handled;
         }
     }
 
