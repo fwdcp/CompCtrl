@@ -437,7 +437,7 @@ public Action CompCtrl_OnRestartTournament() {
     return Plugin_Continue;
 }
 
-public Action CompCtrl_OnCheckWinLimit(bool &allowEnd, bool &returnValue) {
+public Action CompCtrl_OnCheckWinLimit(bool &allowEnd, int &incrementScores, bool &returnValue) {
     if (g_InMatch) {
         GetCurrentRoundConfig();
 
@@ -445,8 +445,8 @@ public Action CompCtrl_OnCheckWinLimit(bool &allowEnd, bool &returnValue) {
             EndCondition endCondition;
             TFTeam cause;
 
-            returnValue = CheckEndConditions(GetScore(TFTeam_Red), GetScore(TFTeam_Blue), endCondition, cause);
-            return Plugin_Changed;
+            returnValue = CheckEndConditions(GetScore(TFTeam_Red) + incrementScores, GetScore(TFTeam_Blue) + incrementScores, endCondition, cause);
+            return Plugin_Handled;
         }
     }
 

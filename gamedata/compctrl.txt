@@ -21,38 +21,38 @@
             }
             "CTFGameRules::BetweenRounds_Start"
             {
-                "windows"   "199"
-                "linux"     "201"
-            }
-            "CTFGameRules::BetweenRounds_End"
-            {
                 "windows"   "200"
                 "linux"     "202"
             }
-            "CTFGameRules::BetweenRounds_Think"
+            "CTFGameRules::BetweenRounds_End"
             {
                 "windows"   "201"
                 "linux"     "203"
             }
+            "CTFGameRules::BetweenRounds_Think"
+            {
+                "windows"   "202"
+                "linux"     "204"
+            }
             "CTFGameRules::RestartTournament"
             {
-                "windows"   "206"
-                "linux"     "208"
+                "windows"   "207"
+                "linux"     "209"
             }
             "CTFGameRules::CheckWinLimit"
             {
-                "windows"   "218"
-                "linux"     "220"
+                "windows"   "219"
+                "linux"     "221"
             }
             "CTFGameRules::RoundRespawn"
             {
-                "windows"   "223"
-                "linux"     "225"
+                "windows"   "224"
+                "linux"     "226"
             }
             "CTFGameRules::CleanUpMap"
             {
-                "windows"   "224"
-                "linux"     "226"
+                "windows"   "225"
+                "linux"     "227"
             }
             "CTFPlayer::ForceRespawn"
             {
