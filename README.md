@@ -15,6 +15,10 @@ Installation
 Changelog
 ---------
 
+### 0.5.7
+* general
+  * update gamedata
+
 ### 0.5.6
 * general
   * update for interface changes
