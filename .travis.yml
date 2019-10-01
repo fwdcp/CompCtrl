@@ -24,7 +24,7 @@ before_deploy:
 deploy:
   provider: releases
   api_key:
-    secure: "TjJoxyK247ohCpGC2x//5Cb91GNUU8FLxTHt5sVQvtm0KgvVYtl5FvxHA0obaClV/rZpWJ+Gaz8lH/O+dgJ8z18BNn4LXjrmuatxdZd5M+LUdYMi4CXEdB3Ny72TWIJFyAceSl1ieiMBVjbf1NsTK0/qYpCYfwVG7VVRE1/a5lw="
+    secure: "V1cxI/NW8YP1BIgmVkWzAf6w262f47jsWYgkmzIrh0yZ9Zs3TgK6AjdNAGtTxzXHNdY8GK/rmZgs3PwxUWGlixp90ZcKKTqhEH1swvCGJiihFcf6JNIQCkO0hisEWB8xzEZ/TO3hvtIAGh6LTn9NQNa1NcH9n41Z6Bbpu29Rgjo="
   file: $TRAVIS_BUILD_DIR/build/package/compctrl-$TRAVIS_TAG-linux.zip
   skip_cleanup: true
   on:
