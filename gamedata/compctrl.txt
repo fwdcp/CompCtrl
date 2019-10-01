@@ -56,18 +56,18 @@
             }
             "CTFPlayer::ForceRespawn"
             {
-                "windows"   "328"
-                "linux"     "329"
+                "windows"   "329"
+                "linux"     "330"
             }
             "CTFTeam::GetTeamNumber"
             {
-                "windows"   "191"
-                "linux"     "192"
+                "windows"   "192"
+                "linux"     "193"
             }
             "CTFTeam::ResetScores"
             {
-                "windows"   "207"
-                "linux"     "208"
+                "windows"   "208"
+                "linux"     "209"
             }
         }
 
