@@ -6,6 +6,7 @@
 #include <compctrl-strategyperiods>
 #include <hudnotify>
 #include <morecolors>
+#include <sdkhooks>
 #include <sdktools>
 #include <tf2>
 
@@ -23,6 +24,15 @@ int g_RestartsLeft = 0;
 int g_RoundsPlayed = 0;
 int g_RedTeamScore = 0;
 int g_BluTeamScore = 0;
+int g_RedTeamTimeoutsRemaining = 0;
+int g_BluTeamTimeoutsRemaining = 0;
+int g_TimeoutLength = 30;
+TFTeam g_TeamRequestingTimeout = TFTeam_Unassigned;
+bool g_TimeoutAlreadyTaken = false;
+bool g_AllowConcede = false;
+TFTeam g_TeamConceding = TFTeam_Unassigned;
+bool g_DisableRoundTimers = false;
+char g_MainTimerName[128] = "";
 
 ConVar g_Tournament;
 ConVar g_TournamentNonAdminRestart;
@@ -52,6 +62,8 @@ public void OnPluginStart() {
     RegAdminCmd("sm_cancelmatch", Command_CancelMatch, ADMFLAG_CONFIG, "cancels and stops a match");
 
     RegConsoleCmd("sm_matchstatus", Command_MatchStatus, "get the status of the current match");
+    RegConsoleCmd("sm_concede", Command_Concede, "concede the match");
+    RegConsoleCmd("sm_timeout", Command_Timeout, "request a timeout in the match");
 
     g_Tournament = FindConVar("mp_tournament");
     g_TournamentNonAdminRestart = FindConVar("mp_tournament_allow_non_admin_restart");
@@ -93,6 +105,14 @@ public Action Command_StartMatch(int client, int args) {
     g_RoundsPlayed = 0;
     g_RedTeamScore = 0;
     g_BluTeamScore = 0;
+    g_RedTeamTimeoutsRemaining = 0;
+    g_BluTeamTimeoutsRemaining = 0;
+    g_TimeoutLength = 30;
+    g_TeamRequestingTimeout = TFTeam_Unassigned;
+    g_TimeoutAlreadyTaken = false;
+    g_AllowConcede = false;
+    g_TeamConceding = TFTeam_Unassigned;
+    g_DisableRoundTimers = false;
 
     char arg[256];
     GetCmdArg(1, arg, sizeof(arg));
@@ -154,13 +174,21 @@ public Action Command_CancelMatch(int client, int args) {
     g_RoundsPlayed = 0;
     g_RedTeamScore = 0;
     g_BluTeamScore = 0;
+    g_RedTeamTimeoutsRemaining = 0;
+    g_BluTeamTimeoutsRemaining = 0;
+    g_TimeoutLength = 30;
+    g_TeamRequestingTimeout = TFTeam_Unassigned;
+    g_TimeoutAlreadyTaken = false;
+    g_AllowConcede = false;
+    g_TeamConceding = TFTeam_Unassigned;
+    g_DisableRoundTimers = false;
 
     return Plugin_Handled;
 }
 
 public Action Command_MatchStatus(int client, int args) {
     if (!g_InMatch) {
-        CPrintToChat(client, "{green}[CompCtrl]{default} No match currently occurring.");
+        CReplyToCommand(client, "{green}[CompCtrl]{default} No match currently occurring.");
         return Plugin_Handled;
     }
 
@@ -170,7 +198,7 @@ public Action Command_MatchStatus(int client, int args) {
     g_MatchConfig.GetString("name", periodName, sizeof(periodName), "period");
 
     if (g_InPeriod) {
-        CPrintToChat(client, "{green}[CompCtrl]{default} Currently in {olive}%s{default}.", periodName);
+        CReplyToCommand(client, "{green}[CompCtrl]{default} Currently in {olive}%s{default}.", periodName);
 
         int currentRound = g_RoundsPlayed + 1;
 
@@ -180,26 +208,26 @@ public Action Command_MatchStatus(int client, int args) {
 
                 switch (GetStopwatchStatus()) {
                     case StopwatchStatus_SetTarget: {
-                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, set part of round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
+                        CReplyToCommand(client, "{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, set part of round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
                     }
                     case StopwatchStatus_ChaseTarget: {
-                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, chase part of round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
+                        CReplyToCommand(client, "{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, chase part of round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
                     }
                     default: {
-                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
+                        CReplyToCommand(client, "{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
                     }
                 }
             }
             else {
                 switch (GetStopwatchStatus()) {
                     case StopwatchStatus_SetTarget: {
-                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, set part of round {olive}%i{default}.", periodName, currentRound);
+                        CReplyToCommand(client, "{green}[CompCtrl]{default} Period status: {olive}%s{default}, set part of round {olive}%i{default}.", periodName, currentRound);
                     }
                     case StopwatchStatus_ChaseTarget: {
-                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, chase part of round {olive}%i{default}.", periodName, currentRound);
+                        CReplyToCommand(client, "{green}[CompCtrl]{default} Period status: {olive}%s{default}, chase part of round {olive}%i{default}.", periodName, currentRound);
                     }
                     default: {
-                        CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, round {olive}%i{default}.", periodName, currentRound);
+                        CReplyToCommand(client, "{green}[CompCtrl]{default} Period status: {olive}%s{default}, round {olive}%i{default}.", periodName, currentRound);
                     }
                 }
             }
@@ -208,15 +236,15 @@ public Action Command_MatchStatus(int client, int args) {
             if (g_MatchConfig.GetNum("timelimit", 0) > 0) {
                 int timeLeft = RoundToFloor(GetTimeLeft());
 
-                CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
+                CReplyToCommand(client, "{green}[CompCtrl]{default} Period status: {olive}%s{default}, {olive}%i:%02i{default} remaining, round {olive}%i{default}.", periodName, timeLeft / 60, timeLeft % 60, currentRound);
             }
             else {
-                CPrintToChatAll("{green}[CompCtrl]{default} Period status: {olive}%s{default}, round {olive}%i{default}.", periodName, currentRound);
+                CReplyToCommand(client, "{green}[CompCtrl]{default} Period status: {olive}%s{default}, round {olive}%i{default}.", periodName, currentRound);
             }
         }
     }
     else {
-        CPrintToChat(client, "{green}[CompCtrl]{default} Period status: awaiting start of {olive}%s{default}.", periodName);
+        CReplyToCommand(client, "{green}[CompCtrl]{default} Period status: awaiting start of {olive}%s{default}.", periodName);
     }
 
     char redName[256];
@@ -224,9 +252,81 @@ public Action Command_MatchStatus(int client, int args) {
     char bluName[256];
     g_BlueTeamName.GetString(bluName, sizeof(bluName));
 
-    CPrintToChat(client, "{green}[CompCtrl]{default} Current score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+    CReplyToCommand(client, "{green}[CompCtrl]{default} Current score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+    CReplyToCommand(client, "{green}[CompCtrl]{default} Timeouts available: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, g_BluTeamTimeoutsRemaining, redName, g_RedTeamTimeoutsRemaining);
 
     return Plugin_Handled;
+}
+
+public Action Command_Concede(int client, int args) {
+    if (!g_InMatch) {
+        CReplyToCommand(client, "{green}[CompCtrl]{default} No match is currently occurring!");
+        return Plugin_Handled;
+    }
+
+    if (!IsClientInGame(client) || (GetClientTeam(client) != view_as<int>(TFTeam_Red) && GetClientTeam(client) != view_as<int>(TFTeam_Blue))) {
+        CReplyToCommand(client, "{green}[CompCtrl]{default} Cannot concede the match!");
+        return Plugin_Handled;
+    }
+
+    if (!g_AllowConcede) {
+        CReplyToCommand(client, "{green}[CompCtrl]{default} Cannot concede the match at this time!");
+        return Plugin_Handled;
+    }
+
+    TFTeam team = view_as<TFTeam>(GetClientTeam(client));
+    ConcedeMatch(team);
+
+    return Plugin_Handled;
+}
+
+public Action Command_Timeout(int client, int args) {
+    if (!g_InMatch) {
+        CReplyToCommand(client, "{green}[CompCtrl]{default} No match is currently occurring!");
+        return Plugin_Handled;
+    }
+
+    if (!IsClientInGame(client) || (GetClientTeam(client) != view_as<int>(TFTeam_Red) && GetClientTeam(client) != view_as<int>(TFTeam_Blue))) {
+        CReplyToCommand(client, "{green}[CompCtrl]{default} Cannot take a timeout!");
+        return Plugin_Handled;
+    }
+
+    if (g_TimeoutAlreadyTaken) {
+        CReplyToCommand(client, "{green}[CompCtrl]{default} Cannot take another timeout at this time!");
+        return Plugin_Handled;
+    }
+
+    if (g_TeamRequestingTimeout == TFTeam_Red || g_TeamRequestingTimeout == TFTeam_Blue) {
+        CReplyToCommand(client, "{green}[CompCtrl]{default} Timeout is already scheduled!");
+    }
+
+    TFTeam team = view_as<TFTeam>(GetClientTeam(client));
+
+    if ((team == TFTeam_Red && g_RedTeamTimeoutsRemaining <= 0) || (team == TFTeam_Blue && g_BluTeamTimeoutsRemaining <= 0)) {
+        CReplyToCommand(client, "{green}[CompCtrl]{default} No timeouts available!");
+        return Plugin_Handled;
+    }
+
+    RequestTimeout(team);
+
+    return Plugin_Handled;
+}
+
+public void OnMapStart() {
+    g_MainTimerName = "";
+
+    for (int timer = FindEntityByClassname(-1, "team_round_timer"); timer != -1; timer = FindEntityByClassname(timer, "team_round_timer")) {
+        if (view_as<bool>(GetEntProp(timer, Prop_Send, "m_bShowInHUD"))) {
+            GetEntPropString(timer, Prop_Data, "m_iName", g_MainTimerName, sizeof(g_MainTimerName));
+            SetUpMainTimer(timer);
+        }
+    }
+}
+
+public void OnEntityCreated(int entity, const char[] classname) {
+    if (StrEqual(classname, "team_round_timer")) {
+        RequestFrame(SetUpMainTimer, entity);
+    }
 }
 
 public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast) {
@@ -240,7 +340,7 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
         g_MatchConfig.GetString("name", periodName, sizeof(periodName), "period");
 
         if (g_RestartsLeft > 0) {
-            CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} will be live after {olive}%i{default} restarts.", periodName, g_RestartsLeft);
+            CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} period will be live after {olive}%i{default} restarts.", periodName, g_RestartsLeft);
 
             g_RestartGame.IntValue = 5;
 
@@ -259,8 +359,8 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
 
         if (!GameRules_GetProp("m_bStopWatch", 1) || GetStopwatchStatus() == StopwatchStatus_SetTarget) {
             if (g_RoundsPlayed == 0) {
-                CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} is {olive}live{default}.", periodName);
-                HudNotifyAll("timer_icon", TFTeam_Unassigned, "The %s is live.", periodName);
+                CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} period is {olive}live{default}.", periodName);
+                HudNotifyAll("timer_icon", TFTeam_Unassigned, "The %s period is live.", periodName);
 
                 g_InPeriod = true;
             }
@@ -320,26 +420,35 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
             int timeLeft = RoundToFloor(GetTimeLeft());
 
             if (GetScore(TFTeam_Red) > GetScore(TFTeam_Blue)) {
-                HudNotifyAll("redcapture", TFTeam_Red, "With %i:%02i remaining in the %s, the score is %s %i, %s %i.", timeLeft / 60, timeLeft % 60, periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+                HudNotifyAll("redcapture", TFTeam_Red, "With %i:%02i remaining in the %s period, the score is %s %i, %s %i.", timeLeft / 60, timeLeft % 60, periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
             }
             else if (GetScore(TFTeam_Blue) > GetScore(TFTeam_Red)) {
-                HudNotifyAll("bluecapture", TFTeam_Blue, "With %i:%02i remaining in the %s, the score is %s %i, %s %i.", timeLeft / 60, timeLeft % 60, periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+                HudNotifyAll("bluecapture", TFTeam_Blue, "With %i:%02i remaining in the %s period, the score is %s %i, %s %i.", timeLeft / 60, timeLeft % 60, periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
             }
             else {
-                HudNotifyAll("timer_icon", TFTeam_Unassigned, "With %i:%02i remaining in the %s, the score is %s %i, %s %i.", timeLeft / 60, timeLeft % 60, periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+                HudNotifyAll("timer_icon", TFTeam_Unassigned, "With %i:%02i remaining in the %s period, the score is %s %i, %s %i.", timeLeft / 60, timeLeft % 60, periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
             }
         }
         else {
             if (GetScore(TFTeam_Red) > GetScore(TFTeam_Blue)) {
-                HudNotifyAll("redcapture", TFTeam_Red, "The current score in the %s is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+                HudNotifyAll("redcapture", TFTeam_Red, "The current score in the %s period is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
             }
             else if (GetScore(TFTeam_Blue) > GetScore(TFTeam_Red)) {
-                HudNotifyAll("bluecapture", TFTeam_Blue, "The current score in the %s is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+                HudNotifyAll("bluecapture", TFTeam_Blue, "The current score in the %s period is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
             }
             else {
-                HudNotifyAll("timer_icon", TFTeam_Unassigned, "The current score in the %s is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+                HudNotifyAll("timer_icon", TFTeam_Unassigned, "The current score in the period %s is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
             }
         }
+    }
+}
+
+void Hook_TimerThink(int entity) {
+    if (g_DisableRoundTimers) {
+	   DisableTimer(entity);
+    }
+    else {
+        SDKUnhook(entity, SDKHook_Think, Hook_TimerThink);
     }
 }
 
@@ -477,6 +586,29 @@ public Action CompCtrl_OnStrategyPeriodBegin() {
     return Plugin_Continue;
 }
 
+public Action CompCtrl_OnStrategyPeriodPauseBegin() {
+    if (g_InMatch) {
+        if (g_TeamRequestingTimeout == TFTeam_Red) {
+            g_RedTeamTimeoutsRemaining--;
+
+            char redName[256];
+            g_RedTeamName.GetString(redName, sizeof(redName));
+
+            CPrintToChatAll("{green}[CompCtrl]{default} Starting timeout requested by {red}%s{default} ({olive}%i{default} remaining).", redName, g_RedTeamTimeoutsRemaining);
+        }
+        else if (g_TeamRequestingTimeout == TFTeam_Blue) {
+            g_BluTeamTimeoutsRemaining--;
+
+            char bluName[256];
+            g_BlueTeamName.GetString(bluName, sizeof(bluName));
+
+            CPrintToChatAll("{green}[CompCtrl]{default} Starting timeout requested by {blue}%s{default} ({olive}%i{default} remaining).", bluName, g_BluTeamTimeoutsRemaining);
+        }
+    }
+
+    return Plugin_Continue;
+}
+
 void BeginPeriod() {
     GetCurrentRoundConfig();
 
@@ -489,6 +621,15 @@ void BeginPeriod() {
     g_MaxRounds.IntValue = g_MatchConfig.GetNum("maxrounds", 0);
     g_FlagCapsPerRound.IntValue = g_MatchConfig.GetNum("flag-caps-per-round", 0);
     g_RestartsLeft = g_MatchConfig.GetNum("live-on", 0);
+    if (!view_as<bool>(g_MatchConfig.GetNum("timeouts-carryover", 0))) {
+        g_RedTeamTimeoutsRemaining = 0;
+        g_BluTeamTimeoutsRemaining = 0;
+    }
+    g_RedTeamTimeoutsRemaining += g_MatchConfig.GetNum("timeouts-add", 0);
+    g_BluTeamTimeoutsRemaining += g_MatchConfig.GetNum("timeouts-add", 0);
+    g_TimeoutLength = g_MatchConfig.GetNum("timeout-length", 30);
+    g_AllowConcede = view_as<bool>(g_MatchConfig.GetNum("allow-concede", 0));
+    g_DisableRoundTimers = view_as<bool>(g_MatchConfig.GetNum("disable-round-timers", 0));
 
     g_RoundsPlayed = 0;
 
@@ -556,7 +697,7 @@ void BeginPeriod() {
     GetCurrentRoundConfig();
 
     if (g_MatchConfig.GetNum("end-game", 1)) {
-        if (g_MatchConfig.GetNum("allow-tie", 0)) {
+        if (g_MatchConfig.GetNum("allow-draw", 0)) {
             CPrintToChatAll("{green}[CompCtrl]{default} Upon completion of this period, the match will end, even if there is a tie.");
         }
         else {
@@ -566,6 +707,20 @@ void BeginPeriod() {
     else {
         CPrintToChatAll("{green}[CompCtrl]{default} Upon completion of this period, the match will proceed to the {olive}%s{default} period.", nextPeriodName);
     }
+
+    if (g_AllowConcede) {
+        CPrintToChatAll("{green}[CompCtrl]{default} Teams may concede the match in this period.");
+    }
+    else {
+        CPrintToChatAll("{green}[CompCtrl]{default} Teams cannot concede the match in this period.");
+    }
+
+    char redName[256];
+    g_RedTeamName.GetString(redName, sizeof(redName));
+    char bluName[256];
+    g_BlueTeamName.GetString(bluName, sizeof(bluName));
+
+    CPrintToChatAll("{green}[CompCtrl]{default} Timeouts available: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, g_BluTeamTimeoutsRemaining, redName, g_RedTeamTimeoutsRemaining);
 }
 
 void EndPeriod(int redScore, int bluScore, EndCondition endCondition, TFTeam cause) {
@@ -582,97 +737,98 @@ void EndPeriod(int redScore, int bluScore, EndCondition endCondition, TFTeam cau
     g_BlueTeamName.GetString(bluName, sizeof(bluName));
 
     if (endCondition == EndCondition_TimeLimit) {
-        CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} ends because the {olive}time limit{default} of {olive}%i{default} has expired.", periodName, g_MatchConfig.GetNum("timelimit", 0));
+        CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} period ends because the {olive}time limit{default} of {olive}%i{default} has expired.", periodName, g_MatchConfig.GetNum("timelimit", 0));
     }
     else if (endCondition == EndCondition_WinLimit) {
         if (cause == TFTeam_Red) {
-            CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} ends because {red}%s{default} has reached the {olive}win limit{default} of {olive}%i{default}.", periodName, redName, g_MatchConfig.GetNum("winlimit", 0));
+            CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} period ends because {red}%s{default} has reached the {olive}win limit{default} of {olive}%i{default}.", periodName, redName, g_MatchConfig.GetNum("winlimit", 0));
         }
         else if (cause == TFTeam_Blue) {
-            CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} ends because {blue}%s{default} has reached the {olive}win limit{default} of {olive}%i{default}.", periodName, bluName, g_MatchConfig.GetNum("winlimit", 0));
+            CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} period ends because {blue}%s{default} has reached the {olive}win limit{default} of {olive}%i{default}.", periodName, bluName, g_MatchConfig.GetNum("winlimit", 0));
         }
     }
     else if (endCondition == EndCondition_WinDifference) {
         if (cause == TFTeam_Red) {
-            CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} ends because {red}%s{default} has reached the {olive}win difference{default} of {olive}%i{default} (with a minimum score of {olive}%i{default}).", periodName, redName, g_MatchConfig.GetNum("windifference", 0), g_MatchConfig.GetNum("windifference-min", 0));
+            CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} period ends because {red}%s{default} has reached the {olive}win difference{default} of {olive}%i{default} (with a minimum score of {olive}%i{default}).", periodName, redName, g_MatchConfig.GetNum("windifference", 0), g_MatchConfig.GetNum("windifference-min", 0));
         }
         else if (cause == TFTeam_Blue) {
-            CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} ends because {blue}%s{default} has reached the {olive}win difference{default} of {olive}%i{default} (with a minimum score of {olive}%i{default}).", periodName, bluName, g_MatchConfig.GetNum("windifference", 0), g_MatchConfig.GetNum("windifference-min", 0));
+            CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} period ends because {blue}%s{default} has reached the {olive}win difference{default} of {olive}%i{default} (with a minimum score of {olive}%i{default}).", periodName, bluName, g_MatchConfig.GetNum("windifference", 0), g_MatchConfig.GetNum("windifference-min", 0));
         }
     }
     else if (endCondition == EndCondition_TimeLimit) {
-        CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} ends because the {olive}max rounds{default} of {olive}%i{default} has been reached.", periodName, g_MatchConfig.GetNum("maxrounds", 0));
+        CPrintToChatAll("{green}[CompCtrl]{default} The {olive}%s{default} period ends because the {olive}max rounds{default} of {olive}%i{default} has been reached.", periodName, g_MatchConfig.GetNum("maxrounds", 0));
     }
 
-    char nextPeriod[256];
-    g_MatchConfig.GetString("next-period", nextPeriod, sizeof(nextPeriod), g_CurrentPeriod);
+    bool matchComplete = false;
+    TFTeam leadingTeam = TFTeam_Unassigned;
 
-    if (g_MatchConfig.GetNum("end-game", 1)) {
-        if (redScore == bluScore && !g_MatchConfig.GetNum("allow-tie", 0)) {
-            CPrintToChatAll("{green}[CompCtrl]{default} Score after {olive}%s{default}: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", periodName, bluName, bluScore, redName, redScore);
-            CPrintToChatAll("{green}[CompCtrl]{default} Because no team has a lead, the match cannot end after this period and will proceed to another period.");
+    if (endCondition == EndCondition_Concede) {
+        matchComplete = true;
 
-            if (GetScore(TFTeam_Red) > GetScore(TFTeam_Blue)) {
-                HudNotifyAll("redcapture", TFTeam_Red, "After the %s, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
-            }
-            else if (GetScore(TFTeam_Blue) > GetScore(TFTeam_Red)) {
-                HudNotifyAll("bluecapture", TFTeam_Blue, "After the %s, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
-            }
-            else {
-                HudNotifyAll("timer_icon", TFTeam_Unassigned, "After the %s, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
-            }
+        if (cause == TFTeam_Red) {
+            leadingTeam = TFTeam_Blue;
 
-            strcopy(g_CurrentPeriod, sizeof(g_CurrentPeriod), nextPeriod);
-
-            GetCurrentRoundConfig();
-            if (g_MatchConfig.GetNum("switch-teams-to-begin", 0)) {
-                CPrintToChatAll("{green}[CompCtrl]{default} Teams will be automatically switched prior to the start of the next period.");
-                g_SwitchTeams = true;
-            }
-
-            g_PeriodNeedsSetup = true;
+            CPrintToChatAll("{green}[CompCtrl]{default} {red}%s{default} has conceded the match.", periodName, redName);
         }
-        else {
-            CPrintToChatAll("{green}[CompCtrl]{default} The match is now over.");
-            CPrintToChatAll("{green}[CompCtrl]{default} Final score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, bluScore, redName, redScore);
+        else if (cause == TFTeam_Blue) {
+            leadingTeam = TFTeam_Red;
 
-            if (GetScore(TFTeam_Red) > GetScore(TFTeam_Blue)) {
-                HudNotifyAll("redcapture", TFTeam_Red, "The final score is %s %i, %s %i.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
-            }
-            else if (GetScore(TFTeam_Blue) > GetScore(TFTeam_Red)) {
-                HudNotifyAll("bluecapture", TFTeam_Blue, "The final score is %s %i, %s %i.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
-            }
-            else {
-                HudNotifyAll("timer_icon", TFTeam_Unassigned, "The final score is %s %i, %s %i.", bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
-            }
-
-            CloseHandle(g_MatchConfig);
-            g_MatchConfig = null;
-            g_InMatch = false;
-            g_MatchConfigName = "";
-            g_InPeriod = false;
-            g_CurrentPeriod = "";
-            g_SwitchTeams = false;
-            g_PeriodNeedsSetup = false;
-            g_AllowScoreReset = true;
-            g_RestartsLeft = 0;
-            g_RoundsPlayed = 0;
-            g_RedTeamScore = 0;
-            g_BluTeamScore = 0;
+            CPrintToChatAll("{green}[CompCtrl]{default} {blue}%s{default} has conceded the match.", periodName, bluName);
         }
     }
     else {
-        CPrintToChatAll("{green}[CompCtrl]{default} Score after {olive}%s{default}: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", periodName, bluName, bluScore, redName, redScore);
-        CPrintToChatAll("{green}[CompCtrl]{default} The match will continue to the next period.");
-
-        if (GetScore(TFTeam_Red) > GetScore(TFTeam_Blue)) {
-            HudNotifyAll("redcapture", TFTeam_Red, "After the %s, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+        if (redScore > bluScore) {
+            leadingTeam = TFTeam_Red;
         }
-        else if (GetScore(TFTeam_Blue) > GetScore(TFTeam_Red)) {
-            HudNotifyAll("bluecapture", TFTeam_Blue, "After the %s, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+        else if (bluScore > redScore) {
+            leadingTeam = TFTeam_Blue;
         }
         else {
-            HudNotifyAll("timer_icon", TFTeam_Unassigned, "After the %s, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+            leadingTeam = TFTeam_Unassigned;
+        }
+
+        if (g_MatchConfig.GetNum("end-game", 1)) {
+            if (leadingTeam == TFTeam_Unassigned && !g_MatchConfig.GetNum("allow-draw", 0)) {
+                matchComplete = false;
+
+                CPrintToChatAll("{green}[CompCtrl]{default} Score after {olive}%s{default}: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", periodName, bluName, bluScore, redName, redScore);
+                CPrintToChatAll("{green}[CompCtrl]{default} Because no team has a lead, the match cannot end after this period and will proceed to another period.");
+            }
+            else {
+                matchComplete = true;
+            }
+        }
+        else {
+            matchComplete = false;
+
+            CPrintToChatAll("{green}[CompCtrl]{default} Score after {olive}%s{default}: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", periodName, bluName, bluScore, redName, redScore);
+            CPrintToChatAll("{green}[CompCtrl]{default} The match will continue to the next period.");
+        }
+    }
+
+    if (!matchComplete) {
+        char nextPeriod[256];
+        g_MatchConfig.GetString("next-period", nextPeriod, sizeof(nextPeriod), g_CurrentPeriod);
+
+        if (g_TeamRequestingTimeout == TFTeam_Red) {
+            g_TeamRequestingTimeout = TFTeam_Unassigned;
+
+            CPrintToChatAll("{green}[CompCtrl]{default} Timeout requested earlier by {red}%s{default} has not been taken due to the period ending.", redName);
+        }
+        else if (g_TeamRequestingTimeout == TFTeam_Blue) {
+            g_TeamRequestingTimeout = TFTeam_Unassigned;
+
+            CPrintToChatAll("{green}[CompCtrl]{default} Timeout requested earlier by {blue}%s{default} has not been taken due to the period ending.", redName);
+        }
+
+        if (GetScore(TFTeam_Red) > GetScore(TFTeam_Blue)) {
+            HudNotifyAll("redcapture", TFTeam_Red, "After the %s period, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+        }
+        else if (GetScore(TFTeam_Blue) > GetScore(TFTeam_Red)) {
+            HudNotifyAll("bluecapture", TFTeam_Blue, "After the %s period, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
+        }
+        else {
+            HudNotifyAll("timer_icon", TFTeam_Unassigned, "After the %s period, the score is %s %i, %s %i.", periodName, bluName, GetScore(TFTeam_Blue), redName, GetScore(TFTeam_Red));
         }
 
         strcopy(g_CurrentPeriod, sizeof(g_CurrentPeriod), nextPeriod);
@@ -685,9 +841,53 @@ void EndPeriod(int redScore, int bluScore, EndCondition endCondition, TFTeam cau
 
         g_PeriodNeedsSetup = true;
     }
+    else {
+        CPrintToChatAll("{green}[CompCtrl]{default} The match is now over.");
+        CPrintToChatAll("{green}[CompCtrl]{default} Final score: {blue}%s{default} {olive}%i{default}, {red}%s{default} {olive}%i{default}.", bluName, bluScore, redName, redScore);
+        if (leadingTeam == TFTeam_Red) {
+            CPrintToChatAll("{green}[CompCtrl]{default} {red}%s{default} has won the match against {blue}%s{default}.", redName, bluName);
+            HudNotifyAll("redcapture", TFTeam_Red, "%s has defeated %s (final score %i - %i).", redName, bluName, GetScore(TFTeam_Red), GetScore(TFTeam_Blue));
+        }
+        else if (leadingTeam == TFTeam_Blue) {
+            CPrintToChatAll("{green}[CompCtrl]{default} {blue}%s{default} has won the match against {red}%s{default}.", bluName, redName);
+            HudNotifyAll("bluecapture", TFTeam_Blue, "%s has defeated %s (final score %i - %i).", bluName, redName, GetScore(TFTeam_Blue), GetScore(TFTeam_Red));
+        }
+        else {
+            CPrintToChatAll("{green}[CompCtrl]{default} {blue}%s{default} and {red}%s{default} have drawn the match.", bluName, redName);
+            HudNotifyAll("timer_icon", TFTeam_Unassigned, "%s and %s have drawn (final score %i - %i).", bluName, redName, GetScore(TFTeam_Blue), GetScore(TFTeam_Red));
+        }
+
+        CloseHandle(g_MatchConfig);
+        g_MatchConfig = null;
+        g_InMatch = false;
+        g_MatchConfigName = "";
+        g_InPeriod = false;
+        g_CurrentPeriod = "";
+        g_SwitchTeams = false;
+        g_PeriodNeedsSetup = false;
+        g_AllowScoreReset = true;
+        g_RestartsLeft = 0;
+        g_RoundsPlayed = 0;
+        g_RedTeamScore = 0;
+        g_BluTeamScore = 0;
+        g_RedTeamTimeoutsRemaining = 0;
+        g_BluTeamTimeoutsRemaining = 0;
+        g_TimeoutLength = 30;
+        g_TeamRequestingTimeout = TFTeam_Unassigned;
+        g_TimeoutAlreadyTaken = false;
+        g_AllowConcede = false;
+        g_TeamConceding = TFTeam_Unassigned;
+        g_DisableRoundTimers = false;
+    }
 }
 
 bool CheckEndConditions(int redScore, int bluScore, EndCondition &endCondition, TFTeam &cause) {
+    if (g_TeamConceding == TFTeam_Red || g_TeamConceding == TFTeam_Blue) {
+        endCondition = EndCondition_Concede;
+        cause = g_TeamConceding;
+        return true;
+    }
+
     GetCurrentRoundConfig();
 
     int timeLimit = g_MatchConfig.GetNum("timelimit", 0);
@@ -743,6 +943,60 @@ bool CheckEndConditions(int redScore, int bluScore, EndCondition &endCondition, 
     endCondition = EndCondition_None;
     cause = TFTeam_Unassigned;
     return false;
+}
+
+void ConcedeMatch(TFTeam team) {
+    g_TeamConceding = team;
+
+    TFTeam winningTeam = TFTeam_Unassigned;
+    if (team == TFTeam_Red) {
+        winningTeam = TFTeam_Blue;
+    }
+    else if (team == TFTeam_Blue) {
+        winningTeam = TFTeam_Red;
+    }
+
+    CompCtrl_SetWinningTeam(winningTeam, WinReason_None, true, false, false, true);
+}
+
+void RequestTimeout(TFTeam team) {
+    g_TeamRequestingTimeout = team;
+
+    if (team == TFTeam_Red) {
+        char redName[256];
+        g_RedTeamName.GetString(redName, sizeof(redName));
+
+        CPrintToChatAll("{green}[CompCtrl]{default} Timeout requested by {red}%s{default} (currently has {olive}%i{default} remaining).", redName, g_RedTeamTimeoutsRemaining);
+    }
+    else if (team == TFTeam_Blue) {
+        char bluName[256];
+        g_BlueTeamName.GetString(bluName, sizeof(bluName));
+
+        CPrintToChatAll("{green}[CompCtrl]{default} Timeout requested by {blue}%s{default} (currently has {olive}%i{default} remaining).", bluName, g_BluTeamTimeoutsRemaining);
+    }
+
+    CompCtrl_PauseStrategyPeriod(float(g_TimeoutLength));
+}
+
+void SetUpMainTimer(int timer) {
+    if (g_DisableRoundTimers) {
+    	char className[32] = "";
+    	GetEntityClassname(timer, className, sizeof(className));
+
+    	if (StrEqual(className, "team_round_timer")) {
+			char timerName[128];
+			GetEntPropString(timer, Prop_Data, "m_iName", timerName, sizeof(timerName));
+
+			if (StrEqual(timerName, g_MainTimerName)) {
+                DisableTimer(timer);
+                SDKHook(timer, SDKHook_Think, Hook_TimerThink);
+            }
+		}
+	}
+}
+
+void DisableTimer(int timer) {
+	AcceptEntityInput(timer, "Disable");
 }
 
 StopwatchStatus GetStopwatchStatus() {

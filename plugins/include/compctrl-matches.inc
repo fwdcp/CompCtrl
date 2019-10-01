@@ -5,7 +5,8 @@ enum EndCondition {
     EndCondition_TimeLimit,
     EndCondition_WinLimit,
     EndCondition_WinDifference,
-    EndCondition_MaxRounds
+    EndCondition_MaxRounds,
+    EndCondition_Concede
 };
 
 enum StopwatchStatus {
