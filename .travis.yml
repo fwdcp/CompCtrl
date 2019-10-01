@@ -1,6 +1,6 @@
 language: cpp
 compiler:
-- clang
+- gcc
 
 addons:
   apt:
@@ -9,17 +9,12 @@ addons:
     - lib32z1-dev
 
 install:
-- git clone https://github.com/alliedmodders/ambuild.git $TRAVIS_BUILD_DIR/../ambuild
-  && cd $TRAVIS_BUILD_DIR/../ambuild && python setup.py build && sudo python setup.py
-  install
+- git clone https://github.com/alliedmodders/ambuild.git $TRAVIS_BUILD_DIR/../ambuild && cd $TRAVIS_BUILD_DIR/../ambuild && python setup.py build && sudo python setup.py install
 - git clone https://github.com/alliedmodders/metamod-source.git -b 1.10-dev $TRAVIS_BUILD_DIR/../metamod-source
 - git clone https://github.com/alliedmodders/hl2sdk.git -b tf2 $TRAVIS_BUILD_DIR/../hl2sdk-tf2
-- git clone https://github.com/alliedmodders/sourcemod.git --recursive -b 1.8-dev $TRAVIS_BUILD_DIR/../sourcemod
-  && cd $TRAVIS_BUILD_DIR/../sourcemod && mkdir build && cd build && python ../configure.py
-  --sdks=tf2 --no-mysql --enable-optimize && ambuild
+- git clone https://github.com/alliedmodders/sourcemod.git --recursive -b 1.8-dev $TRAVIS_BUILD_DIR/../sourcemod && cd $TRAVIS_BUILD_DIR/../sourcemod && mkdir build && cd build && python ../configure.py --sdks=tf2 --no-mysql --enable-optimize && ambuild
 script:
-- export SOURCEMOD_RELEASE=$(cd $TRAVIS_BUILD_DIR/../sourcemod/build/package/addons/sourcemod
-  && pwd)
+- export SOURCEMOD_RELEASE=$(cd $TRAVIS_BUILD_DIR/../sourcemod/build/package/addons/sourcemod && pwd)
 - mkdir $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build
 - python ../configure.py --enable-optimize
 - ambuild
@@ -34,5 +29,9 @@ deploy:
   skip_cleanup: true
   on:
     repo: fwdcp/CompCtrl
-    tags: true
+    draft: true
     all_branches: true
+
+branches:
+  except:
+    - /^untagged/
