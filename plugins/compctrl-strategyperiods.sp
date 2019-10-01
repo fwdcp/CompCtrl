@@ -9,11 +9,15 @@
 
 bool g_StrategyPeriodActive = false;
 bool g_StrategyPeriodCompleted = false;
-bool g_StrategyPeriodPause = false;
+bool g_StrategyPeriodPaused = false;
+float g_StrategyPeriodNextPauseLength = -1.0;
 int g_StrategyPeriodTimer = -1;
+float g_StrategyPeriodPauseEnd = -1.0;
 float g_TransitionTime = 0.0;
 
-Handle g_OnStart;
+Handle g_OnPeriodStart;
+Handle g_OnPauseStart;
+Handle g_OnPauseEnd;
 
 ConVar g_Time;
 
@@ -27,74 +31,24 @@ public Plugin myinfo =
 };
 
 public void OnPluginStart() {
-    g_Time = CreateConVar("compctrl_strategyperiods_time", "15", "the amount of time between rounds");
+    g_Time = CreateConVar("compctrl_strategyperiods_time", "15", "the amount of time between rounds", 0, true, 0.0);
 
-    RegConsoleCmd("sm_cancelpause", Command_CancelPause, "cancels any strategy period pauses");
-    RegConsoleCmd("sm_requestpause", Command_RequestPause, "pauses the game at the soonest strategy period");
-
-    g_OnStart = CreateGlobalForward("CompCtrl_OnStrategyPeriodBegin", ET_Hook);
+    g_OnPeriodStart = CreateGlobalForward("CompCtrl_OnStrategyPeriodBegin", ET_Hook);
+    g_OnPauseStart = CreateGlobalForward("CompCtrl_OnStrategyPeriodPauseBegin", ET_Hook, Param_FloatByRef);
+    g_OnPauseEnd = CreateGlobalForward("CompCtrl_OnStrategyPeriodPauseEnd", ET_Hook, Param_FloatByRef);
 
     HookEvent("teamplay_round_start", Event_RoundStart);
 }
 
-public Action Command_CancelPause(int client, int args) {
-    if (g_StrategyPeriodPause) {
-        if (g_StrategyPeriodActive) {
-            g_TransitionTime = GetGameTime() + g_Time.FloatValue;
-
-            if (g_StrategyPeriodTimer != -1) {
-                SetVariantInt(RoundToCeil(g_Time.FloatValue));
-                AcceptEntityInput(g_StrategyPeriodTimer, "SetTime");
-                AcceptEntityInput(g_StrategyPeriodTimer, "Resume");
-            }
-
-            g_StrategyPeriodPause = false;
-
-            CPrintToChatAll("{green}[CompCtrl]{default} Current strategy period pause has been ended.");
-        }
-        else {
-            g_StrategyPeriodPause = false;
-
-            CPrintToChatAll("{green}[CompCtrl]{default} Next strategy period pause has been canceled.");
-        }
-    }
-    else {
-        CReplyToCommand(client, "{green}[CompCtrl]{default} No strategy period pause to cancel!");
-    }
-}
-
-public Action Command_RequestPause(int client, int args) {
-    if (!g_StrategyPeriodPause) {
-        if (g_StrategyPeriodActive) {
-            g_StrategyPeriodPause = true;
-
-            if (g_StrategyPeriodTimer != -1) {
-                SetVariantInt(RoundToCeil(g_Time.FloatValue));
-                AcceptEntityInput(g_StrategyPeriodTimer, "SetTime");
-                AcceptEntityInput(g_StrategyPeriodTimer, "Pause");
-            }
-
-            CPrintToChatAll("{green}[CompCtrl]{default} Current strategy period has been paused.");
-        }
-        else {
-            g_StrategyPeriodPause = true;
-
-            CPrintToChatAll("{green}[CompCtrl]{default} Pause has been scheduled for the next strategy period.");
-        }
-    }
-    else {
-        if (g_StrategyPeriodActive) {
-            CReplyToCommand(client, "{green}[CompCtrl]{default} Strategy period is already paused!");
-        }
-        else {
-            CReplyToCommand(client, "{green}[CompCtrl]{default} Strategy period pause is already scheduled!");
-        }
-    }
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max) {
+    CreateNative("CompCtrl_PauseStrategyPeriod", Native_PauseStrategyPeriod);
+    CreateNative("CompCtrl_UnpauseStrategyPeriod", Native_UnpauseStrategyPeriod);
+    return APLRes_Success;
 }
 
 public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast) {
-    if (g_Time.FloatValue > 0.0) {
-        Call_StartForward(g_OnStart);
+    if (g_Time.FloatValue > 0.0 || g_StrategyPeriodNextPauseLength >= 0.0) {
+        Call_StartForward(g_OnPeriodStart);
 
         Action result;
         Call_Finish(result);
@@ -131,7 +85,7 @@ public Action CompCtrl_OnBetweenRoundsThink() {
 
     MaintainStrategyPeriod();
 
-    if (!g_StrategyPeriodPause && GetGameTime() >= g_TransitionTime) {
+    if (!g_StrategyPeriodPaused && GetGameTime() >= g_TransitionTime) {
         CompCtrl_StateTransition(RoundState_Preround);
     }
 
@@ -149,6 +103,50 @@ public Action CompCtrl_OnStrategyPeriodBegin() {
     }
 
     return Plugin_Continue;
+}
+
+public int Native_PauseStrategyPeriod(Handle plugin, int numParams) {
+    float pauseTime = view_as<float>(GetNativeCell(1));
+
+    if (g_StrategyPeriodActive) {
+        if (!g_StrategyPeriodPaused) {
+            PauseStrategyPeriod(pauseTime);
+            return view_as<int>(g_StrategyPeriodPaused);
+        }
+        else {
+            return view_as<int>(false);
+        }
+    }
+    else {
+        if (g_StrategyPeriodNextPauseLength < 0.0) {
+            g_StrategyPeriodNextPauseLength = pauseTime;
+            return view_as<int>(true);
+        }
+        else {
+            return view_as<int>(false);
+        }
+    }
+}
+
+public int Native_UnpauseStrategyPeriod(Handle plugin, int numParams) {
+    if (g_StrategyPeriodActive) {
+        if (g_StrategyPeriodPaused) {
+            UnpauseStrategyPeriod();
+            return view_as<int>(!g_StrategyPeriodPaused);
+        }
+        else {
+            return view_as<int>(false);
+        }
+    }
+    else {
+        if (g_StrategyPeriodNextPauseLength >= 0.0) {
+            g_StrategyPeriodNextPauseLength = -1.0;
+            return view_as<int>(true);
+        }
+        else {
+            return view_as<int>(false);
+        }
+    }
 }
 
 public void StrategyPeriodRequested(any data) {
@@ -172,13 +170,7 @@ void SetUpStrategyPeriod() {
     if (g_StrategyPeriodTimer != -1) {
         DispatchKeyValue(g_StrategyPeriodTimer, "targetname", "zz_teamplay_strategyperiod_timer");
 
-        if (g_StrategyPeriodPause) {
-            DispatchKeyValue(g_StrategyPeriodTimer, "start_paused", "1");
-        }
-        else {
-            DispatchKeyValue(g_StrategyPeriodTimer, "start_paused", "0");
-        }
-
+        DispatchKeyValue(g_StrategyPeriodTimer, "start_paused", "0");
         DispatchKeyValue(g_StrategyPeriodTimer, "auto_countdown", "0");
         DispatchKeyValue(g_StrategyPeriodTimer, "show_in_hud", "1");
         DispatchSpawn(g_StrategyPeriodTimer);
@@ -191,21 +183,29 @@ void SetUpStrategyPeriod() {
 
     CPrintToChatAll("{green}[CompCtrl]{default} Strategy period has begun.");
 
-    if (g_StrategyPeriodPause) {
-        CPrintToChatAll("{green}[CompCtrl]{default} The strategy period begins paused as requested.");
+    if (g_StrategyPeriodNextPauseLength >= 0.0) {
+        PauseStrategyPeriod(g_StrategyPeriodNextPauseLength);
+        g_StrategyPeriodNextPauseLength = -1.0;
     }
 }
 
 void MaintainStrategyPeriod() {
-    float endTime = g_StrategyPeriodPause ? GetGameTime() + g_Time.FloatValue : g_TransitionTime;
-
-    if (g_StrategyPeriodPause) {
-        if (g_StrategyPeriodTimer != -1) {
-            AcceptEntityInput(g_StrategyPeriodTimer, "Pause");
-            SetVariantInt(RoundToCeil(g_Time.FloatValue));
-            AcceptEntityInput(g_StrategyPeriodTimer, "SetTime");
+    if (g_StrategyPeriodPaused) {
+        if (g_StrategyPeriodPauseEnd > 0.0) {
+            if (GetGameTime() >= g_StrategyPeriodPauseEnd) {
+                UnpauseStrategyPeriod();
+            }
+        }
+        else {
+            if (g_StrategyPeriodTimer != -1) {
+                AcceptEntityInput(g_StrategyPeriodTimer, "Pause");
+                SetVariantInt(RoundToCeil(g_Time.FloatValue));
+                AcceptEntityInput(g_StrategyPeriodTimer, "SetTime");
+            }
         }
     }
+
+    float endTime = g_StrategyPeriodPaused ? GetGameTime() + g_Time.FloatValue + 0.1 : g_TransitionTime;
 
     for (int i = 1; i <= MaxClients; i++) {
         if (IsClientConnected(i) && IsClientInGame(i) && !IsClientObserver(i)) {
@@ -245,5 +245,85 @@ void TearDownStrategyPeriod() {
 
     g_StrategyPeriodActive = false;
     g_StrategyPeriodCompleted = true;
-    g_StrategyPeriodPause = false;
+    g_StrategyPeriodPaused = false;
+}
+
+void PauseStrategyPeriod(float time) {
+    Call_StartForward(g_OnPauseStart);
+    Call_PushFloatRef(time);
+
+    Action result;
+    Call_Finish(result);
+
+    if (result == Plugin_Continue || result == Plugin_Changed) {
+        g_StrategyPeriodPaused = true;
+
+        if (time > 0.0) {
+            g_StrategyPeriodPauseEnd = GetGameTime() + time;
+
+            if (g_StrategyPeriodTimer != -1) {
+                SetVariantInt(RoundToCeil(time));
+                AcceptEntityInput(g_StrategyPeriodTimer, "SetTime");
+                AcceptEntityInput(g_StrategyPeriodTimer, "Resume");
+            }
+
+            CPrintToChatAll("{green}[CompCtrl]{default} Current strategy period has been paused for {olive}%f{default} seconds.", time);
+        }
+        else {
+            g_StrategyPeriodPauseEnd = -1.0;
+
+            if (g_StrategyPeriodTimer != -1) {
+                SetVariantInt(RoundToCeil(g_Time.FloatValue));
+                AcceptEntityInput(g_StrategyPeriodTimer, "SetTime");
+                AcceptEntityInput(g_StrategyPeriodTimer, "Pause");
+            }
+
+            CPrintToChatAll("{green}[CompCtrl]{default} Current strategy period has been paused.");
+        }
+    }
+}
+
+void UnpauseStrategyPeriod() {
+    Call_StartForward(g_OnPauseEnd);
+
+    float time = -1.0;
+    Call_PushFloatRef(time);
+
+    Action result;
+    Call_Finish(result);
+
+    if (result == Plugin_Continue) {
+        g_StrategyPeriodPaused = false;
+        g_StrategyPeriodPauseEnd = -1.0;
+
+        g_TransitionTime = GetGameTime() + g_Time.FloatValue;
+
+        if (g_StrategyPeriodTimer != -1) {
+            SetVariantInt(RoundToCeil(g_Time.FloatValue));
+            AcceptEntityInput(g_StrategyPeriodTimer, "SetTime");
+            AcceptEntityInput(g_StrategyPeriodTimer, "Resume");
+        }
+
+        CPrintToChatAll("{green}[CompCtrl]{default} Current strategy period pause has ended.");
+    }
+    else {
+        if (time > 0.0) {
+            g_StrategyPeriodPauseEnd = GetGameTime() + time;
+
+            if (g_StrategyPeriodTimer != -1) {
+                SetVariantInt(RoundToCeil(time));
+                AcceptEntityInput(g_StrategyPeriodTimer, "SetTime");
+                AcceptEntityInput(g_StrategyPeriodTimer, "Resume");
+            }
+        }
+        else {
+            g_StrategyPeriodPauseEnd = -1.0;
+
+            if (g_StrategyPeriodTimer != -1) {
+                SetVariantInt(RoundToCeil(g_Time.FloatValue));
+                AcceptEntityInput(g_StrategyPeriodTimer, "SetTime");
+                AcceptEntityInput(g_StrategyPeriodTimer, "Pause");
+            }
+        }
+    }
 }
