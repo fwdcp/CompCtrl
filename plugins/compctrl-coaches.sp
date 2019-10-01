@@ -10,6 +10,8 @@
 
 #define OBS_MODE_IN_EYE 4
 
+ConVar g_Enabled;
+
 bool g_Coaches[MAXPLAYERS + 1];
 
 public Plugin myinfo =
@@ -22,6 +24,10 @@ public Plugin myinfo =
 };
 
 public void OnPluginStart() {
+    g_Enabled = CreateConVar("compctrl_coaches_enabled", "0", "enables coaching functionality");
+
+    g_Enabled.AddChangeHook(Hook_OnEnabledConVarChange);
+
     RegConsoleCmd("sm_becomecoach", Command_BecomeCoach, "become coach for current team");
     RegConsoleCmd("sm_becomeplayer", Command_BecomePlayer, "become player for current team");
 }
@@ -37,6 +43,11 @@ public void OnMapStart() {
 public Action Command_BecomeCoach(int client, int args) {
     if (!IsClientInGame(client) || (GetClientTeam(client) != view_as<int>(TFTeam_Red) && GetClientTeam(client) != view_as<int>(TFTeam_Blue))) {
         CReplyToCommand(client, "{green}[CompCtrl]{default} You cannot become a team coach!");
+        return Plugin_Handled;
+    }
+
+    if (!g_Enabled.BoolValue) {
+        CReplyToCommand(client, "{green}[CompCtrl]{default} Team coaching is currently disabled!");
         return Plugin_Handled;
     }
 
@@ -106,6 +117,20 @@ public void Hook_OnPlayerManagerThinkPost(int entity) {
 
         if (g_Coaches[i]) {
             SetEntProp(entity, Prop_Send, "m_bConnected", 0, _, i);
+        }
+    }
+}
+
+public void Hook_OnEnabledConVarChange(ConVar convar, const char[] oldValue, const char[] newValue) {
+    if (!g_Enabled.BoolValue) {
+        for (int i = 1; i <= MaxClients; i++) {
+            if (g_Coaches[i]) {
+                g_Coaches[i] = false;
+
+                if (IsClientInGame(i) && (GetClientTeam(i) == view_as<int>(TFTeam_Red) || GetClientTeam(i) == view_as<int>(TFTeam_Blue))) {
+                    TF2_RespawnPlayer(i);
+                }
+            }
         }
     }
 }
